@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product - Advance IT Traders</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = { theme: { extend: { colors: { brand: { DEFAULT: '#0ea5e9', dark: '#0b84b6' }, surface: '#0f172a', card: '#111827' } }, fontFamily: { sans: ['Poppins','ui-sans-serif','system-ui','Segoe UI','Roboto'] } } };
+    </script>
+</head>
+<body class="bg-surface text-gray-100 font-sans">
+    <header class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
+        <a href="index.html" class="text-sm text-brand hover:underline">← Back to Home</a>
+        <a href="#cart" class="text-sm hover:text-brand">Cart (<span id="cartCount">0</span>)</a>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div>
+            <div id="pImage" class="bg-card border border-gray-800 rounded-lg aspect-[4/3] bg-center bg-cover"></div>
+            <div id="pGallery" class="mt-3 grid grid-cols-4 gap-2"></div>
+        </div>
+        <div>
+            <h1 id="pTitle" class="text-2xl font-semibold">Product Title</h1>
+            <div id="pPrice" class="mt-2 text-brand font-semibold text-xl">Rs 0</div>
+            <p id="pDesc" class="mt-4 text-gray-300 text-sm">This is a placeholder product detail page. Integrate with your product data to populate title, price, description, and images.</p>
+            <div class="mt-6 flex gap-3">
+                <button id="addToCart" class="px-5 py-2 bg-brand text-black rounded-md font-semibold hover:bg-brand-dark">Add to Cart</button>
+                <a href="#" class="px-5 py-2 border border-gray-700 rounded-md hover:border-brand">Buy Now</a>
+            </div>
+        </div>
+    </main>
+
+    <section class="max-w-6xl mx-auto px-4 pb-12">
+        <h2 class="text-xl font-semibold mb-4">You Might Also Like</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <a href="product.html" class="bg-card border border-gray-800 rounded-lg p-4 hover:border-brand">Related Item</a>
+            <a href="product.html" class="bg-card border border-gray-800 rounded-lg p-4 hover:border-brand">Related Item</a>
+            <a href="product.html" class="bg-card border border-gray-800 rounded-lg p-4 hover:border-brand">Related Item</a>
+            <a href="product.html" class="bg-card border border-gray-800 rounded-lg p-4 hover:border-brand">Related Item</a>
+        </div>
+    </section>
+
+    <footer class="border-t border-gray-800 py-6 text-center text-xs text-gray-400">© <span id="year"></span> Advance IT Traders</footer>
+
+    <script>
+        const CART_KEY = 'ait-cart-count';
+        function getCartCount() {
+            const n = Number(localStorage.getItem(CART_KEY) || '0');
+            return isNaN(n) ? 0 : n;
+        }
+        function setCartCount(n) {
+            localStorage.setItem(CART_KEY, String(n));
+            document.getElementById('cartCount').textContent = String(n);
+        }
+        function incCart() {
+            setCartCount(getCartCount() + 1);
+            alert('Added to cart (placeholder).');
+        }
+
+        // Simple demo: map some SKUs to data so the page shows relevant info when navigated from index
+        const PRODUCTS = {
+            'laptop4060': {
+                title: 'Gaming Laptop 15" RTX 4060',
+                price: 345000,
+                desc: 'High-FPS 1080p/1440p gaming laptop with RTX 4060.',
+                image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=2070&auto=format&fit=crop',
+                gallery: [
+                    'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=2070&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1000&auto=format&fit=crop'
+                ]
+            },
+            'pc-ryzen7': {
+                title: 'Custom Gaming PC Ryzen 7',
+                price: 280000,
+                desc: 'Ryzen 7 + RTX performance for streaming and gaming.',
+                image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2069&auto=format&fit=crop',
+                gallery: [
+                    'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2069&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=2069&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1512428559087-560fa5ceab42?q=80&w=2069&auto=format&fit=crop'
+                ]
+            },
+            'kb-rgb': {
+                title: 'RGB Mechanical Keyboard',
+                price: 12500,
+                desc: 'Tactile switches, per-key RGB, detachable cable.',
+                image: 'https://images.unsplash.com/photo-1595044426077-d36a40f253d3?q=80&w=2070&auto=format&fit=crop',
+                gallery: [
+                    'https://images.unsplash.com/photo-1595044426077-d36a40f253d3?q=80&w=2070&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1511715281310-7ff014df43a2?q=80&w=1200&auto=format&fit=crop'
+                ]
+            },
+            'headset-71': {
+                title: 'Gaming Headset 7.1 Surround',
+                price: 9800,
+                desc: 'Immersive virtual surround with noise-cancelling mic.',
+                image: 'https://images.unsplash.com/photo-1511715281310-7ff014df43a2?q=80&w=2069&auto=format&fit=crop',
+                gallery: [
+                    'https://images.unsplash.com/photo-1511715281310-7ff014df43a2?q=80&w=2069&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1552932774-4dc0d7c1d5ae?q=80&w=2069&auto=format&fit=crop',
+                    'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop'
+                ]
+            }
+        };
+        function formatPKR(n){ return 'Rs ' + Number(n).toLocaleString('en-PK'); }
+        function initProduct() {
+            const params = new URLSearchParams(location.search);
+            const sku = params.get('sku');
+            const data = PRODUCTS[sku] || { title: 'Product Title', price: 0, desc: document.getElementById('pDesc').textContent, image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop', gallery: [] };
+            document.getElementById('pTitle').textContent = data.title;
+            document.getElementById('pPrice').textContent = formatPKR(data.price);
+            document.getElementById('pDesc').textContent = data.desc;
+            // set main image
+            const hero = document.getElementById('pImage');
+            hero.style.backgroundImage = `url('${data.image}')`;
+            // render gallery
+            const gal = document.getElementById('pGallery');
+            gal.innerHTML = '';
+            (data.gallery || []).forEach(src => {
+                const btn = document.createElement('button');
+                btn.className = 'aspect-[4/3] rounded-md overflow-hidden border border-gray-800 hover:border-brand';
+                btn.innerHTML = `<div class="w-full h-full bg-center bg-cover" style="background-image:url('${src}')"></div>`;
+                btn.addEventListener('click', () => { hero.style.backgroundImage = `url('${src}')`; });
+                gal.appendChild(btn);
+            });
+        }
+
+        document.getElementById('addToCart')?.addEventListener('click', incCart);
+        document.getElementById('year').textContent = new Date().getFullYear();
+        // Initialize
+        setCartCount(getCartCount());
+        initProduct();
+    </script>
+</body>
+</html>
+
+

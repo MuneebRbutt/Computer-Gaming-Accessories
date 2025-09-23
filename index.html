@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advance IT Traders - Gaming PCs, Laptops & Accessories</title>
+    <meta name="description" content="Advance IT Traders - Gaming PCs, laptops, and computer accessories at the best prices in Pakistan." />
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            DEFAULT: '#0ea5e9', // electric blue accent
+                            dark: '#0b84b6'
+                        },
+                        surface: '#0f172a', // slate-900
+                        card: '#111827' // gray-900
+                    },
+                    boxShadow: {
+                        soft: '0 10px 25px -10px rgba(14,165,233,0.35)'
+                    }
+                },
+                fontFamily: {
+                    sans: ['Poppins', 'ui-sans-serif', 'system-ui', 'Segoe UI', 'Roboto']
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html { scroll-behavior: smooth; }
+    </style>
+</head>
+<body class="bg-surface text-gray-100 font-sans">
+    <!-- Top Bar -->
+    <div class="hidden md:block bg-black/40 text-xs text-gray-300">
+        <div class="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
+            <div>Owner: <span class="font-medium">Syed Khuram Shah</span></div>
+            <div class="flex items-center gap-4">
+                <a href="tel:+923224264260" class="hover:text-brand">+92 322-4264260</a>
+                <span class="hidden md:inline">|</span>
+                <a href="mailto:advanceittraders@gmail.com" class="hover:text-brand">advanceittraders@gmail.com</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header / Navigation -->
+    <header class="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-black/30 bg-black/50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex items-center justify-between py-4 gap-3">
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-3">
+                    <img src="https://placehold.co/40x40/0ea5e9/000000?text=AIT" alt="Advance IT Traders logo" class="w-10 h-10 rounded-full shadow-soft" />
+                    <div class="leading-5">
+                        <div class="font-semibold text-white">Advance IT Traders</div>
+                        <div class="text-xs text-gray-400">Gaming & Accessories</div>
+                    </div>
+                </a>
+
+                <!-- Search -->
+                <div class="hidden lg:flex flex-1 max-w-xl relative">
+                    <div class="flex w-full">
+                        <input id="searchInput" type="text" placeholder="Search for gaming PCs, laptops, accessories..." class="w-full bg-card border border-gray-700 rounded-l-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand" autocomplete="off" />
+                        <label for="imageUpload" class="cursor-pointer bg-card border-y border-gray-700 px-3 grid place-items-center hover:bg-gray-800" title="Search by image (AI)">
+                            <!-- Camera Icon -->
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-300">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.25 2.25 0 0 1 8.78 5.25h6.44a2.25 2.25 0 0 1 1.953.925l.9 1.2A2.25 2.25 0 0 0 19.78 8.25h.72A2.25 2.25 0 0 1 22.75 10.5v7.125A2.25 2.25 0 0 1 20.5 19.875H3.5A2.25 2.25 0 0 1 1.25 17.625V10.5A2.25 2.25 0 0 1 3.5 8.25h.72a2.25 2.25 0 0 0 1.707-.875l.9-1.2z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+                            </svg>
+                            <input id="imageUpload" type="file" accept="image/*" class="hidden" />
+                        </label>
+                        <button id="searchBtn" class="bg-brand hover:bg-brand-dark text-black font-semibold px-4 rounded-r-md">Search</button>
+                    </div>
+                    <!-- Suggestions -->
+                    <div id="suggestions" class="absolute top-full left-0 right-0 bg-card border border-gray-700 rounded-md mt-1 hidden overflow-hidden">
+                        <div class="px-4 py-2 text-xs text-gray-400">Popular</div>
+                        <ul id="suggestionsList" class="divide-y divide-gray-800"></ul>
+                    </div>
+                </div>
+
+                <!-- Nav -->
+                <nav class="hidden md:flex items-center gap-6 text-sm">
+                    <a href="#" class="hover:text-brand">Home</a>
+                    <a href="#products" class="hover:text-brand">Products</a>
+                    <a href="#about" class="hover:text-brand">About Us</a>
+                    <a href="#contact" class="hover:text-brand">Contact Us</a>
+                    <a href="#cart" class="hover:text-brand">Cart</a>
+                </nav>
+
+                <!-- Actions -->
+                <div class="flex items-center gap-3">
+                    <button id="loginBtn" class="hidden sm:inline-block text-sm px-3 py-1.5 rounded-md border border-gray-700 hover:border-brand">Login</button>
+                    <button id="registerBtn" class="hidden sm:inline-block text-sm px-3 py-1.5 rounded-md bg-brand text-black font-semibold hover:bg-brand-dark">Register</button>
+                    <button id="cartBtn" class="relative p-2 rounded-md hover:bg-gray-800" title="Cart">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-gray-200"><path d="M2.25 3a.75.75 0 0 0 0 1.5h1.386c.17 0 .318.114.36.278l.657 2.63 1.44 6.605A3 3 0 0 0 8.99 17.25h7.02a3 3 0 0 0 2.897-2.237l1.26-4.725A.75.75 0 0 0 19.47 9H7.605l-.454-2h13.299a.75.75 0 0 0 0-1.5H6.75L6.39 3.947A1.86 1.86 0 0 0 3.636 3H2.25z"/></svg>
+                        <span id="cartCount" class="absolute -top-1 -right-1 bg-brand text-black text-xs font-bold w-5 h-5 rounded-full grid place-items-center">0</span>
+                    </button>
+                    <button id="menuBtn" class="md:hidden p-2 rounded-md hover:bg-gray-800" aria-label="Open Menu">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Search & Menu -->
+            <div id="mobileMenu" class="md:hidden hidden pb-4">
+                <div class="relative mb-3">
+                    <input id="mSearchInput" type="text" placeholder="Search products..." class="w-full bg-card border border-gray-700 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand" autocomplete="off" />
+                    <div id="mSuggestions" class="absolute top-full left-0 right-0 bg-card border border-gray-700 rounded-md mt-1 hidden overflow-hidden"></div>
+                </div>
+                <nav class="grid gap-2 text-sm">
+                    <a href="#" class="hover:text-brand">Home</a>
+                    <a href="#products" class="hover:text-brand">Products</a>
+                    <a href="#about" class="hover:text-brand">About Us</a>
+                    <a href="#contact" class="hover:text-brand">Contact Us</a>
+                    <a href="#cart" class="hover:text-brand">Cart</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative">
+        <div class="absolute inset-0">
+            <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop" alt="Gaming setup" class="w-full h-full object-cover opacity-30" />
+            <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-surface"></div>
+        </div>
+        <div class="relative max-w-7xl mx-auto px-4 py-24 md:py-32">
+            <div class="max-w-2xl">
+                <h1 class="text-3xl md:text-5xl font-extrabold leading-tight">Gaming & Computer Accessories at the Best Prices in Pakistan</h1>
+                <p class="mt-4 text-gray-300">Build your dream setup with top-tier gaming PCs, powerful laptops, and premium accessories.</p>
+                <div class="mt-8 flex flex-wrap gap-3">
+                    <a href="#products" class="px-6 py-3 rounded-md bg-brand text-black font-semibold hover:bg-brand-dark shadow-soft">Shop Now</a>
+                    <a href="#featured-gaming" class="px-6 py-3 rounded-md border border-gray-700 hover:border-brand">Explore Gaming PCs</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Promotions -->
+    <section class="max-w-7xl mx-auto px-4 py-12 md:py-16">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-semibold">Featured Promotions</h2>
+            <div class="flex gap-2">
+                <button id="promoPrev" class="p-2 rounded-md border border-gray-700 hover:border-brand">Prev</button>
+                <button id="promoNext" class="p-2 rounded-md border border-gray-700 hover:border-brand">Next</button>
+            </div>
+        </div>
+        <div class="overflow-hidden">
+            <div id="promoTrack" class="flex gap-4 transition-transform duration-500">
+                <!-- Cards -->
+                <div class="min-w-[85%] sm:min-w-[45%] md:min-w-[32%] bg-card rounded-lg border border-gray-800 p-5 shadow-soft">
+                    <img src="https://images.unsplash.com/photo-1595044426077-d36a40f253d3?q=80&w=1200&auto=format&fit=crop" alt="Gaming Starter Pack bundle" class="w-full h-32 object-cover rounded-md mb-4" onerror="this.onerror=null;this.src='https://picsum.photos/640/256?random=1001';" />
+                    <div class="text-sm text-brand font-semibold">Bundle Offer</div>
+                    <div class="mt-2 text-xl font-semibold">Gaming Starter Pack</div>
+                    <p class="mt-2 text-sm text-gray-400">Keyboard + Mouse + Headset combo. Save 20%.</p>
+                    <button class="mt-4 px-4 py-2 bg-brand text-black rounded-md font-semibold hover:bg-brand-dark">Shop Bundle</button>
+                </div>
+                <div class="min-w-[85%] sm:min-w-[45%] md:min-w-[32%] bg-card rounded-lg border border-gray-800 p-5 shadow-soft">
+                    <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop" alt="RTX 4060 Laptop Deals" class="w-full h-32 object-cover rounded-md mb-4" onerror="this.onerror=null;this.src='https://picsum.photos/640/256?random=1002';" />
+                    <div class="text-sm text-brand font-semibold">Limited Time</div>
+                    <div class="mt-2 text-xl font-semibold">RTX 4060 Laptop Deals</div>
+                    <p class="mt-2 text-sm text-gray-400">High FPS on a budget. Save Rs 15,000.</p>
+                    <button class="mt-4 px-4 py-2 bg-brand text-black rounded-md font-semibold hover:bg-brand-dark">View Deals</button>
+                </div>
+                <div class="min-w-[85%] sm:min-w-[45%] md:min-w-[32%] bg-card rounded-lg border border-gray-800 p-5 shadow-soft">
+                    <img src="https://images.unsplash.com/photo-1595044426077-d36a40f253d3?q=80&w=1200&auto=format&fit=crop" alt="Mechanical Keyboards" class="w-full h-32 object-cover rounded-md mb-4" onerror="this.onerror=null;this.src='https://picsum.photos/640/256?random=1003';" />
+                    <div class="text-sm text-brand font-semibold">Flash Sale</div>
+                    <div class="mt-2 text-xl font-semibold">Mechanical Keyboards</div>
+                    <p class="mt-2 text-sm text-gray-400">Clicky precision at 15% off today.</p>
+                    <button class="mt-4 px-4 py-2 bg-brand text-black rounded-md font-semibold hover:bg-brand-dark">Grab Now</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section id="products" class="max-w-7xl mx-auto px-4 py-12 md:py-16">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-semibold">Top-Selling Products</h2>
+            <a href="#" class="text-brand hover:underline">View All</a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Product Card Template (x4) -->
+            <div class="group bg-card rounded-lg border border-gray-800 overflow-hidden" data-title="Gaming Laptop 15\" RTX 4060" data-price="345000" data-image="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop">
+                <a href="product.html?sku=laptop4060" class="block">
+                    <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop" alt="Gaming Laptop RTX 4060" class="w-full aspect-[4/3] object-cover" onerror="this.onerror=null;this.src='https://picsum.photos/800/600?random=3001';" />
+                </a>
+                <div class="p-4">
+                    <a href="product.html?sku=laptop4060" class="font-semibold hover:text-brand line-clamp-1">Gaming Laptop 15" RTX 4060</a>
+                    <div class="mt-1 text-brand font-semibold">Rs 345,000</div>
+                    <div class="mt-3 flex items-center justify-between">
+                        <button class="add-to-cart px-3 py-1.5 bg-brand text-black rounded-md text-sm font-semibold hover:bg-brand-dark">Add to Cart</button>
+                        <button class="quick-view opacity-0 group-hover:opacity-100 transition text-sm px-3 py-1.5 border border-gray-700 rounded-md hover:border-brand">Quick View</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group bg-card rounded-lg border border-gray-800 overflow-hidden" data-title="Custom Gaming PC Ryzen 7" data-price="280000" data-image="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop">
+                <a href="product.html?sku=pc-ryzen7" class="block">
+                    <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop" alt="Custom Gaming PC Ryzen 7" class="w-full aspect-[4/3] object-cover" onerror="this.onerror=null;this.src='https://picsum.photos/800/600?random=3002';" />
+                </a>
+                <div class="p-4">
+                    <a href="product.html?sku=pc-ryzen7" class="font-semibold hover:text-brand line-clamp-1">Custom Gaming PC Ryzen 7</a>
+                    <div class="mt-1 text-brand font-semibold">Rs 280,000</div>
+                    <div class="mt-3 flex items-center justify-between">
+                        <button class="add-to-cart px-3 py-1.5 bg-brand text-black rounded-md text-sm font-semibold hover:bg-brand-dark">Add to Cart</button>
+                        <button class="quick-view opacity-0 group-hover:opacity-100 transition text-sm px-3 py-1.5 border border-gray-700 rounded-md hover:border-brand">Quick View</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group bg-card rounded-lg border border-gray-800 overflow-hidden" data-title="RGB Mechanical Keyboard" data-price="12500" data-image="https://images.unsplash.com/photo-1595044426077-d36a40f253d3?q=80&w=1200&auto=format&fit=crop">
+                <a href="product.html?sku=kb-rgb" class="block">
+                    <img src="https://images.unsplash.com/photo-1595044426077-d36a40f253d3?q=80&w=1200&auto=format&fit=crop" alt="RGB Mechanical Keyboard" class="w-full aspect-[4/3] object-cover" onerror="this.onerror=null;this.src='https://picsum.photos/800/600?random=3003';" />
+                </a>
+                <div class="p-4">
+                    <a href="product.html?sku=kb-rgb" class="font-semibold hover:text-brand line-clamp-1">RGB Mechanical Keyboard</a>
+                    <div class="mt-1 text-brand font-semibold">Rs 12,500</div>
+                    <div class="mt-3 flex items-center justify-between">
+                        <button class="add-to-cart px-3 py-1.5 bg-brand text-black rounded-md text-sm font-semibold hover:bg-brand-dark">Add to Cart</button>
+                        <button class="quick-view opacity-0 group-hover:opacity-100 transition text-sm px-3 py-1.5 border border-gray-700 rounded-md hover:border-brand">Quick View</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group bg-card rounded-lg border border-gray-800 overflow-hidden" data-title="Gaming Headset 7.1 Surround" data-price="9800" data-image="https://images.unsplash.com/photo-1511715281310-7ff014df43a2?q=80&w=1200&auto=format&fit=crop">
+                <a href="product.html?sku=headset-71" class="block">
+                    <img src="https://images.unsplash.com/photo-1511715281310-7ff014df43a2?q=80&w=1200&auto=format&fit=crop" alt="Gaming Headset 7.1" class="w-full aspect-[4/3] object-cover" onerror="this.onerror=null;this.src='https://picsum.photos/800/600?random=3004';" />
+                </a>
+                <div class="p-4">
+                    <a href="product.html?sku=headset-71" class="font-semibold hover:text-brand line-clamp-1">Gaming Headset 7.1 Surround</a>
+                    <div class="mt-1 text-brand font-semibold">Rs 9,800</div>
+                    <div class="mt-3 flex items-center justify-between">
+                        <button class="add-to-cart px-3 py-1.5 bg-brand text-black rounded-md text-sm font-semibold hover:bg-brand-dark">Add to Cart</button>
+                        <button class="quick-view opacity-0 group-hover:opacity-100 transition text-sm px-3 py-1.5 border border-gray-700 rounded-md hover:border-brand">Quick View</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Extra demo products to fill homepage -->
+            <div class="group bg-card rounded-lg border border-gray-800 overflow-hidden" data-title="Wireless Gaming Mouse" data-price="6500" data-image="https://images.unsplash.com/photo-1584270354949-c26b0d5b07e7?q=80&w=1200&auto=format&fit=crop">
+                <a href="product.html?sku=mouse-wireless" class="block">
+                    <img src="https://images.unsplash.com/photo-1584270354949-c26b0d5b07e7?q=80&w=1200&auto=format&fit=crop" alt="Wireless Gaming Mouse" class="w-full aspect-[4/3] object-cover" onerror="this.onerror=null;this.src='https://picsum.photos/800/600?random=3005';" />
+                </a>
+                <div class="p-4">
+                    <a href="product.html?sku=mouse-wireless" class="font-semibold hover:text-brand line-clamp-1">Wireless Gaming Mouse</a>
+                    <div class="mt-1 text-brand font-semibold">Rs 6,500</div>
+                    <div class="mt-3 flex items-center justify-between">
+                        <button class="add-to-cart px-3 py-1.5 bg-brand text-black rounded-md text-sm font-semibold hover:bg-brand-dark">Add to Cart</button>
+                        <button class="quick-view opacity-0 group-hover:opacity-100 transition text-sm px-3 py-1.5 border border-gray-700 rounded-md hover:border-brand">Quick View</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group bg-card rounded-lg border border-gray-800 overflow-hidden" data-title="27\" 165Hz Gaming Monitor" data-price="62000" data-image="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop">
+                <a href="product.html?sku=monitor-27-165" class="block">
+                    <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop" alt="27 inch 165Hz Gaming Monitor" class="w-full aspect-[4/3] object-cover" onerror="this.onerror=null;this.src='https://picsum.photos/800/600?random=3006';" />
+                </a>
+                <div class="p-4">
+                    <a href="product.html?sku=monitor-27-165" class="font-semibold hover:text-brand line-clamp-1">27" 165Hz Gaming Monitor</a>
+                    <div class="mt-1 text-brand font-semibold">Rs 62,000</div>
+                    <div class="mt-3 flex items-center justify-between">
+                        <button class="add-to-cart px-3 py-1.5 bg-brand text-black rounded-md text-sm font-semibold hover:bg-brand-dark">Add to Cart</button>
+                        <button class="quick-view opacity-0 group-hover:opacity-100 transition text-sm px-3 py-1.5 border border-gray-700 rounded-md hover:border-brand">Quick View</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group bg-card rounded-lg border border-gray-800 overflow-hidden" data-title="NVMe SSD 1TB" data-price="18500" data-image="https://images.unsplash.com/photo-1611695434369-5c6e61bbee04?q=80&w=1200&auto=format&fit=crop">
+                <a href="product.html?sku=ssd-1tb" class="block">
+                    <img src="https://images.unsplash.com/photo-1611695434369-5c6e61bbee04?q=80&w=1200&auto=format&fit=crop" alt="NVMe SSD 1TB" class="w-full aspect-[4/3] object-cover" onerror="this.onerror=null;this.src='https://picsum.photos/800/600?random=3007';" />
+                </a>
+                <div class="p-4">
+                    <a href="product.html?sku=ssd-1tb" class="font-semibold hover:text-brand line-clamp-1">NVMe SSD 1TB</a>
+                    <div class="mt-1 text-brand font-semibold">Rs 18,500</div>
+                    <div class="mt-3 flex items-center justify-between">
+                        <button class="add-to-cart px-3 py-1.5 bg-brand text-black rounded-md text-sm font-semibold hover:bg-brand-dark">Add to Cart</button>
+                        <button class="quick-view opacity-0 group-hover:opacity-100 transition text-sm px-3 py-1.5 border border-gray-700 rounded-md hover:border-brand">Quick View</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group bg-card rounded-lg border border-gray-800 overflow-hidden" data-title="ARGB CPU Liquid Cooler" data-price="14500" data-image="https://images.unsplash.com/photo-1561154464-82e9adf32764?q=80&w=1200&auto=format&fit=crop">
+                <a href="product.html?sku=cpu-cooler" class="block">
+                    <img src="https://images.unsplash.com/photo-1561154464-82e9adf32764?q=80&w=1200&auto=format&fit=crop" alt="ARGB CPU Liquid Cooler" class="w-full aspect-[4/3] object-cover" onerror="this.onerror=null;this.src='https://picsum.photos/800/600?random=3008';" />
+                </a>
+                <div class="p-4">
+                    <a href="product.html?sku=cpu-cooler" class="font-semibold hover:text-brand line-clamp-1">ARGB CPU Liquid Cooler</a>
+                    <div class="mt-1 text-brand font-semibold">Rs 14,500</div>
+                    <div class="mt-3 flex items-center justify-between">
+                        <button class="add-to-cart px-3 py-1.5 bg-brand text-black rounded-md text-sm font-semibold hover:bg-brand-dark">Add to Cart</button>
+                        <button class="quick-view opacity-0 group-hover:opacity-100 transition text-sm px-3 py-1.5 border border-gray-700 rounded-md hover:border-brand">Quick View</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Product Recommendations -->
+    <section class="max-w-7xl mx-auto px-4 py-12 md:py-16">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-semibold">Recommended for You (AI)</h2>
+            <div class="flex gap-2">
+                <button id="recPrev" class="p-2 rounded-md border border-gray-700 hover:border-brand">Prev</button>
+                <button id="recNext" class="p-2 rounded-md border border-gray-700 hover:border-brand">Next</button>
+            </div>
+        </div>
+        <div class="overflow-hidden">
+            <div id="recTrack" class="flex gap-4 transition-transform duration-500">
+                <!-- With demo images using <img> for consistency -->
+                <div class="min-w-[70%] sm:min-w-[33%] lg:min-w-[24%] bg-card rounded-lg border border-gray-800 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop" alt="AI Pick: RTX Gaming Laptop" class="w-full h-28 object-cover" onerror="this.onerror=null;this.src='https://picsum.photos/640/224?random=2001';" />
+                    <div class="p-4">
+                        <div class="font-semibold">AI Pick: RTX Gaming Laptop</div>
+                        <div class="text-sm text-gray-400">Great for esports</div>
+                    </div>
+                </div>
+                <div class="min-w-[70%] sm:min-w-[33%] lg:min-w-[24%] bg-card rounded-lg border border-gray-800 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop" alt="AI Pick: Ryzen 7 Desktop" class="w-full h-28 object-cover" onerror="this.onerror=null;this.src='https://picsum.photos/640/224?random=2002';" />
+                    <div class="p-4">
+                        <div class="font-semibold">AI Pick: Ryzen 7 Desktop</div>
+                        <div class="text-sm text-gray-400">Stream + game</div>
+                    </div>
+                </div>
+                <div class="min-w-[70%] sm:min-w-[33%] lg:min-w-[24%] bg-card rounded-lg border border-gray-800 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1595044426077-d36a40f253d3?q=80&w=1200&auto=format&fit=crop" alt="AI Pick: Mech Keyboard" class="w-full h-28 object-cover" onerror="this.onerror=null;this.src='https://picsum.photos/640/224?random=2003';" />
+                    <div class="p-4">
+                        <div class="font-semibold">AI Pick: Mech Keyboard</div>
+                        <div class="text-sm text-gray-400">Tactile typing</div>
+                    </div>
+                </div>
+                <div class="min-w-[70%] sm:min-w-[33%] lg:min-w-[24%] bg-card rounded-lg border border-gray-800 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1511715281310-7ff014df43a2?q=80&w=1200&auto=format&fit=crop" alt="AI Pick: Gaming Headset" class="w-full h-28 object-cover" onerror="this.onerror=null;this.src='https://picsum.photos/640/224?random=2004';" />
+                    <div class="p-4">
+                        <div class="font-semibold">AI Pick: Gaming Headset</div>
+                        <div class="text-sm text-gray-400">Crystal clear audio</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Shop With Us -->
+    <section id="about" class="max-w-7xl mx-auto px-4 py-12 md:py-16">
+        <h2 class="text-2xl font-semibold mb-6">Why Shop With Us</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <div class="bg-card rounded-lg border border-gray-800 p-4">
+                <div class="text-brand font-semibold">Easy & Secure</div>
+                <div class="text-sm text-gray-400">Smooth, safe checkout</div>
+            </div>
+            <div class="bg-card rounded-lg border border-gray-800 p-4">
+                <div class="text-brand font-semibold">Reliable Payments</div>
+                <div class="text-sm text-gray-400">Trusted gateways</div>
+            </div>
+            <div class="bg-card rounded-lg border border-gray-800 p-4">
+                <div class="text-brand font-semibold">Order Tracking</div>
+                <div class="text-sm text-gray-400">Real-time updates</div>
+            </div>
+            <div class="bg-card rounded-lg border border-gray-800 p-4">
+                <div class="text-brand font-semibold">24/7 Availability</div>
+                <div class="text-sm text-gray-400">We're always open</div>
+            </div>
+            <div class="bg-card rounded-lg border border-gray-800 p-4 col-span-2 md:col-span-1">
+                <div class="text-brand font-semibold">Customer Reviews</div>
+                <div class="text-sm text-gray-400">Trusted by gamers</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="max-w-7xl mx-auto px-4 py-12 md:py-16">
+        <h2 class="text-2xl font-semibold mb-6">What Gamers Say</h2>
+        <div class="overflow-hidden">
+            <div id="testiTrack" class="flex gap-4 transition-transform duration-500">
+                <div class="min-w-[85%] md:min-w-[48%] bg-card rounded-lg border border-gray-800 p-5">
+                    <div class="font-semibold">Hassan R.</div>
+                    <div class="text-sm text-gray-400">"Amazing prices and fast delivery. My RTX laptop is a beast!"</div>
+                </div>
+                <div class="min-w-[85%] md:min-w-[48%] bg-card rounded-lg border border-gray-800 p-5">
+                    <div class="font-semibold">Ayesha K.</div>
+                    <div class="text-sm text-gray-400">"Great support. Helped me choose the right accessories for streaming."</div>
+                </div>
+                <div class="min-w-[85%] md:min-w-[48%] bg-card rounded-lg border border-gray-800 p-5">
+                    <div class="font-semibold">Bilal S.</div>
+                    <div class="text-sm text-gray-400">"Bundle offers are worth it. Highly recommended."</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Signup -->
+    <section class="max-w-7xl mx-auto px-4 py-12 md:py-16">
+        <div class="bg-card border border-gray-800 rounded-lg p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div>
+                <h3 class="text-xl font-semibold">Stay Updated on New Products & Deals</h3>
+                <p class="text-gray-400 text-sm">Join our mailing list to receive the latest offers.</p>
+            </div>
+            <form id="newsletterForm" class="w-full md:w-auto flex gap-2" action="#" method="post">
+                <input type="email" name="email" required placeholder="Enter your email" class="w-full md:w-80 bg-black/40 border border-gray-700 rounded-md px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand" />
+                <button type="submit" class="px-5 py-2 bg-brand text-black rounded-md font-semibold hover:bg-brand-dark">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Contact / Footer -->
+    <footer id="contact" class="bg-black/40 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 py-10 grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div>
+                <div class="font-semibold text-white">Advance IT Traders</div>
+                <div class="text-sm text-gray-400">Gaming PCs, Laptops & Accessories</div>
+                <div class="mt-3 text-sm text-gray-400">Shop Address: Karachi, Pakistan</div>
+            </div>
+            <div>
+                <div class="font-semibold mb-3">Quick Links</div>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#" class="hover:text-brand">Home</a></li>
+                    <li><a href="#products" class="hover:text-brand">Products</a></li>
+                    <li><a href="#about" class="hover:text-brand">About</a></li>
+                    <li><a href="#contact" class="hover:text-brand">Contact</a></li>
+                    <li><a href="#cart" class="hover:text-brand">Cart</a></li>
+                </ul>
+            </div>
+            <div>
+                <div class="font-semibold mb-3">Contact</div>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="tel:+923224264260" class="hover:text-brand">+92 322-4264260</a></li>
+                    <li><a href="mailto:advanceittraders@gmail.com" class="hover:text-brand">advanceittraders@gmail.com</a></li>
+                </ul>
+            </div>
+            <div>
+                <div class="font-semibold mb-3">Follow</div>
+                <div class="flex items-center gap-3 text-gray-300">
+                    <a href="#" aria-label="Facebook" class="hover:text-brand">Fb</a>
+                    <a href="#" aria-label="Instagram" class="hover:text-brand">Ig</a>
+                    <a href="#" aria-label="Twitter" class="hover:text-brand">Tw</a>
+                    <a href="#" aria-label="YouTube" class="hover:text-brand">Yt</a>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-gray-800 py-4 text-center text-xs text-gray-400">
+            © <span id="year"></span> Advance IT Traders. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- Chatbot Floating Button -->
+    <button id="chatbotBtn" class="fixed bottom-6 right-6 z-40 rounded-full bg-brand text-black font-bold w-14 h-14 shadow-soft hover:bg-brand-dark" title="AI Assistant">AI</button>
+    <!-- Chatbot Panel (placeholder) -->
+    <div id="chatbotPanel" class="fixed bottom-24 right-6 z-40 w-[90vw] max-w-sm bg-card border border-gray-800 rounded-lg hidden">
+        <div class="p-3 border-b border-gray-800 flex items-center justify-between">
+            <div class="font-semibold">AI Assistant</div>
+            <button id="chatbotClose" class="text-sm text-gray-400 hover:text-brand">Close</button>
+        </div>
+        <div id="chatLog" class="p-3 h-64 overflow-y-auto text-sm space-y-2">
+            <div class="text-gray-400">This is an AI chatbot placeholder. Integrate your AI backend here.</div>
+        </div>
+        <form id="chatForm" class="p-3 border-t border-gray-800 flex gap-2">
+            <input id="chatInput" type="text" placeholder="Ask about products..." class="flex-1 bg-black/40 border border-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand" />
+            <button class="px-4 py-2 bg-brand text-black rounded-md text-sm font-semibold">Send</button>
+        </form>
+    </div>
+
+    <!-- Quick View Modal -->
+    <div id="quickView" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/70"></div>
+        <div class="relative max-w-2xl mx-auto mt-20 bg-card border border-gray-800 rounded-lg overflow-hidden">
+            <div class="flex items-center justify-between px-4 py-3 border-b border-gray-800">
+                <div id="qvTitle" class="font-semibold">Product</div>
+                <button id="qvClose" class="text-sm text-gray-400 hover:text-brand">Close</button>
+            </div>
+            <div class="grid md:grid-cols-2 gap-0">
+                <div id="qvImage" class="aspect-[4/3] bg-center bg-cover"></div>
+                <div class="p-4">
+                    <div id="qvPrice" class="text-brand font-semibold text-lg">Rs 0</div>
+                    <p class="mt-2 text-sm text-gray-300">Quick preview. View full details on the product page.</p>
+                    <div class="mt-4 flex gap-2">
+                        <button id="qvAdd" class="px-4 py-2 bg-brand text-black rounded-md text-sm font-semibold">Add to Cart</button>
+                        <a id="qvLink" href="#" class="px-4 py-2 border border-gray-700 rounded-md text-sm hover:border-brand">View Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // State
+        const state = {
+            cartCount: 0,
+            promoIndex: 0,
+            recIndex: 0,
+            testiIndex: 0,
+            suggestions: ['Gaming PC', 'RTX Laptop', 'Mechanical Keyboard', 'Gaming Mouse', 'Headset', 'SSD 1TB', 'Monitor 27"']
+        };
+
+        // Storage helpers
+        const CART_KEY = 'ait-cart-count';
+        function loadCartCount() {
+            const n = Number(localStorage.getItem(CART_KEY) || '0');
+            state.cartCount = isNaN(n) ? 0 : n;
+            const el = document.getElementById('cartCount');
+            if (el) el.textContent = String(state.cartCount);
+        }
+        function persistCart() {
+            localStorage.setItem(CART_KEY, String(state.cartCount));
+        }
+
+        // Header interactions
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Search suggestions (desktop)
+        const searchInput = document.getElementById('searchInput');
+        const suggestions = document.getElementById('suggestions');
+        const suggestionsList = document.getElementById('suggestionsList');
+        searchInput?.addEventListener('input', () => {
+            const q = searchInput.value.toLowerCase();
+            const matches = state.suggestions.filter(s => s.toLowerCase().includes(q)).slice(0, 5);
+            suggestionsList.innerHTML = matches.map(m => `<li class="px-4 py-2 hover:bg-gray-800 cursor-pointer">${m}</li>`).join('');
+            suggestions.classList.toggle('hidden', matches.length === 0);
+        });
+        suggestionsList?.addEventListener('click', (e) => {
+            const li = e.target.closest('li');
+            if (!li) return;
+            searchInput.value = li.textContent;
+            suggestions.classList.add('hidden');
+        });
+        document.addEventListener('click', (e) => {
+            if (!suggestions.contains(e.target) && e.target !== searchInput) {
+                suggestions.classList.add('hidden');
+            }
+        });
+
+        // Image search placeholder
+        document.getElementById('imageUpload')?.addEventListener('change', (e) => {
+            const file = e.target.files?.[0];
+            if (file) alert('AI image search placeholder: ' + file.name);
+        });
+        document.getElementById('searchBtn')?.addEventListener('click', () => {
+            alert('Search placeholder for: ' + (searchInput?.value || ''));
+        });
+
+        // Cart interactions
+        function updateCart(delta = 1) {
+            state.cartCount += delta;
+            const el = document.getElementById('cartCount');
+            if (el) el.textContent = String(state.cartCount);
+            persistCart();
+        }
+        document.querySelectorAll('.add-to-cart').forEach(btn => btn.addEventListener('click', () => updateCart(1)));
+
+        // Initialize cart on load
+        loadCartCount();
+
+        // Simple carousel helpers
+        function carousel(trackId, prevBtnId, nextBtnId) {
+            const track = document.getElementById(trackId);
+            const prev = document.getElementById(prevBtnId);
+            const next = document.getElementById(nextBtnId);
+            let index = 0;
+            function slide(dir) {
+                const items = Array.from(track.children);
+                const visible = Math.round(track.parentElement.offsetWidth / items[0].offsetWidth);
+                index = Math.max(0, Math.min(items.length - visible, index + dir));
+                const w = items[0].offsetWidth + 16; // including gap
+                track.style.transform = `translateX(${-index * w}px)`;
+            }
+            prev?.addEventListener('click', () => slide(-1));
+            next?.addEventListener('click', () => slide(1));
+            window.addEventListener('resize', () => slide(0));
+            return { slide }
+        }
+
+        const promo = carousel('promoTrack', 'promoPrev', 'promoNext');
+        const rec = carousel('recTrack', 'recPrev', 'recNext');
+
+        // Testimonials auto-slide
+        (function () {
+            const track = document.getElementById('testiTrack');
+            let i = 0;
+            setInterval(() => {
+                const items = Array.from(track.children);
+                i = (i + 1) % items.length;
+                const w = items[0].offsetWidth + 16;
+                track.style.transform = `translateX(${-i * w}px)`;
+            }, 4000);
+        })();
+
+        // Newsletter placeholder submit
+        document.getElementById('newsletterForm')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = new FormData(e.target).get('email');
+            alert('Subscribed (placeholder): ' + email);
+            e.target.reset();
+        });
+
+        // Chatbot placeholder
+        const chatbotBtn = document.getElementById('chatbotBtn');
+        const chatbotPanel = document.getElementById('chatbotPanel');
+        const chatbotClose = document.getElementById('chatbotClose');
+        const chatForm = document.getElementById('chatForm');
+        const chatInput = document.getElementById('chatInput');
+        const chatLog = document.getElementById('chatLog');
+        chatbotBtn?.addEventListener('click', () => chatbotPanel.classList.toggle('hidden'));
+        chatbotClose?.addEventListener('click', () => chatbotPanel.classList.add('hidden'));
+        chatForm?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const msg = chatInput.value.trim();
+            if (!msg) return;
+            chatLog.insertAdjacentHTML('beforeend', `<div><span class="text-brand">You:</span> ${msg}</div>`);
+            chatLog.insertAdjacentHTML('beforeend', `<div class="text-gray-400">AI: (placeholder) I will help you find ${msg}.</div>`);
+            chatLog.scrollTop = chatLog.scrollHeight;
+            chatInput.value = '';
+        });
+
+        // Quick View logic
+        const qv = document.getElementById('quickView');
+        const qvTitle = document.getElementById('qvTitle');
+        const qvPrice = document.getElementById('qvPrice');
+        const qvImage = document.getElementById('qvImage');
+        const qvAdd = document.getElementById('qvAdd');
+        const qvLink = document.getElementById('qvLink');
+        document.querySelectorAll('.quick-view').forEach(btn => btn.addEventListener('click', (e) => {
+            const card = e.target.closest('.group');
+            const title = card.getAttribute('data-title');
+            const price = Number(card.getAttribute('data-price'));
+            const image = card.getAttribute('data-image');
+            const link = card.querySelector('a[href*="product.html"]').getAttribute('href');
+            qvTitle.textContent = title;
+            qvPrice.textContent = 'Rs ' + price.toLocaleString('en-PK');
+            qvImage.style.backgroundImage = `url('${image}')`;
+            qvLink.setAttribute('href', link);
+            qv.classList.remove('hidden');
+            qvAdd.onclick = () => updateCart(1);
+        }));
+        document.getElementById('qvClose')?.addEventListener('click', () => qv.classList.add('hidden'));
+        qv.addEventListener('click', (e) => { if (e.target === qv) qv.classList.add('hidden'); });
+
+        // Year
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
+
+
