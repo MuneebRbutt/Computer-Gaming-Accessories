@@ -91,6 +91,7 @@
                 <nav class="hidden md:flex items-center gap-6 text-sm">
                     <a href="#" class="hover:text-brand">Home</a>
                     <a href="#products" class="hover:text-brand">Products</a>
+                    <a href="#pc-builder" class="hover:text-brand">Custom Builder</a>
                     <a href="#about" class="hover:text-brand">About Us</a>
                     <a href="#contact" class="hover:text-brand">Contact Us</a>
                     <a href="#cart" class="hover:text-brand">Cart</a>
@@ -121,6 +122,7 @@
                 <nav class="grid gap-2 text-sm">
                     <a href="#" class="hover:text-brand">Home</a>
                     <a href="#products" class="hover:text-brand">Products</a>
+                    <a href="#pc-builder" class="hover:text-brand">Custom Builder</a>
                     <a href="#about" class="hover:text-brand">About Us</a>
                     <a href="#contact" class="hover:text-brand">Contact Us</a>
                     <a href="#cart" class="hover:text-brand">Cart</a>
@@ -145,6 +147,115 @@
                 </div>
             </div>
         </div>
+    </section>
+
+    <!-- Custom PC Builder -->
+    <section id="pc-builder" class="max-w-7xl mx-auto px-4 py-12 md:py-16">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-semibold">Custom PC Builder</h2>
+            <a href="#shop" class="text-brand hover:underline">Browse Parts</a>
+        </div>
+        <div class="bg-card border border-gray-800 rounded-lg p-5 grid grid-cols-1 md:grid-cols-3 gap-5">
+            <div class="grid gap-3">
+                <div class="grid gap-2">
+                    <label class="text-xs text-gray-400" for="bCase">Case</label>
+                    <select id="bCase" class="bg-black/40 border border-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand"></select>
+                </div>
+                <div class="grid gap-2">
+                    <label class="text-xs text-gray-400" for="bCPU">Processor</label>
+                    <select id="bCPU" class="bg-black/40 border border-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand"></select>
+                </div>
+                <div class="grid gap-2">
+                    <label class="text-xs text-gray-400" for="bGPU">Graphic Card</label>
+                    <select id="bGPU" class="bg-black/40 border border-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand"></select>
+                </div>
+            </div>
+            <div class="grid gap-3">
+                <div class="grid gap-2">
+                    <label class="text-xs text-gray-400" for="bRAM">Memory (RAM)</label>
+                    <select id="bRAM" class="bg-black/40 border border-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand"></select>
+                </div>
+                <div class="grid gap-2">
+                    <label class="text-xs text-gray-400" for="bStorage">Storage</label>
+                    <select id="bStorage" class="bg-black/40 border border-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand"></select>
+                </div>
+                <div class="grid gap-2">
+                    <label class="text-xs text-gray-400" for="bPSU">Power Supply</label>
+                    <select id="bPSU" class="bg-black/40 border border-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand"></select>
+                </div>
+            </div>
+            <div class="grid content-start gap-3">
+                <div class="border border-gray-800 rounded-md p-4">
+                    <div class="text-sm text-gray-400">Estimated Price</div>
+                    <div id="bTotal" class="text-xl font-semibold text-brand">Rs 0</div>
+                    <div class="mt-3 text-sm text-gray-400">Estimated Wattage</div>
+                    <div id="bWatts" class="text-sm">0 W</div>
+                    <div id="bCompat" class="mt-2 text-xs"></div>
+                </div>
+                <button id="bAddToCart" class="px-4 py-2 bg-brand text-black rounded-md text-sm font-semibold hover:bg-brand-dark">Add to Cart</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Shop: All Products -->
+    <section id="shop" class="max-w-7xl mx-auto px-4 py-12 md:py-16">
+        <div class="flex items-center justify-between mb-6 gap-3 flex-wrap">
+            <h2 class="text-2xl font-semibold">Shop Products</h2>
+            <a href="#shop" class="text-brand hover:underline">Back to top</a>
+        </div>
+
+        <!-- Toolbar: Search, Filters, Sort -->
+        <div class="bg-card border border-gray-800 rounded-lg p-4 md:p-5 mb-6 grid grid-cols-1 md:grid-cols-5 gap-4">
+            <div class="grid gap-2">
+                <label for="shopSearch" class="text-xs text-gray-400">Search</label>
+                <input id="shopSearch" type="text" placeholder="Search by name or category" class="w-full bg-black/40 border border-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand" />
+            </div>
+            <div class="grid gap-2">
+                <label for="shopCategory" class="text-xs text-gray-400">Category</label>
+                <select id="shopCategory" class="w-full bg-black/40 border border-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand">
+                    <option value="">All</option>
+                </select>
+            </div>
+            <div class="grid gap-2">
+                <label for="shopSubcategory" class="text-xs text-gray-400">Subcategory</label>
+                <select id="shopSubcategory" class="w-full bg-black/40 border border-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand">
+                    <option value="">All</option>
+                </select>
+            </div>
+            <div class="grid gap-2">
+                <label for="shopBrand" class="text-xs text-gray-400">Brand</label>
+                <select id="shopBrand" class="w-full bg-black/40 border border-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand">
+                    <option value="">All</option>
+                </select>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+                <div class="grid gap-2">
+                    <label for="shopMinPrice" class="text-xs text-gray-400">Min Price (Rs)</label>
+                    <input id="shopMinPrice" type="number" min="0" class="w-full bg-black/40 border border-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand" />
+                </div>
+                <div class="grid gap-2">
+                    <label for="shopMaxPrice" class="text-xs text-gray-400">Max Price (Rs)</label>
+                    <input id="shopMaxPrice" type="number" min="0" class="w-full bg-black/40 border border-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand" />
+                </div>
+            </div>
+            <div class="grid gap-2 md:col-span-3 md:col-start-2">
+                <label for="shopSort" class="text-xs text-gray-400">Sort By</label>
+                <div class="flex gap-2">
+                    <select id="shopSort" class="flex-1 bg-black/40 border border-gray-700 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand">
+                        <option value="default">Default</option>
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
+                        <option value="name-asc">Name: A → Z</option>
+                        <option value="name-desc">Name: Z → A</option>
+                    </select>
+                    <button id="shopReset" class="px-4 py-2 border border-gray-700 rounded-md text-sm hover:border-brand">Reset</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grid -->
+        <div id="shopGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+        <div id="shopEmpty" class="hidden text-center text-gray-400 text-sm mt-6">No products match your filters.</div>
     </section>
 
     <!-- Featured Promotions -->
@@ -188,7 +299,7 @@
     <section id="products" class="max-w-7xl mx-auto px-4 py-12 md:py-16">
         <div class="flex items-center justify-between mb-6">
             <h2 class="text-2xl font-semibold">Top-Selling Products</h2>
-            <a href="#" class="text-brand hover:underline">View All</a>
+            <a href="#shop" class="text-brand hover:underline">View All</a>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <!-- Product Card Template (x4) -->
@@ -648,6 +759,209 @@
         }));
         document.getElementById('qvClose')?.addEventListener('click', () => qv.classList.add('hidden'));
         qv.addEventListener('click', (e) => { if (e.target === qv) qv.classList.add('hidden'); });
+
+        // ---------- Shop (All Products) ----------
+        function formatPKR(n){ return 'Rs ' + Number(n).toLocaleString('en-PK'); }
+        const SHOP_PRODUCTS = [
+            { sku: 'laptop4060', title: 'Gaming Laptop 15" RTX 4060', price: 345000, category: 'Gaming Laptops', subcategory: '', brand: 'MSI', image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop' },
+            { sku: 'pc-ryzen7', title: 'Custom Gaming PC Ryzen 7', price: 280000, category: 'PC', subcategory: 'PC Bundle (Pre-build)', brand: 'AMD', image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop' },
+            { sku: 'kb-rgb', title: 'RGB Mechanical Keyboard', price: 12500, category: 'Keyboards', subcategory: '', brand: 'Razer', image: 'https://images.unsplash.com/photo-1595044426077-d36a40f253d3?q=80&w=1200&auto=format&fit=crop' },
+            { sku: 'headset-71', title: 'Gaming Headset 7.1 Surround', price: 9800, category: 'Headphones', subcategory: '', brand: 'HyperX', image: 'https://images.unsplash.com/photo-1511715281310-7ff014df43a2?q=80&w=1200&auto=format&fit=crop' },
+            { sku: 'mouse-wireless', title: 'Wireless Gaming Mouse', price: 6500, category: 'Mouses', subcategory: '', brand: 'Logitech', image: 'https://images.unsplash.com/photo-1584270354949-c26b0d5b07e7?q=80&w=1200&auto=format&fit=crop' },
+            { sku: 'monitor-27-165', title: '27" 165Hz Gaming Monitor', price: 62000, category: 'Computer Accessories', subcategory: '', brand: 'Dell', image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop' },
+            { sku: 'ssd-1tb', title: 'NVMe SSD 1TB', price: 18500, category: 'Computer Accessories', subcategory: '', brand: 'Samsung', image: 'https://images.unsplash.com/photo-1611695434369-5c6e61bbee04?q=80&w=1200&auto=format&fit=crop' },
+            { sku: 'cpu-cooler', title: 'ARGB CPU Liquid Cooler', price: 14500, category: 'Computer Accessories', subcategory: '', brand: 'CoolerMaster', image: 'https://images.unsplash.com/photo-1561154464-82e9adf32764?q=80&w=1200&auto=format&fit=crop' }
+        ];
+
+        // Add two prebuilt bundles as products
+        SHOP_PRODUCTS.push(
+            { sku: 'bundle-starter', title: 'PC Bundle Starter (i5 + GTX 1660)', price: 165000, category: 'PC', subcategory: 'PC Bundle (Pre-build)', brand: 'AdvanceIT', image: 'https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1200&auto=format&fit=crop' },
+            { sku: 'bundle-streamer', title: 'PC Bundle Streamer (Ryzen 5 + RTX 3060)', price: 225000, category: 'PC', subcategory: 'PC Bundle (Pre-build)', brand: 'AdvanceIT', image: 'https://images.unsplash.com/photo-1512428559087-560fa5ceab42?q=80&w=1200&auto=format&fit=crop' }
+        );
+
+        const shopGrid = document.getElementById('shopGrid');
+        const shopEmpty = document.getElementById('shopEmpty');
+        const shopSearch = document.getElementById('shopSearch');
+        const shopCategory = document.getElementById('shopCategory');
+        const shopBrand = document.getElementById('shopBrand');
+        const shopSubcategory = document.getElementById('shopSubcategory');
+        const shopMinPrice = document.getElementById('shopMinPrice');
+        const shopMaxPrice = document.getElementById('shopMaxPrice');
+        const shopSort = document.getElementById('shopSort');
+        const shopReset = document.getElementById('shopReset');
+
+        function renderShop(products){
+            if (!shopGrid) return;
+            shopGrid.innerHTML = products.map(p => `
+                <div class="group bg-card rounded-lg border border-gray-800 overflow-hidden" data-title="${p.title}" data-price="${p.price}" data-image="${p.image}">
+                    <a href="product.html?sku=${p.sku}" class="block">
+                        <img src="${p.image}" alt="${p.title}" class="w-full aspect-[4/3] object-cover" onerror="this.onerror=null;this.src='https://picsum.photos/800/600?random=${Math.floor(Math.random()*9000)+1000}';" />
+                    </a>
+                    <div class="p-4">
+                        <a href="product.html?sku=${p.sku}" class="font-semibold hover:text-brand line-clamp-1">${p.title}</a>
+                        <div class="mt-1 text-brand font-semibold">${formatPKR(p.price)}</div>
+                        <div class="mt-2 text-xs text-gray-400">${p.category}${p.subcategory ? ' • ' + p.subcategory : ''} • ${p.brand}</div>
+                        <div class="mt-3 flex items-center justify-between">
+                            <button class="shop-add px-3 py-1.5 bg-brand text-black rounded-md text-sm font-semibold hover:bg-brand-dark">Add to Cart</button>
+                            <a class="text-sm px-3 py-1.5 border border-gray-700 rounded-md hover:border-brand" href="product.html?sku=${p.sku}">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            // bind add to cart
+            shopGrid.querySelectorAll('.shop-add').forEach(btn => btn.addEventListener('click', () => updateCart(1)));
+            shopEmpty.classList.toggle('hidden', products.length !== 0);
+        }
+
+        function getUnique(list, key){
+            return Array.from(new Set(list.map(x => x[key]))).sort();
+        }
+
+        function populateFilters(){
+            if (!shopCategory || !shopBrand || !shopSubcategory) return;
+            const cats = getUnique(SHOP_PRODUCTS, 'category');
+            const brands = getUnique(SHOP_PRODUCTS, 'brand');
+            shopCategory.innerHTML = '<option value="">All</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
+            shopBrand.innerHTML = '<option value="">All</option>' + brands.map(b => `<option value="${b}">${b}</option>`).join('');
+            updateSubcategories();
+        }
+
+        function updateSubcategories(){
+            if (!shopSubcategory) return;
+            const cat = shopCategory?.value || '';
+            let subs = SHOP_PRODUCTS
+                .filter(p => !cat || p.category === cat)
+                .map(p => p.subcategory || '')
+                .filter(Boolean);
+            subs = Array.from(new Set(subs)).sort();
+            shopSubcategory.innerHTML = '<option value="">All</option>' + subs.map(s => `<option value="${s}">${s}</option>`).join('');
+        }
+
+        function applyFilters(){
+            const q = (shopSearch?.value || '').toLowerCase().trim();
+            const cat = shopCategory?.value || '';
+            const brand = shopBrand?.value || '';
+            const sub = shopSubcategory?.value || '';
+            const min = Number(shopMinPrice?.value || '0');
+            const max = Number(shopMaxPrice?.value || '0');
+            const sort = shopSort?.value || 'default';
+            let list = SHOP_PRODUCTS.filter(p => {
+                const matchesText = !q || p.title.toLowerCase().includes(q) || p.category.toLowerCase().includes(q);
+                const matchesCat = !cat || p.category === cat;
+                const matchesSub = !sub || (p.subcategory || '') === sub;
+                const matchesBrand = !brand || p.brand === brand;
+                const matchesMin = !min || p.price >= min;
+                const matchesMax = !max || p.price <= max;
+                return matchesText && matchesCat && matchesSub && matchesBrand && matchesMin && matchesMax;
+            });
+            if (sort === 'price-asc') list.sort((a,b)=>a.price-b.price);
+            if (sort === 'price-desc') list.sort((a,b)=>b.price-a.price);
+            if (sort === 'name-asc') list.sort((a,b)=>a.title.localeCompare(b.title));
+            if (sort === 'name-desc') list.sort((a,b)=>b.title.localeCompare(a.title));
+            renderShop(list);
+        }
+
+        function bindShopUI(){
+            [shopSearch, shopCategory, shopSubcategory, shopBrand, shopMinPrice, shopMaxPrice, shopSort].forEach(el => el?.addEventListener('input', applyFilters));
+            shopCategory?.addEventListener('input', updateSubcategories);
+            shopReset?.addEventListener('click', () => {
+                if (shopSearch) shopSearch.value = '';
+                if (shopCategory) shopCategory.value = '';
+                if (shopSubcategory) shopSubcategory.value = '';
+                if (shopBrand) shopBrand.value = '';
+                if (shopMinPrice) shopMinPrice.value = '';
+                if (shopMaxPrice) shopMaxPrice.value = '';
+                if (shopSort) shopSort.value = 'default';
+                updateSubcategories();
+                applyFilters();
+            });
+        }
+
+        // Initialize shop on DOM ready
+        populateFilters();
+        renderShop(SHOP_PRODUCTS);
+        bindShopUI();
+
+        // ---------- Custom PC Builder Logic ----------
+        const CASES = [
+            { id: 'nzxt-h510', name: 'NZXT H510', price: 18000 },
+            { id: 'cm-nr200', name: 'Cooler Master NR200', price: 16500 },
+            { id: 'lianli-215', name: 'Lian Li Lancool 215', price: 22000 }
+        ];
+        const CPUS = [
+            { id: 'i5-12400f', name: 'Intel Core i5-12400F', price: 45000, watts: 65 },
+            { id: 'r5-5600', name: 'AMD Ryzen 5 5600', price: 38000, watts: 65 },
+            { id: 'r7-5700x', name: 'AMD Ryzen 7 5700X', price: 65000, watts: 65 }
+        ];
+        const GPUS = [
+            { id: 'gtx-1660', name: 'NVIDIA GTX 1660 6GB', price: 65000, watts: 120 },
+            { id: 'rtx-3060', name: 'NVIDIA RTX 3060 12GB', price: 105000, watts: 170 },
+            { id: 'rtx-4060', name: 'NVIDIA RTX 4060 8GB', price: 125000, watts: 115 }
+        ];
+        const RAMS = [
+            { id: '16gb-3200', name: '16GB (2x8) DDR4-3200', price: 14000, watts: 8 },
+            { id: '32gb-3600', name: '32GB (2x16) DDR4-3600', price: 28000, watts: 12 }
+        ];
+        const STORAGES = [
+            { id: 'ssd-500', name: 'NVMe SSD 500GB', price: 11000, watts: 5 },
+            { id: 'ssd-1tb', name: 'NVMe SSD 1TB', price: 18500, watts: 5 }
+        ];
+        const PSUS = [
+            { id: 'psu-550', name: '550W 80+ Bronze', price: 15000, watts: 550 },
+            { id: 'psu-650', name: '650W 80+ Bronze', price: 18500, watts: 650 },
+            { id: 'psu-750', name: '750W 80+ Gold', price: 26000, watts: 750 }
+        ];
+
+        const bCase = document.getElementById('bCase');
+        const bCPU = document.getElementById('bCPU');
+        const bGPU = document.getElementById('bGPU');
+        const bRAM = document.getElementById('bRAM');
+        const bStorage = document.getElementById('bStorage');
+        const bPSU = document.getElementById('bPSU');
+        const bTotal = document.getElementById('bTotal');
+        const bWatts = document.getElementById('bWatts');
+        const bCompat = document.getElementById('bCompat');
+        const bAddToCart = document.getElementById('bAddToCart');
+
+        function fillSelect(sel, list){
+            if (!sel) return;
+            sel.innerHTML = '<option value="">Select...</option>' + list.map(i => `<option value="${i.id}">${i.name} — Rs ${i.price.toLocaleString('en-PK')}</option>`).join('');
+        }
+        function findById(list, id){ return list.find(x => x.id === id); }
+        function calc(){
+            const c = findById(CASES, bCase?.value);
+            const cpu = findById(CPUS, bCPU?.value);
+            const gpu = findById(GPUS, bGPU?.value);
+            const ram = findById(RAMS, bRAM?.value);
+            const sto = findById(STORAGES, bStorage?.value);
+            const psu = findById(PSUS, bPSU?.value);
+            const sum = [c, cpu, gpu, ram, sto, psu].filter(Boolean).reduce((a,b)=> a + b.price, 0);
+            const watts = [cpu, gpu, ram, sto].filter(Boolean).reduce((a,b)=> a + (b.watts||0), 0) + 50; // 50W motherboard/headroom
+            bTotal.textContent = formatPKR(sum);
+            bWatts.textContent = `${watts} W`;
+            let ok = true;
+            let msg = '';
+            if (psu && watts > psu.watts * 0.8) { // require 20% headroom
+                ok = false;
+                msg = `Recommended higher PSU. Need ≥ ${Math.ceil(watts/0.8)}W`;
+            }
+            bCompat.textContent = msg || 'Looks compatible.';
+            bCompat.className = 'mt-2 text-xs ' + (ok ? 'text-green-400' : 'text-yellow-400');
+        }
+        [bCase, bCPU, bGPU, bRAM, bStorage, bPSU].forEach(el => el?.addEventListener('input', calc));
+        bAddToCart?.addEventListener('click', () => {
+            updateCart(1);
+            alert('Custom build added (placeholder).');
+        });
+
+        // initialize builder selects
+        fillSelect(bCase, CASES);
+        fillSelect(bCPU, CPUS);
+        fillSelect(bGPU, GPUS);
+        fillSelect(bRAM, RAMS);
+        fillSelect(bStorage, STORAGES);
+        fillSelect(bPSU, PSUS);
+        calc();
 
         // Year
         document.getElementById('year').textContent = new Date().getFullYear();
