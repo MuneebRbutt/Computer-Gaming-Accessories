@@ -6,6 +6,7 @@ import { useFilterStore } from '@/lib/store'
 import { Input } from './ui/Input'
 import { Select } from './ui/Select'
 import { Button } from './ui/Button'
+import { clsx } from 'clsx'
 
 interface ProductFiltersProps {
   products: Product[]
@@ -20,6 +21,7 @@ export default function ProductFilters({ products }: ProductFiltersProps) {
     minPrice,
     maxPrice,
     sortBy,
+    view,
     setSearch,
     setCategory,
     setSubcategory,
@@ -27,6 +29,7 @@ export default function ProductFilters({ products }: ProductFiltersProps) {
     setMinPrice,
     setMaxPrice,
     setSortBy,
+    setView,
     resetFilters
   } = useFilterStore()
 
@@ -44,7 +47,7 @@ export default function ProductFilters({ products }: ProductFiltersProps) {
 
   return (
     <div className="bg-card border border-gray-800 rounded-lg p-4 md:p-5 mb-6">
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
         {/* Search */}
         <div className="grid gap-2">
           <label className="text-xs text-gray-400">Search</label>
@@ -123,8 +126,8 @@ export default function ProductFilters({ products }: ProductFiltersProps) {
           </div>
         </div>
 
-        {/* Sort */}
-        <div className="grid gap-2 md:col-span-3 md:col-start-2">
+        {/* Sort + View */}
+        <div className="grid gap-2 md:col-span-3 md:col-start-3">
           <label className="text-xs text-gray-400">Sort By</label>
           <div className="flex gap-2">
             <Select
@@ -138,6 +141,22 @@ export default function ProductFilters({ products }: ProductFiltersProps) {
               <option value="name-asc">Name: A → Z</option>
               <option value="name-desc">Name: Z → A</option>
             </Select>
+            <div className="flex items-center gap-1 text-xs">
+              <button
+                className={clsx('px-2 py-2 rounded-md border', view === 'grid' ? 'border-brand text-brand' : 'border-gray-700')}
+                onClick={(e) => { e.preventDefault(); setView('grid') }}
+                title="Grid view"
+              >
+                🔳
+              </button>
+              <button
+                className={clsx('px-2 py-2 rounded-md border', view === 'list' ? 'border-brand text-brand' : 'border-gray-700')}
+                onClick={(e) => { e.preventDefault(); setView('list') }}
+                title="List view"
+              >
+                📄
+              </button>
+            </div>
             <Button
               variant="outline"
               onClick={resetFilters}

@@ -99,8 +99,8 @@
 
                 <!-- Actions -->
                 <div class="flex items-center gap-3">
-                    <button id="loginBtn" class="hidden sm:inline-block text-sm px-3 py-1.5 rounded-md border border-gray-700 hover:border-brand">Login</button>
-                    <button id="registerBtn" class="hidden sm:inline-block text-sm px-3 py-1.5 rounded-md bg-brand text-black font-semibold hover:bg-brand-dark">Register</button>
+                    <button id="loginBtn" class="hidden sm:inline-block text-sm px-3 py-1.5 rounded-md border border-gray-700 hover:border-brand" onclick="goToLogin()">Login</button>
+                    <button id="registerBtn" class="hidden sm:inline-block text-sm px-3 py-1.5 rounded-md bg-brand text-black font-semibold hover:bg-brand-dark" onclick="goToSignup()">Register</button>
                     <button id="cartBtn" class="relative p-2 rounded-md hover:bg-gray-800" title="Cart">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-gray-200"><path d="M2.25 3a.75.75 0 0 0 0 1.5h1.386c.17 0 .318.114.36.278l.657 2.63 1.44 6.605A3 3 0 0 0 8.99 17.25h7.02a3 3 0 0 0 2.897-2.237l1.26-4.725A.75.75 0 0 0 19.47 9H7.605l-.454-2h13.299a.75.75 0 0 0 0-1.5H6.75L6.39 3.947A1.86 1.86 0 0 0 3.636 3H2.25z"/></svg>
                         <span id="cartCount" class="absolute -top-1 -right-1 bg-brand text-black text-xs font-bold w-5 h-5 rounded-full grid place-items-center">0</span>
@@ -965,6 +965,73 @@
 
         // Year
         document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Authentication functions to connect to Next.js app
+        function goToLogin() {
+            // Check if Next.js server is running on port 3000
+            const nextjsUrl = 'http://localhost:3000/login';
+            
+            // Try to open Next.js login page
+            window.open(nextjsUrl, '_blank');
+            
+            // Provide fallback message
+            setTimeout(() => {
+                if (!confirm('Login page opened in new tab. If it didn\'t open, make sure the Next.js server is running.\n\nWould you like instructions to start the server?')) {
+                    return;
+                }
+                alert('To start the Next.js server:\n\n1. Open terminal/command prompt\n2. Navigate to the nextjs folder\n3. Run: npm run dev\n4. Then go to http://localhost:3000/login');
+            }, 1000);
+        }
+
+        function goToSignup() {
+            // Check if Next.js server is running on port 3000
+            const nextjsUrl = 'http://localhost:3000/signup';
+            
+            // Try to open Next.js signup page
+            window.open(nextjsUrl, '_blank');
+            
+            // Provide fallback message
+            setTimeout(() => {
+                if (!confirm('Signup page opened in new tab. If it didn\'t open, make sure the Next.js server is running.\n\nWould you like instructions to start the server?')) {
+                    return;
+                }
+                alert('To start the Next.js server:\n\n1. Open terminal/command prompt\n2. Navigate to the nextjs folder\n3. Run: npm run dev\n4. Then go to http://localhost:3000/signup');
+            }, 1000);
+        }
+
+        // Check if Next.js server is running and update buttons accordingly
+        function checkNextJsServer() {
+            fetch('http://localhost:3000')
+                .then(response => {
+                    if (response.ok) {
+                        // Server is running, update button text to indicate it's working
+                        const loginBtn = document.getElementById('loginBtn');
+                        const registerBtn = document.getElementById('registerBtn');
+                        if (loginBtn) {
+                            loginBtn.style.borderColor = '#0ea5e9';
+                            loginBtn.title = 'Next.js server is running - click to login';
+                        }
+                        if (registerBtn) {
+                            registerBtn.style.backgroundColor = '#0ea5e9';
+                            registerBtn.title = 'Next.js server is running - click to register';
+                        }
+                    }
+                })
+                .catch(error => {
+                    // Server is not running, buttons will show instructions
+                    const loginBtn = document.getElementById('loginBtn');
+                    const registerBtn = document.getElementById('registerBtn');
+                    if (loginBtn) {
+                        loginBtn.title = 'Next.js server not running - click for instructions';
+                    }
+                    if (registerBtn) {
+                        registerBtn.title = 'Next.js server not running - click for instructions';
+                    }
+                });
+        }
+
+        // Check server status when page loads
+        setTimeout(checkNextJsServer, 1000);
     </script>
 </body>
 </html>

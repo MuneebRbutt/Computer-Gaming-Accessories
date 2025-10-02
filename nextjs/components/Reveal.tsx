@@ -38,3 +38,4 @@ export default function Reveal({ children, direction = 'up', delay = 0 }: Reveal
 }
 
 
+

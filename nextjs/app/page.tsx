@@ -5,6 +5,7 @@ import PCBuilder from '@/components/PCBuilder'
 import ProductGrid from '@/components/ProductGrid'
 import ProductFilters from '@/components/ProductFilters'
 import CategoryGrid from '@/components/CategoryGrid'
+import Footer from '@/components/Footer'
 import { PRODUCTS } from '@/lib/data'
 
 export default function Home() {
@@ -29,6 +30,8 @@ export default function Home() {
         
         <FeaturedProducts />
       </main>
+      
+      <Footer />
     </div>
   )
 }

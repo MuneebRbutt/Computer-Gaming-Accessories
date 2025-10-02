@@ -1,14 +1,17 @@
+'use client'
+
 import Link from 'next/link'
 import Image from 'next/image'
 import { Button } from './ui/Button'
 import { motion } from 'framer-motion'
+import Banner from '../images/banner.png'
 
 export default function Hero() {
   return (
     <section className="relative">
       <div className="absolute inset-0">
         <Image
-          src="https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=2070&auto=format&fit=crop"
+          src={Banner}
           alt="Gaming setup"
           fill
           className="object-cover opacity-30"

@@ -5,6 +5,9 @@ import { PRODUCTS } from '@/lib/data'
 import Header from '@/components/Header'
 import { Button } from '@/components/ui/Button'
 import ProductCard from '@/components/ProductCard'
+import ProductGallery from '@/components/ProductGallery'
+import Tabs from '@/components/Tabs'
+import Reviews from '@/components/Reviews'
 
 interface ProductPageProps {
   params: {
@@ -45,42 +48,22 @@ export default function ProductPage({ params }: ProductPageProps) {
       <Header />
       
       <main className="max-w-6xl mx-auto px-4 py-8">
-        <div className="mb-4">
-          <Link href="/" className="text-sm text-brand hover:underline">
-            ← Back to Home
-          </Link>
-        </div>
+        {/* Breadcrumbs */}
+        <nav className="text-xs text-gray-400 mb-3">
+          <Link href="/" className="hover:text-brand">Home</Link>
+          <span className="mx-1">/</span>
+          <Link href="/shop" className="hover:text-brand">Shop</Link>
+          <span className="mx-1">/</span>
+          <span className="text-white">{product.title}</span>
+        </nav>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Product Images */}
-          <div>
-            <div className="relative aspect-[4/3] bg-card border border-gray-800 rounded-lg overflow-hidden">
-              <Image
-                src={product.image}
-                alt={product.title}
-                fill
-                className="object-cover"
-                priority
-              />
-            </div>
-            {product.gallery && product.gallery.length > 0 && (
-              <div className="mt-3 grid grid-cols-4 gap-2">
-                {product.gallery.map((image, index) => (
-                  <div key={index} className="aspect-[4/3] bg-card border border-gray-800 rounded-md overflow-hidden">
-                    <Image
-                      src={image}
-                      alt={`${product.title} ${index + 1}`}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          {/* Product Gallery */}
+          <ProductGallery images={[product.image, ...(product.gallery || [])]} />
 
-          {/* Product Details */}
+          {/* Product Info */}
           <div>
+            <div className="mb-1 text-xs text-brand">Best Computer Store In Pakistan</div>
             <div className="flex items-start justify-between gap-3 mb-2">
               <h1 className="text-2xl font-semibold">{product.title}</h1>
               {product.availability && (
@@ -89,38 +72,54 @@ export default function ProductPage({ params }: ProductPageProps) {
                 </span>
               )}
             </div>
-            
-            <div className="text-brand font-semibold text-xl mb-2">
-              {formatPrice(product.price)}
+
+            <div className="flex items-center gap-2 mb-2">
+              <div className="text-brand font-semibold text-2xl">{formatPrice(product.price)}</div>
+              {/* example discount badge */}
+              <span className="px-2 py-0.5 text-xs rounded-md border border-yellow-600 text-yellow-400">Save 10%</span>
             </div>
-            
             <div className="text-sm text-gray-400 mb-4">
               {product.category}
               {product.subcategory && ` • ${product.subcategory}`}
               {` • ${product.brand}`}
             </div>
-            
-            <p className="text-gray-300 text-sm mb-6">
-              {product.description}
-            </p>
-            
-            <div className="flex gap-3 mb-8">
-              <Button size="lg">
-                Add to Cart
-              </Button>
-              <Button variant="outline" size="lg">
-                Buy Now
-              </Button>
+
+            {/* Key specs */}
+            <ul className="text-sm text-gray-300 list-disc pl-5 mb-4 space-y-1">
+              {Object.entries(product.specs || {}).slice(0,4).map(([k,v]) => (
+                <li key={k}><span className="text-gray-400">{k}:</span> {v}</li>
+              ))}
+            </ul>
+
+            <div className="flex flex-wrap gap-3 mb-6">
+              <Button size="lg">Add to Cart</Button>
+              <Button size="lg" variant="outline">Buy Now</Button>
+              <Button size="sm" variant="outline">Wishlist</Button>
+              <Button size="sm" variant="outline">Compare</Button>
             </div>
 
-            {/* Technical Specifications */}
-            {product.specs && Object.keys(product.specs).length > 0 && (
-              <div>
-                <h2 className="text-lg font-semibold mb-3">Technical Specifications</h2>
+            {/* Trust elements */}
+            <div className="grid grid-cols-2 gap-3 text-xs text-gray-300">
+              <div className="border border-gray-800 rounded-md p-3">Warranty & Returns</div>
+              <div className="border border-gray-800 rounded-md p-3">Secure Payments</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Tabs: Overview, Specifications, Reviews */}
+        <section className="mt-10">
+          <Tabs
+            items={[
+              { key: 'overview', label: 'Overview', content: (
+                <div className="text-sm text-gray-300">
+                  {product.description}
+                </div>
+              ) },
+              { key: 'specs', label: 'Specifications', content: (
                 <div className="overflow-hidden rounded-lg border border-gray-800">
                   <table className="w-full text-sm">
                     <tbody>
-                      {Object.entries(product.specs).map(([key, value], index) => (
+                      {Object.entries(product.specs || {}).map(([key, value], index) => (
                         <tr key={key} className={index % 2 === 0 ? 'bg-black/20' : ''}>
                           <td className="px-4 py-2 w-40 text-gray-400">{key}</td>
                           <td className="px-4 py-2">{value}</td>
@@ -129,10 +128,13 @@ export default function ProductPage({ params }: ProductPageProps) {
                     </tbody>
                   </table>
                 </div>
-              </div>
-            )}
-          </div>
-        </div>
+              ) },
+              { key: 'reviews', label: 'Reviews', content: (
+                <Reviews sku={product.id} />
+              ) }
+            ]}
+          />
+        </section>
 
         {/* Related Products */}
         {relatedProducts.length > 0 && (

@@ -1,10 +1,9 @@
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {
-  experimental: {
-    appDir: true,
-  },
+  reactStrictMode: true,
   images: {
-    domains: ['images.unsplash.com', 'picsum.photos'],
+    domains: ['images.unsplash.com', 'picsum.photos', 'placehold.co','ui-avatars.com'],
   },
 }
 

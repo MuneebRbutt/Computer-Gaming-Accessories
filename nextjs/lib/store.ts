@@ -59,7 +59,8 @@ export const useCartStore = create<CartStore>()(
       getTotalPrice: () => get().items.reduce((total, item) => total + (item.product.price * item.quantity), 0)
     }),
     {
-      name: 'cart-storage'
+      name: 'cart-storage',
+      skipHydration: true,
     }
   )
 )
@@ -72,6 +73,7 @@ interface FilterStore {
   minPrice: number
   maxPrice: number
   sortBy: string
+  view: 'grid' | 'list'
   setSearch: (search: string) => void
   setCategory: (category: string) => void
   setSubcategory: (subcategory: string) => void
@@ -79,6 +81,7 @@ interface FilterStore {
   setMinPrice: (minPrice: number) => void
   setMaxPrice: (maxPrice: number) => void
   setSortBy: (sortBy: string) => void
+  setView: (view: 'grid' | 'list') => void
   resetFilters: () => void
 }
 
@@ -90,6 +93,7 @@ export const useFilterStore = create<FilterStore>((set) => ({
   minPrice: 0,
   maxPrice: 0,
   sortBy: 'default',
+  view: 'grid',
   setSearch: (search) => set({ search }),
   setCategory: (category) => set({ category, subcategory: '' }),
   setSubcategory: (subcategory) => set({ subcategory }),
@@ -97,6 +101,7 @@ export const useFilterStore = create<FilterStore>((set) => ({
   setMinPrice: (minPrice) => set({ minPrice }),
   setMaxPrice: (maxPrice) => set({ maxPrice }),
   setSortBy: (sortBy) => set({ sortBy }),
+  setView: (view) => set({ view }),
   resetFilters: () => set({
     search: '',
     category: '',
@@ -104,6 +109,7 @@ export const useFilterStore = create<FilterStore>((set) => ({
     brand: '',
     minPrice: 0,
     maxPrice: 0,
-    sortBy: 'default'
+    sortBy: 'default',
+    view: 'grid'
   })
 }))

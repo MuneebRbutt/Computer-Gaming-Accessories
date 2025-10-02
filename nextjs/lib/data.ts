@@ -1,3 +1,28 @@
+import type { StaticImageData } from 'next/image'
+
+import Img1 from '../images/Image (1).png'
+import Img2 from '../images/Image (2).png'
+import Img3 from '../images/Image (3).png'
+import Img4 from '../images/Image (4).png'
+import Img5 from '../images/Image (5).png'
+import Img6 from '../images/Image (6).png'
+import Img7 from '../images/Image (7).png'
+import Img8 from '../images/Image (8).png'
+import Img9 from '../images/Image (9).png'
+import Img10 from '../images/Image (10).png'
+import Img11 from '../images/Image (11).png'
+import Img12 from '../images/Image (12).png'
+import Img13 from '../images/Image (13).png'
+import Img14 from '../images/Image (14).png'
+import Img15 from '../images/Image (15).png'
+import Img16 from '../images/Image (16).png'
+import Img17 from '../images/Image (17).png'
+import Img18 from '../images/Image (18).png'
+import Img19 from '../images/Image (19).png'
+import Img20 from '../images/Image (20).png'
+import Img21 from '../images/Image (21).png'
+import Img22 from '../images/Image (22).png'
+
 export interface Product {
   id: string
   title: string
@@ -5,8 +30,8 @@ export interface Product {
   category: string
   subcategory?: string
   brand: string
-  image: string
-  gallery?: string[]
+  image: string | StaticImageData
+  gallery?: (string | StaticImageData)[]
   description?: string
   availability?: 'In Stock' | 'Limited Stock' | 'Preorder' | 'Out of Stock'
   specs?: Record<string, string>
@@ -31,11 +56,8 @@ export const PRODUCTS: Product[] = [
     price: 345000,
     category: 'Gaming Laptops',
     brand: 'MSI',
-    image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop',
-    gallery: [
-      'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1000&auto=format&fit=crop'
-    ],
+    image: Img1,
+    gallery: [Img1, Img2],
     description: 'High-FPS 1080p/1440p gaming laptop with RTX 4060.',
     availability: 'In Stock',
     specs: {
@@ -54,11 +76,8 @@ export const PRODUCTS: Product[] = [
     category: 'PC',
     subcategory: 'PC Bundle (Pre-build)',
     brand: 'AMD',
-    image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop',
-    gallery: [
-      'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1200&auto=format&fit=crop'
-    ],
+    image: Img3,
+    gallery: [Img3, Img4],
     description: 'Ryzen 7 + RTX performance for streaming and gaming.',
     availability: 'Limited Stock',
     specs: {
@@ -76,7 +95,7 @@ export const PRODUCTS: Product[] = [
     price: 12500,
     category: 'Keyboards',
     brand: 'Razer',
-    image: 'https://images.unsplash.com/photo-1595044426077-d36a40f253d3?q=80&w=1200&auto=format&fit=crop',
+    image: Img5,
     description: 'Tactile switches, per-key RGB, detachable cable.',
     availability: 'In Stock',
     specs: {
@@ -94,7 +113,7 @@ export const PRODUCTS: Product[] = [
     price: 9800,
     category: 'Headphones',
     brand: 'HyperX',
-    image: 'https://images.unsplash.com/photo-1511715281310-7ff014df43a2?q=80&w=1200&auto=format&fit=crop',
+    image: Img6,
     description: 'Immersive virtual surround with noise-cancelling mic.',
     availability: 'In Stock',
     specs: {
@@ -111,7 +130,7 @@ export const PRODUCTS: Product[] = [
     price: 6500,
     category: 'Mouses',
     brand: 'Logitech',
-    image: 'https://images.unsplash.com/photo-1584270354949-c26b0d5b07e7?q=80&w=1200&auto=format&fit=crop',
+    image: Img7,
     description: 'Lightweight wireless mouse with precise sensor.',
     availability: 'In Stock',
     specs: {
@@ -128,7 +147,7 @@ export const PRODUCTS: Product[] = [
     price: 62000,
     category: 'Computer Accessories',
     brand: 'Dell',
-    image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?q=80&w=1200&auto=format&fit=crop',
+    image: Img8,
     description: 'Fast 165Hz IPS panel for smooth gameplay.',
     availability: 'Preorder',
     specs: {
@@ -145,7 +164,7 @@ export const PRODUCTS: Product[] = [
     price: 18500,
     category: 'Computer Accessories',
     brand: 'Samsung',
-    image: 'https://images.unsplash.com/photo-1611695434369-5c6e61bbee04?q=80&w=1200&auto=format&fit=crop',
+    image: Img9,
     description: 'Blazing fast NVMe SSD for OS and games.',
     availability: 'In Stock',
     specs: {
@@ -161,7 +180,7 @@ export const PRODUCTS: Product[] = [
     price: 14500,
     category: 'Computer Accessories',
     brand: 'CoolerMaster',
-    image: 'https://images.unsplash.com/photo-1561154464-82e9adf32764?q=80&w=1200&auto=format&fit=crop',
+    image: Img10,
     description: 'Quiet cooling with addressable RGB.',
     availability: 'In Stock',
     specs: {

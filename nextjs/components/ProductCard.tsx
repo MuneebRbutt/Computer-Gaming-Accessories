@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ShoppingCart, Eye } from 'lucide-react'
 import { Product } from '@/lib/data'
-import { useCartStore } from '@/lib/store'
+import { useCartStore } from '@/hooks/useCartStore'
 import { Button } from './ui/Button'
 import toast from 'react-hot-toast'
 import { Badge } from './ui/Badge'
@@ -51,10 +51,17 @@ export default function ProductCard({ product }: ProductCardProps) {
             src={product.image}
             alt={product.title}
             fill
+            unoptimized
             className="object-cover group-hover:scale-105 transition-transform duration-300"
             onError={(e) => {
               const target = e.target as HTMLImageElement
-              target.src = `https://picsum.photos/800/600?random=${Math.floor(Math.random() * 9000) + 1000}`
+              const svg = encodeURIComponent(
+                `<svg xmlns='http://www.w3.org/2000/svg' width='800' height='600'>\
+<rect width='100%' height='100%' fill='#0b1220'/>\
+<text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='#7aa7ff' font-size='22' font-family='Arial, sans-serif'>Image unavailable</text>\
+</svg>`
+              )
+              target.src = `data:image/svg+xml;charset=utf-8,${svg}`
             }}
           />
           {product.availability && (
