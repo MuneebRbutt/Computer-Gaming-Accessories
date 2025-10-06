@@ -17,13 +17,13 @@ export default function AccountSidebar() {
   const pathname = usePathname()
   return (
     <aside className="hidden md:block md:w-64">
-      <div className="sticky top-20 border border-gray-800 rounded-lg bg-card p-3">
-        <div className="text-sm font-semibold mb-2">My Account</div>
+      <div className="sticky top-20 border border-gray-200 rounded-lg bg-white p-4 shadow-sm">
+        <div className="text-sm font-bold text-gray-900 mb-3">My Account</div>
         <nav className="grid gap-1 text-sm">
           {items.map(item => {
             const active = pathname === item.href
             return (
-              <Link key={item.href} href={item.href} className={`px-3 py-2 rounded-md border ${active ? 'border-brand text-brand' : 'border-gray-800 hover:border-brand/60'}`}>{item.label}</Link>
+              <Link key={item.href} href={item.href} className={`px-3 py-2 rounded-md border transition-all ${active ? 'border-primary bg-primary/10 text-primary font-medium' : 'border-gray-200 text-gray-600 hover:border-primary/40 hover:text-gray-900'}`}>{item.label}</Link>
             )
           })}
         </nav>

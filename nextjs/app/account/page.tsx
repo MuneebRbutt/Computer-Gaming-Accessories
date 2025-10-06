@@ -35,41 +35,41 @@ export default function AccountDashboard() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <div className="text-2xl font-semibold">Welcome back, {session?.user?.name || "Gamer"}!</div>
+        <div className="text-3xl font-bold text-gray-900">Welcome back, {session?.user?.name || "Gamer"}!</div>
         <button
           onClick={handleSignOut}
           disabled={isLoading}
-          className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md transition duration-200 disabled:opacity-50"
+          className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold shadow-sm transition duration-200 disabled:opacity-50"
         >
           {isLoading ? "Signing out..." : "Sign Out"}
         </button>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div className="border border-gray-800 rounded-md bg-card p-4">
-          <div className="text-sm text-gray-400">Recent Orders</div>
-          <div className="text-2xl font-semibold">2</div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="border border-gray-200 rounded-lg bg-white p-6 shadow-sm">
+          <div className="text-sm font-medium text-gray-600 mb-2">Recent Orders</div>
+          <div className="text-3xl font-bold text-gray-900">2</div>
         </div>
-        <div className="border border-gray-800 rounded-md bg-card p-4">
-          <div className="text-sm text-gray-400">Wishlist Items</div>
-          <div className="text-2xl font-semibold">5</div>
+        <div className="border border-gray-200 rounded-lg bg-white p-6 shadow-sm">
+          <div className="text-sm font-medium text-gray-600 mb-2">Wishlist Items</div>
+          <div className="text-3xl font-bold text-gray-900">5</div>
         </div>
-        <div className="border border-gray-800 rounded-md bg-card p-4">
-          <div className="text-sm text-gray-400">Loyalty Points</div>
-          <div className="text-2xl font-semibold">1,250</div>
+        <div className="border border-gray-200 rounded-lg bg-white p-6 shadow-sm">
+          <div className="text-sm font-medium text-gray-600 mb-2">Loyalty Points</div>
+          <div className="text-3xl font-bold text-primary">1,250</div>
         </div>
       </div>
       
-      <div className="bg-gray-900 rounded-lg shadow-lg p-6 mb-8">
-        <h2 className="text-xl font-semibold mb-4">Profile Information</h2>
-        <div className="bg-gray-800 rounded-md p-4">
-          <p className="mb-2">
-            <span className="text-gray-400">Email:</span>{" "}
-            {session?.user?.email || "example@email.com"}
+      <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-6 mb-8">
+        <h2 className="text-xl font-bold text-gray-900 mb-4">Profile Information</h2>
+        <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 space-y-3">
+          <p className="flex items-center">
+            <span className="font-semibold text-gray-700 w-32">Email:</span>
+            <span className="text-gray-900">{session?.user?.email || "example@email.com"}</span>
           </p>
-          <p>
-            <span className="text-gray-400">Member since:</span>{" "}
-            {new Date().toLocaleDateString()}
+          <p className="flex items-center">
+            <span className="font-semibold text-gray-700 w-32">Member since:</span>
+            <span className="text-gray-900">{new Date().toLocaleDateString()}</span>
           </p>
         </div>
       </div>

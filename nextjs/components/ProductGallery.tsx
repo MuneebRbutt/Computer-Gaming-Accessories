@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import type { StaticImageData } from 'next/image'
-import Placeholder from '../images/Image (4).png'
+// Use public placeholder path
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 
@@ -13,14 +13,14 @@ interface ProductGalleryProps {
 }
 
 export default function ProductGallery({ images, videoUrl, view360Url }: ProductGalleryProps) {
-  const list = images && images.length ? images : [Placeholder]
+  const list = images && images.length ? images : ['/images/image (32).png']
   const [active, setActive] = useState(0)
   const [zoom, setZoom] = useState(false)
 
   return (
     <div>
       <div
-        className="relative aspect-[4/3] bg-card border border-gray-800 rounded-lg overflow-hidden cursor-zoom-in"
+        className="relative aspect-[4/3] bg-white border border-gray-200 rounded-lg overflow-hidden cursor-zoom-in shadow-sm hover:shadow-md transition-shadow"
         onClick={() => setZoom(!zoom)}
         title={zoom ? 'Exit zoom' : 'Click to zoom'}
       >
@@ -30,10 +30,10 @@ export default function ProductGallery({ images, videoUrl, view360Url }: Product
         {(videoUrl || view360Url) && (
           <div className="absolute top-2 left-2 flex gap-2">
             {videoUrl && (
-              <a href={videoUrl} target="_blank" className="px-2 py-1 text-xs rounded-md border border-gray-700 bg-black/40 hover:border-brand">Video</a>
+              <a href={videoUrl} target="_blank" className="px-3 py-1.5 text-xs rounded-md border border-gray-300 bg-white/90 hover:border-primary hover:bg-primary/10 transition-all font-medium">Video</a>
             )}
             {view360Url && (
-              <a href={view360Url} target="_blank" className="px-2 py-1 text-xs rounded-md border border-gray-700 bg-black/40 hover:border-brand">360°</a>
+              <a href={view360Url} target="_blank" className="px-3 py-1.5 text-xs rounded-md border border-gray-300 bg-white/90 hover:border-primary hover:bg-primary/10 transition-all font-medium">360°</a>
             )}
           </div>
         )}
@@ -43,7 +43,7 @@ export default function ProductGallery({ images, videoUrl, view360Url }: Product
           <button
             key={i}
             onClick={() => setActive(i)}
-            className={`relative aspect-[4/3] rounded-md overflow-hidden border ${i === active ? 'border-brand' : 'border-gray-800'} hover:border-brand`}
+            className={`relative aspect-[4/3] rounded-md overflow-hidden border-2 transition-all ${i === active ? 'border-primary shadow-sm' : 'border-gray-200 hover:border-gray-300'}`}
           >
             <Image src={img} alt={`Thumb ${i + 1}`} fill className="object-cover" />
           </button>

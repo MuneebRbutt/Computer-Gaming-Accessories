@@ -13,13 +13,22 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className="bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-surface via-[#0b1224] to-surface text-gray-100 font-sans min-h-screen">
-        <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(14,165,233,0.08),transparent_35%),radial-gradient(circle_at_80%_0%,rgba(14,165,233,0.06),transparent_35%)]" />
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Preload fonts for better performance */}
+        <link
+          rel="preconnect"
+          href="https://fonts.googleapis.com"
+        />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+      </head>
+      <body suppressHydrationWarning>
         <Providers>
-          <div className="relative">
-            {children}
-          </div>
+          {children}
         </Providers>
       </body>
     </html>

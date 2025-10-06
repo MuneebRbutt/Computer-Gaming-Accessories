@@ -1,13 +1,19 @@
-import { notFound } from 'next/navigation'
+'use client'
+
+import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { PRODUCTS } from '@/lib/data'
+import { useState, useEffect } from 'react'
+import { PRODUCTS, Product } from '@/lib/data'
 import Header from '@/components/Header'
 import { Button } from '@/components/ui/Button'
 import ProductCard from '@/components/ProductCard'
 import ProductGallery from '@/components/ProductGallery'
 import Tabs from '@/components/Tabs'
 import Reviews from '@/components/Reviews'
+import { useCartStore } from '@/hooks/useCartStore'
+import { useWishlistStore } from '@/lib/store'
+import { toast } from 'react-hot-toast'
 
 interface ProductPageProps {
   params: {
@@ -16,10 +22,75 @@ interface ProductPageProps {
 }
 
 export default function ProductPage({ params }: ProductPageProps) {
-  const product = PRODUCTS.find(p => p.id === params.id)
+  const router = useRouter()
+  const [quantity, setQuantity] = useState(1)
+  const [mounted, setMounted] = useState(false)
+  const [allProducts, setAllProducts] = useState<Product[]>(PRODUCTS)
+  const [loading, setLoading] = useState(true)
   
+  // Zustand stores - with safe defaults
+  const cartStore = useCartStore()
+  const wishlistStore = useWishlistStore()
+  
+  const addToCart = cartStore?.addItem
+  const hydrated = cartStore?.hydrated ?? false
+  const addToWishlist = wishlistStore?.addItem
+  const isInWishlist = wishlistStore?.isInWishlist ?? (() => false)
+  
+  useEffect(() => {
+    setMounted(true)
+    
+    // Fetch products from database with no caching
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('/api/products?status=ACTIVE', {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache'
+          }
+        })
+        if (response.ok) {
+          const dbProducts = await response.json()
+          setAllProducts([...dbProducts, ...PRODUCTS])
+        }
+      } catch (error) {
+        console.error('Failed to fetch products:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    
+    fetchProducts()
+  }, [params.id]) // Re-fetch when product ID changes
+  
+  const product = allProducts.find(p => p.id === params.id)
+  
+  // Handle product not found in client component
   if (!product) {
-    notFound()
+    return (
+      <div className="min-h-screen bg-surface">
+        <Header />
+        <main className="max-w-6xl mx-auto px-4 py-16 text-center">
+          <h1 className="text-3xl font-bold text-white mb-4">Product Not Found</h1>
+          <p className="text-gray-400 mb-8">The product you're looking for doesn't exist.</p>
+          <Button onClick={() => router.push('/products')}>
+            Browse All Products
+          </Button>
+        </main>
+      </div>
+    )
+  }
+  
+  // Show loading state while mounting or fetching
+  if (!mounted || loading) {
+    return (
+      <div className="min-h-screen bg-surface">
+        <Header />
+        <main className="max-w-6xl mx-auto px-4 py-16 text-center">
+          <div className="text-white">Loading...</div>
+        </main>
+      </div>
+    )
   }
 
   const formatPrice = (price: number) => {
@@ -39,23 +110,74 @@ export default function ProductPage({ params }: ProductPageProps) {
     }
   }
 
-  const relatedProducts = PRODUCTS
+  const relatedProducts = allProducts
     .filter(p => p.id !== product.id && p.category === product.category)
     .slice(0, 4)
 
-  return (
-    <div className="min-h-screen bg-surface">
-      <Header />
-      
-      <main className="max-w-6xl mx-auto px-4 py-8">
-        {/* Breadcrumbs */}
-        <nav className="text-xs text-gray-400 mb-3">
-          <Link href="/" className="hover:text-brand">Home</Link>
-          <span className="mx-1">/</span>
-          <Link href="/shop" className="hover:text-brand">Shop</Link>
-          <span className="mx-1">/</span>
-          <span className="text-white">{product.title}</span>
-        </nav>
+  const handleAddToCart = () => {
+    if (!addToCart) {
+      toast.error('Cart is not available')
+      return
+    }
+    
+    if (!hydrated) {
+      toast.error('Please wait...')
+      return
+    }
+    
+    addToCart(product, { quantity })
+    toast.success(`${product.title} added to cart!`)
+  }
+
+  const handleBuyNow = () => {
+    if (!addToCart) {
+      toast.error('Cart is not available')
+      return
+    }
+    
+    if (!hydrated) {
+      toast.error('Please wait...')
+      return
+    }
+    
+    addToCart(product, { quantity })
+    toast.success('Product added to cart!')
+    router.push('/cart')
+  }
+
+  const handleAddToWishlist = () => {
+    if (!addToWishlist) {
+      toast.error('Wishlist is not available')
+      return
+    }
+    
+    if (isInWishlist(product.id)) {
+      toast('Already in wishlist', { icon: '❤️' })
+    } else {
+      addToWishlist(product)
+      toast.success('Added to wishlist!')
+    }
+  }
+
+  const handleCompare = () => {
+    toast('Compare feature coming soon!', { icon: 'ℹ️' })
+  }
+
+  // Render the page
+  try {
+    return (
+      <div className="min-h-screen bg-surface">
+        <Header />
+        
+        <main className="max-w-6xl mx-auto px-4 py-8">
+          {/* Breadcrumbs */}
+          <nav className="text-xs text-gray-400 mb-3">
+            <Link href="/" className="hover:text-brand">Home</Link>
+            <span className="mx-1">/</span>
+            <Link href="/shop" className="hover:text-brand">Shop</Link>
+            <span className="mx-1">/</span>
+            <span className="text-white">{product.title}</span>
+          </nav>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Product Gallery */}
@@ -91,11 +213,56 @@ export default function ProductPage({ params }: ProductPageProps) {
               ))}
             </ul>
 
+            {/* Quantity Selector */}
+            <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Quantity
+              </label>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                  className="w-10 h-10 flex items-center justify-center border border-gray-700 rounded-lg hover:bg-gray-800 transition-colors"
+                  aria-label="Decrease quantity"
+                >
+                  -
+                </button>
+                <input
+                  type="number"
+                  min="1"
+                  max="10"
+                  value={quantity}
+                  onChange={(e) => setQuantity(Math.max(1, Math.min(10, parseInt(e.target.value) || 1)))}
+                  className="w-16 h-10 text-center border border-gray-700 rounded-lg bg-gaming-dark text-white focus:outline-none focus:ring-2 focus:ring-gaming-primary"
+                />
+                <button
+                  onClick={() => setQuantity(Math.min(10, quantity + 1))}
+                  className="w-10 h-10 flex items-center justify-center border border-gray-700 rounded-lg hover:bg-gray-800 transition-colors"
+                  aria-label="Increase quantity"
+                >
+                  +
+                </button>
+                <span className="text-sm text-gray-400 ml-2">Max: 10</span>
+              </div>
+            </div>
+
             <div className="flex flex-wrap gap-3 mb-6">
-              <Button size="lg">Add to Cart</Button>
-              <Button size="lg" variant="outline">Buy Now</Button>
-              <Button size="sm" variant="outline">Wishlist</Button>
-              <Button size="sm" variant="outline">Compare</Button>
+              <Button size="lg" onClick={handleAddToCart}>
+                Add to Cart
+              </Button>
+              <Button size="lg" variant="outline" onClick={handleBuyNow}>
+                Buy Now
+              </Button>
+              <Button 
+                size="sm" 
+                variant="outline" 
+                onClick={handleAddToWishlist}
+                className={isInWishlist(product.id) ? 'text-red-500 border-red-500' : ''}
+              >
+                {isInWishlist(product.id) ? '❤️ In Wishlist' : '🤍 Wishlist'}
+              </Button>
+              <Button size="sm" variant="outline" onClick={handleCompare}>
+                Compare
+              </Button>
             </div>
 
             {/* Trust elements */}
@@ -149,5 +316,20 @@ export default function ProductPage({ params }: ProductPageProps) {
         )}
       </main>
     </div>
-  )
+    )
+  } catch (error) {
+    console.error('Product page error:', error)
+    return (
+      <div className="min-h-screen bg-surface">
+        <Header />
+        <main className="max-w-6xl mx-auto px-4 py-16 text-center">
+          <h1 className="text-3xl font-bold text-white mb-4">Something Went Wrong</h1>
+          <p className="text-gray-400 mb-8">We encountered an error loading this product.</p>
+          <Button onClick={() => router.push('/products')}>
+            Browse All Products
+          </Button>
+        </main>
+      </div>
+    )
+  }
 }

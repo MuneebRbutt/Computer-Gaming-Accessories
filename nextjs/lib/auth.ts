@@ -2,7 +2,9 @@ import { NextAuthOptions, User } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import { UserRecord, findUserByEmail } from "./users";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 // Types for better type safety
 interface ExtendedUser extends User {
@@ -68,14 +70,20 @@ export const authOptions: NextAuthOptions = {
             return null;
           }
 
-          // Find user
-          const user = findUserByEmail(credentials.email);
+          // Find user in MongoDB database
+          const user = await prisma.user.findUnique({
+            where: { email: credentials.email }
+          });
           if (!user) {
             console.log("User not found");
             return null;
           }
 
           // Verify password
+          if (!user.password) {
+            console.log("User has no password set");
+            return null;
+          }
           const isPasswordValid = await bcrypt.compare(
             credentials.password,
             user.password
@@ -86,12 +94,16 @@ export const authOptions: NextAuthOptions = {
           }
 
           // Return user object
+          const displayName = user.firstName && user.lastName 
+            ? `${user.firstName} ${user.lastName}`
+            : user.username || user.email.split('@')[0];
+          
           return {
             id: user.id,
-            name: user.name,
+            name: displayName,
             email: user.email,
-            image: `https://ui-avatars.com/api/?name=${encodeURIComponent(
-              user.name
+            image: user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(
+              displayName
             )}&background=0ea5e9&color=fff&size=128`,
             role: user.role,
           } as ExtendedUser;

@@ -11,27 +11,27 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         className={clsx(
-          'relative overflow-hidden inline-flex items-center justify-center rounded-md font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/60 disabled:opacity-50 disabled:pointer-events-none',
+          'inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none',
           {
-            'bg-brand text-black hover:bg-brand-dark hover:shadow-soft': variant === 'primary',
-            'bg-card text-white hover:bg-gray-800 hover:shadow-soft': variant === 'secondary',
-            'border border-gray-700 text-white hover:border-brand hover:shadow-soft': variant === 'outline',
-            'text-white hover:bg-gray-800 hover:shadow-soft': variant === 'ghost',
+            // Primary - Light Green
+            'bg-primary text-white hover:bg-primary-600 shadow-sm hover:shadow-md': variant === 'primary',
+            // Secondary - Indigo
+            'bg-secondary text-white hover:bg-secondary-600 shadow-sm hover:shadow-md': variant === 'secondary',
+            // Outline - Light Green border
+            'border-2 border-primary text-primary hover:bg-primary hover:text-white': variant === 'outline',
+            // Ghost - Subtle hover
+            'text-gray-700 hover:bg-gray-100 hover:text-primary': variant === 'ghost',
           },
           {
             'h-8 px-3 text-sm': size === 'sm',
             'h-10 px-4 py-2': size === 'md',
-            'h-12 px-6 text-lg': size === 'lg',
+            'h-12 px-6 text-base': size === 'lg',
           },
           className
         )}
         ref={ref}
         {...props}
-      >
-        {/* neon gradient hover overlay */}
-        <span className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-[linear-gradient(110deg,rgba(14,165,233,0.25),rgba(14,165,233,0.05),rgba(14,165,233,0.25))] bg-[length:200%_100%] animate-shimmer" />
-        <span className="relative z-10">{props.children}</span>
-      </button>
+      />
     )
   }
 )

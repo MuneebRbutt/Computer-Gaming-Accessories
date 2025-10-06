@@ -1,0 +1,515 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// User Management
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  username  String?  @unique
+  firstName String?
+  lastName  String?
+  phone     String?
+  avatar    String?
+  role      UserRole @default(CUSTOMER)
+  
+  // Authentication
+  password     String?
+  emailVerified DateTime?
+  
+  // Preferences
+  preferences  Json?     // Store user preferences as JSON
+  newsletter   Boolean   @default(false)
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  lastLogin DateTime?
+  
+  // Relations
+  orders        Order[]
+  reviews       Review[]
+  wishlists     WishlistItem[]
+  cartItems     CartItem[]
+  addresses     Address[]
+  tickets       SupportTicket[]
+  pcBuilds      PCBuild[]
+  
+  @@map("users")
+}
+
+enum UserRole {
+  CUSTOMER
+  ADMIN
+  SUPER_ADMIN
+  SUPPORT
+  MANAGER
+}
+
+// Address Management
+model Address {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String  @db.ObjectId
+  type        AddressType @default(SHIPPING)
+  firstName   String
+  lastName    String
+  company     String?
+  address1    String
+  address2    String?
+  city        String
+  state       String
+  zipCode     String
+  country     String  @default("Pakistan")
+  phone       String?
+  isDefault   Boolean @default(false)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  user           User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  shippingOrders Order[] @relation("ShippingAddress")
+  billingOrders  Order[] @relation("BillingAddress")
+  
+  @@map("addresses")
+}
+
+enum AddressType {
+  SHIPPING
+  BILLING
+  BOTH
+}
+
+// Product Management
+model Category {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  slug        String  @unique
+  description String?
+  image       String?
+  icon        String?
+  parentId    String? @db.ObjectId
+  featured    Boolean @default(false)
+  sortOrder   Int     @default(0)
+  seoTitle    String?
+  seoDescription String?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations - MongoDB doesn't support cascading, so we use NoAction
+  parent     Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  children   Category[] @relation("CategoryHierarchy")
+  products   Product[]
+  
+  @@map("categories")
+}
+
+model Brand {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  slug        String  @unique
+  description String?
+  logo        String?
+  website     String?
+  featured    Boolean @default(false)
+  sortOrder   Int     @default(0)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  products Product[]
+  
+  @@map("brands")
+}
+
+model Product {
+  id               String      @id @default(auto()) @map("_id") @db.ObjectId
+  title            String
+  slug             String      @unique
+  description      String?
+  shortDescription String?
+  sku              String      @unique
+  barcode          String?
+  
+  // Pricing - MongoDB uses Float instead of Decimal
+  price            Float
+  comparePrice     Float?      // Original/MSRP price
+  costPrice        Float?      // Cost for margin calculation
+  
+  // Media
+  images           String[]    // Array of image URLs
+  videos           String[]    // Array of video URLs
+  
+  // Categorization
+  categoryId       String      @db.ObjectId
+  brandId          String?     @db.ObjectId
+  tags             String[]
+  
+  // Inventory
+  trackQuantity    Boolean     @default(true)
+  quantity         Int         @default(0)
+  lowStockThreshold Int        @default(10)
+  
+  // Physical properties
+  weight           Float?      // in grams
+  dimensions       Json?       // {length, width, height}
+  
+  // SEO & Marketing
+  metaTitle        String?
+  metaDescription  String?
+  featured         Boolean     @default(false)
+  
+  // Status
+  status           ProductStatus @default(DRAFT)
+  publishedAt      DateTime?
+  
+  // Specs and variants
+  specifications   Json?       // Technical specifications
+  variants         Json?       // Color, size, etc variations
+  
+  // Ratings
+  averageRating    Float?      @default(0)
+  reviewCount      Int         @default(0)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  category     Category       @relation(fields: [categoryId], references: [id])
+  brand        Brand?         @relation(fields: [brandId], references: [id])
+  reviews      Review[]
+  orderItems   OrderItem[]
+  cartItems    CartItem[]
+  wishlists    WishlistItem[]
+  pcBuilds     PCBuildItem[]
+  
+  @@map("products")
+}
+
+enum ProductStatus {
+  DRAFT
+  ACTIVE
+  INACTIVE
+  DISCONTINUED
+}
+
+// Review System
+model Review {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  productId String @db.ObjectId
+  userId    String @db.ObjectId
+  
+  rating    Int    // 1-5 stars
+  title     String
+  comment   String
+  pros      String[] // Array of pros
+  cons      String[] // Array of cons
+  
+  verified  Boolean @default(false) // Verified purchase
+  helpful   Int     @default(0)     // Helpful votes
+  
+  status    ReviewStatus @default(PENDING)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("reviews")
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+// Shopping Cart
+model CartItem {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String @db.ObjectId
+  productId String @db.ObjectId
+  quantity  Int
+  price     Float // Price at time of adding to cart
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  @@map("cart_items")
+}
+
+// Wishlist
+model WishlistItem {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String @db.ObjectId
+  productId String @db.ObjectId
+  
+  createdAt DateTime @default(now())
+  
+  // Relations
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  @@map("wishlist_items")
+}
+
+// Order Management
+model Order {
+  id          String      @id @default(auto()) @map("_id") @db.ObjectId
+  orderNumber String      @unique
+  userId      String      @db.ObjectId
+  
+  // Addresses
+  shippingAddressId String @db.ObjectId
+  billingAddressId  String @db.ObjectId
+  
+  // Pricing - Using Float for MongoDB
+  subtotal        Float
+  taxAmount       Float   @default(0)
+  shippingAmount  Float   @default(0)
+  discountAmount  Float   @default(0)
+  totalAmount     Float
+  
+  // Status
+  status          OrderStatus    @default(PENDING)
+  paymentStatus   PaymentStatus  @default(PENDING)
+  fulfillmentStatus FulfillmentStatus @default(PENDING)
+  
+  // Payment
+  paymentMethod   String?
+  paymentId       String?        // Stripe payment intent ID
+  
+  // Shipping
+  shippingMethod  String?
+  trackingNumber  String?
+  shippingCarrier String?
+  
+  // Metadata
+  notes           String?
+  internalNotes   String?        // Admin only notes
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  user            User      @relation(fields: [userId], references: [id])
+  shippingAddress Address   @relation("ShippingAddress", fields: [shippingAddressId], references: [id])
+  billingAddress  Address   @relation("BillingAddress", fields: [billingAddressId], references: [id])
+  items           OrderItem[]
+  
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  orderId   String @db.ObjectId
+  productId String @db.ObjectId
+  
+  quantity  Int
+  price     Float // Price at time of order
+  
+  // Relations
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+  
+  @@map("order_items")
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+}
+
+enum FulfillmentStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+// PC Builder System
+model PCBuild {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String @db.ObjectId
+  name        String
+  description String?
+  
+  totalPrice  Float @default(0)
+  totalWatts  Int   @default(0)
+  
+  public      Boolean @default(false)
+  featured    Boolean @default(false)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  user  User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items PCBuildItem[]
+  
+  @@map("pc_builds")
+}
+
+model PCBuildItem {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  buildId   String @db.ObjectId
+  productId String @db.ObjectId
+  category  String // cpu, gpu, ram, etc.
+  quantity  Int    @default(1)
+  
+  // Relations
+  build   PCBuild @relation(fields: [buildId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+  
+  @@map("pc_build_items")
+}
+
+// Support System
+model SupportTicket {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String @db.ObjectId
+  subject  String
+  message  String
+  status   TicketStatus @default(OPEN)
+  priority TicketPriority @default(MEDIUM)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("support_tickets")
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+// Blog/Content Management
+model BlogPost {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  slug        String @unique
+  excerpt     String?
+  content     String
+  featuredImage String?
+  
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+  
+  // Status
+  status      PostStatus @default(DRAFT)
+  publishedAt DateTime?
+  
+  // Categorization
+  tags        String[]
+  category    String?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("blog_posts")
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+// Newsletter
+model NewsletterSubscriber {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  email     String @unique
+  firstName String?
+  lastName  String?
+  status    SubscriptionStatus @default(ACTIVE)
+  tags      String[] // Segmentation tags
+  
+  subscribedAt   DateTime @default(now())
+  unsubscribedAt DateTime?
+  
+  @@map("newsletter_subscribers")
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  UNSUBSCRIBED
+  BOUNCED
+}
+
+// Analytics & Tracking
+model PageView {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  path      String
+  userId    String? @db.ObjectId
+  sessionId String
+  userAgent String?
+  ip        String?
+  referrer  String?
+  
+  createdAt DateTime @default(now())
+  
+  @@map("page_views")
+}
+
+// Configuration
+model SiteConfig {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  key   String @unique
+  value String
+  type  ConfigType @default(STRING)
+  
+  updatedAt DateTime @updatedAt
+  
+  @@map("site_config")
+}
+
+enum ConfigType {
+  STRING
+  NUMBER
+  BOOLEAN
+  JSON
+}

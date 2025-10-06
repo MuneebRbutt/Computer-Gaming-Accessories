@@ -8,7 +8,14 @@
     "start": "next start",
     "lint": "next lint",
     "export": "next export",
-    "postbuild": "next-sitemap"
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:seed": "node prisma/seed.js",
+    "db:studio": "prisma studio",
+    "db:reset": "prisma migrate reset",
+    "db:setup": "prisma generate && prisma db push && npm run db:seed",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -19,6 +26,7 @@
     "@types/react-dom": "^18.2.18",
     "autoprefixer": "^10.4.16",
     "bcryptjs": "^3.0.2",
+    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "framer-motion": "^10.16.16",
@@ -45,5 +53,8 @@
     "eslint-config-next": "14.0.4",
     "prisma": "^6.16.3",
     "ts-node": "^10.9.2"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.js"
   }
 }

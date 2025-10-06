@@ -1,19 +1,26 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Poppins:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-html {
-  scroll-behavior: smooth;
+:root {
+  --font-heading: 'Orbitron', sans-serif;
+  --font-body: 'Poppins', sans-serif;
+  --color-primary: #8B0000;
+  --color-primary-light: #A52A2A;
+  --color-primary-dark: #660000;
 }
 
 body {
-  font-family: 'Poppins', ui-sans-serif, system-ui, 'Segoe UI', Roboto;
+  font-family: var(--font-body);
+  color: #1f2937;
+  margin: 0;
+  padding: 0;
 }
 
-.line-clamp-1 {
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  letter-spacing: 0.05em;
 }
