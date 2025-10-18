@@ -76,7 +76,7 @@ export async function POST(request: Request) {
         pre: 'q-80', // Quality 80%
       },
       customMetadata: {
-        uploadedBy: session.user.id,
+        uploadedBy: (session.user as any).id || session.user.email || 'unknown',
         productId: productId || '',
         uploadDate: new Date().toISOString()
       }
