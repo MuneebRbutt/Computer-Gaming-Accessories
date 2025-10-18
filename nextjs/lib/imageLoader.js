@@ -4,30 +4,36 @@
  */
 
 export default function imageKitLoader({ src, width, quality }) {
-  // If it's already an optimized URL, return as-is
+  // If it's already a full ImageKit URL, return as-is (already optimized)
   if (src.startsWith('https://ik.imagekit.io/') || src.startsWith('data:')) {
     return src
   }
 
-  const params = new URLSearchParams()
+  // If it's an external URL (not ImageKit), return as-is
+  if (src.startsWith('http://') || src.startsWith('https://')) {
+    return src
+  }
+
+  // Build transformation parameters
+  const transformations = []
   
   // Set width for responsive images
   if (width) {
-    params.set('tr', `w-${width}`)
+    transformations.push(`w-${width}`)
   }
   
   // Set quality (default 75 for optimal balance)
   const imageQuality = quality || 75
-  params.set('tr', `${params.get('tr') || ''},q-${imageQuality}`)
+  transformations.push(`q-${imageQuality}`)
   
   // Auto format to WebP/AVIF for modern browsers
-  params.set('tr', `${params.get('tr')},f-auto`)
+  transformations.push('f-auto')
   
   // Progressive loading
-  params.set('tr', `${params.get('tr')},pr-true`)
+  transformations.push('pr-true')
   
   // ImageKit endpoint
-  const IMAGEKIT_ENDPOINT = process.env.IMAGEKIT_ENDPOINT || 'https://ik.imagekit.io/gaming-store'
+  const IMAGEKIT_ENDPOINT = process.env.NEXT_PUBLIC_IMAGEKIT_ENDPOINT || 'https://ik.imagekit.io/rbo8xe5z6'
   
   // Handle different source types
   let imagePath = src
@@ -37,12 +43,9 @@ export default function imageKitLoader({ src, width, quality }) {
     imagePath = src.substring(1)
   }
   
-  // If it's an external URL, encode it
-  if (src.startsWith('http')) {
-    imagePath = encodeURIComponent(src)
-  }
-  
-  return `${IMAGEKIT_ENDPOINT}/${imagePath}?${params.toString()}`
+  // Build final URL with transformations
+  const transformParam = transformations.join(',')
+  return `${IMAGEKIT_ENDPOINT}/${imagePath}?tr=${transformParam}`
 }
 
 /**

@@ -30,10 +30,10 @@ export default function CategoryGrid() {
   const featuredCategories = CATEGORIES.filter(cat => cat.featured)
 
   return (
-    <section className="py-16 md:py-24 bg-gray-50">
+    <section className="py-12 md:py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-8">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             Shop by Category
           </h2>
@@ -86,7 +86,7 @@ export default function CategoryGrid() {
         </div>
 
         {/* View All Categories Link */}
-        <div className="text-center mt-12">
+        <div className="text-center mt-8">
           <Link 
             href="/categories"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-primary text-primary hover:bg-primary/10 transition-all font-medium"

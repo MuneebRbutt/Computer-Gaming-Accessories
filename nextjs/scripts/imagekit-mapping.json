@@ -1,0 +1,113 @@
+{
+  "gaming-laptop-rtx4060": {
+    "image": "https://ik.imagekit.io/rbo8xe5z6/images/gaming-laptop-1.png",
+    "gallery": [
+      "https://ik.imagekit.io/rbo8xe5z6/images/gaming-laptop-1.png",
+      "https://ik.imagekit.io/rbo8xe5z6/images/gaming-laptop-2.png"
+    ]
+  },
+  "custom-pc-ryzen7": {
+    "image": "https://ik.imagekit.io/rbo8xe5z6/images/gaming-pc-1.png",
+    "gallery": [
+      "https://ik.imagekit.io/rbo8xe5z6/images/gaming-pc-1.png",
+      "https://ik.imagekit.io/rbo8xe5z6/images/gaming-pc-2.png",
+      "https://ik.imagekit.io/rbo8xe5z6/images/custom-pc-1.png"
+    ]
+  },
+  "razer-keyboard-rgb": {
+    "image": "https://ik.imagekit.io/rbo8xe5z6/images/keyboard-razer-1.png",
+    "gallery": [
+      "https://ik.imagekit.io/rbo8xe5z6/images/keyboard-razer-1.png"
+    ]
+  },
+  "hyperx-headset-cloud3": {
+    "image": "https://ik.imagekit.io/rbo8xe5z6/images/headset-hyperx-1.png",
+    "gallery": [
+      "https://ik.imagekit.io/rbo8xe5z6/images/headset-hyperx-1.png"
+    ]
+  },
+  "logitech-mouse-gpro": {
+    "image": "https://ik.imagekit.io/rbo8xe5z6/images/mouse-logitech-1.png",
+    "gallery": [
+      "https://ik.imagekit.io/rbo8xe5z6/images/mouse-logitech-1.png"
+    ]
+  },
+  "dell-monitor-27-165hz": {
+    "image": "https://ik.imagekit.io/rbo8xe5z6/images/monitor-dell-1.png",
+    "gallery": [
+      "https://ik.imagekit.io/rbo8xe5z6/images/monitor-dell-1.png"
+    ]
+  },
+  "samsung-ssd-1tb": {
+    "image": "https://ik.imagekit.io/rbo8xe5z6/images/ssd-samsung-1.png",
+    "gallery": [
+      "https://ik.imagekit.io/rbo8xe5z6/images/ssd-samsung-1.png"
+    ]
+  },
+  "corsair-ram-32gb": {
+    "image": "https://ik.imagekit.io/rbo8xe5z6/images/ram-corsair-1.png",
+    "gallery": [
+      "https://ik.imagekit.io/rbo8xe5z6/images/ram-corsair-1.png"
+    ]
+  },
+  "ryzen9-cpu": {
+    "image": "https://ik.imagekit.io/rbo8xe5z6/images/cpu-ryzen-1.png",
+    "gallery": [
+      "https://ik.imagekit.io/rbo8xe5z6/images/cpu-ryzen-1.png"
+    ]
+  },
+  "rtx4070-gpu": {
+    "image": "https://ik.imagekit.io/rbo8xe5z6/images/gpu-rtx4070-1.png",
+    "gallery": [
+      "https://ik.imagekit.io/rbo8xe5z6/images/gpu-rtx4070-1.png"
+    ]
+  },
+  "asus-monitor-4k": {
+    "image": "https://ik.imagekit.io/rbo8xe5z6/images/monitor-asus-1.png",
+    "gallery": [
+      "https://ik.imagekit.io/rbo8xe5z6/images/monitor-asus-1.png"
+    ]
+  },
+  "lg-ultrawide-34": {
+    "image": "https://ik.imagekit.io/rbo8xe5z6/images/monitor-lg-1.png",
+    "gallery": [
+      "https://ik.imagekit.io/rbo8xe5z6/images/monitor-lg-1.png"
+    ]
+  },
+  "steelseries-headset": {
+    "image": "https://ik.imagekit.io/rbo8xe5z6/images/headset-steelseries-1.png",
+    "gallery": [
+      "https://ik.imagekit.io/rbo8xe5z6/images/headset-steelseries-1.png"
+    ]
+  },
+  "razer-deathadder": {
+    "image": "https://ik.imagekit.io/rbo8xe5z6/images/mouse-razer-1.png",
+    "gallery": [
+      "https://ik.imagekit.io/rbo8xe5z6/images/mouse-razer-1.png"
+    ]
+  },
+  "corsair-mouse": {
+    "image": "https://ik.imagekit.io/rbo8xe5z6/images/mouse-corsair-1.png",
+    "gallery": [
+      "https://ik.imagekit.io/rbo8xe5z6/images/mouse-corsair-1.png"
+    ]
+  },
+  "corsair-keyboard": {
+    "image": "https://ik.imagekit.io/rbo8xe5z6/images/keyboard-corsair-1.png",
+    "gallery": [
+      "https://ik.imagekit.io/rbo8xe5z6/images/keyboard-corsair-1.png"
+    ]
+  },
+  "logitech-keyboard": {
+    "image": "https://ik.imagekit.io/rbo8xe5z6/images/keyboard-logitech-1.png",
+    "gallery": [
+      "https://ik.imagekit.io/rbo8xe5z6/images/keyboard-logitech-1.png"
+    ]
+  },
+  "razer-headset": {
+    "image": "https://ik.imagekit.io/rbo8xe5z6/images/headset-razer-1.png",
+    "gallery": [
+      "https://ik.imagekit.io/rbo8xe5z6/images/headset-razer-1.png"
+    ]
+  }
+}

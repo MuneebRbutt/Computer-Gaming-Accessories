@@ -1,0 +1,44 @@
+{
+  "products": {
+    "gaming-laptop-rtx4060": {
+      "image": "https://ik.imagekit.io/rbo8xe5z6/images/msi-gaming-laptop-rtx4060-front.png",
+      "gallery": [
+        "https://ik.imagekit.io/rbo8xe5z6/images/msi-gaming-laptop-rtx4060-front.png",
+        "https://ik.imagekit.io/rbo8xe5z6/images/msi-gaming-laptop-rtx4060-side.png"
+      ]
+    },
+    "custom-pc-ryzen7": {
+      "image": "https://ik.imagekit.io/rbo8xe5z6/images/custom-pc-ryzen7-5800x-front.png",
+      "gallery": [
+        "https://ik.imagekit.io/rbo8xe5z6/images/custom-pc-ryzen7-5800x-front.png",
+        "https://ik.imagekit.io/rbo8xe5z6/images/custom-pc-ryzen7-5800x-rgb.png",
+        "https://ik.imagekit.io/rbo8xe5z6/images/custom-pc-ryzen7-5800x-inside.png"
+      ]
+    },
+    "razer-keyboard-rgb": {
+      "image": "https://ik.imagekit.io/rbo8xe5z6/images/razer-blackwidow-v4-rgb.png",
+      "gallery": []
+    },
+    "hyperx-headset-cloud3": {
+      "image": "https://ik.imagekit.io/rbo8xe5z6/images/hyperx-cloud3-wireless-black.png",
+      "gallery": []
+    },
+    "logitech-mouse-gpro": {
+      "image": "https://ik.imagekit.io/rbo8xe5z6/images/logitech-gpro-superlight-white.png",
+      "gallery": []
+    },
+    "dell-monitor-27-165hz": {
+      "image": "https://ik.imagekit.io/rbo8xe5z6/images/dell-s2722dgm-27-curved.png",
+      "gallery": []
+    },
+    "samsung-ssd-1tb": {
+      "image": "https://ik.imagekit.io/rbo8xe5z6/images/samsung-980pro-ssd-1tb.png",
+      "gallery": []
+    }
+  },
+  "branding": {
+    "banner": "https://ik.imagekit.io/rbo8xe5z6/images/advance-it-traders-hero-banner.png",
+    "logo": "https://ik.imagekit.io/rbo8xe5z6/images/advance-it-traders-logo.png"
+  },
+  "updated": "2025-10-17T06:54:05.896Z"
+}

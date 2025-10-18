@@ -7,8 +7,8 @@ import { Gamepad2, Zap, Monitor, Cpu } from 'lucide-react'
 
 export default function Hero() {
   return (
-    <section className="relative bg-gradient-to-br from-white via-gray-50 to-white py-20 md:py-32">
-      <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-12 items-center">
+    <section className="relative bg-gradient-to-br from-white via-gray-50 to-white py-12 md:py-16">
+      <div className="max-w-7xl mx-auto px-4 grid lg:grid-cols-2 gap-8 items-center">
         {/* Content */}
         <div>
           {/* Gaming badge */}
@@ -65,7 +65,7 @@ export default function Hero() {
           </div>
 
           {/* Stats */}
-          <div className="flex items-center gap-8 mt-12 pt-8 border-t border-gray-200">
+          <div className="flex items-center gap-8 mt-8 pt-6 border-t border-gray-200">
             {[
               { value: '1000+', label: 'Products' },
               { value: '500+', label: 'Happy Gamers' },
@@ -85,13 +85,14 @@ export default function Hero() {
 
         {/* Visual */}
         <div className="relative">
-          <div className="relative bg-white rounded-2xl border border-gray-200 p-8 shadow-lg">
+          <div className="relative bg-white rounded-2xl border border-gray-200 p-4 shadow-lg">
             <Image
               src="/images/banner.png"
               alt="Gaming setup showcase"
               width={500}
               height={400}
               className="rounded-lg"
+              unoptimized
             />
             
             {/* Overlay badges */}

@@ -7,14 +7,8 @@ const nextConfig = {
   
   // Image Optimization with ImageKit and WebP
   images: {
-    domains: [
-      'images.unsplash.com', 
-      'picsum.photos', 
-      'placehold.co',
-      'ui-avatars.com',
-      'ik.imagekit.io', // ImageKit CDN
-      'cdn.gaming-store.com' // Custom CDN
-    ],
+    loader: 'custom',
+    loaderFile: './lib/imageLoader.js',
     formats: ['image/webp', 'image/avif'],
     minimumCacheTTL: 86400, // 24 hours
     dangerouslyAllowSVG: false,
@@ -103,7 +97,7 @@ const nextConfig = {
   // Environment Variables
   env: {
     NEXTAUTH_URL: process.env.NEXTAUTH_URL || 'https://your-app-name.vercel.app',
-    IMAGEKIT_ENDPOINT: process.env.IMAGEKIT_ENDPOINT || 'https://ik.imagekit.io/your-id',
+    NEXT_PUBLIC_IMAGEKIT_ENDPOINT: process.env.NEXT_PUBLIC_IMAGEKIT_ENDPOINT || 'https://ik.imagekit.io/rbo8xe5z6',
     REDIS_URL: process.env.REDIS_URL || 'redis://localhost:6379',
   },
   

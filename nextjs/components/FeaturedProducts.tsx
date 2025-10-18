@@ -65,11 +65,11 @@ export default function FeaturedProducts() {
     .slice(0, 4)
 
   return (
-    <section className="relative py-16 md:py-24 bg-white">
+    <section className="relative py-12 md:py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4">
         {/* Section Header */}
         <motion.div 
-          className="text-center mb-16"
+          className="text-center mb-10"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -92,7 +92,7 @@ export default function FeaturedProducts() {
 
         {/* Stats Bar */}
         <motion.div 
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -122,7 +122,7 @@ export default function FeaturedProducts() {
 
         {/* Featured Products Grid */}
         <motion.div 
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
           variants={container}
           initial="hidden"
           whileInView="show"
@@ -195,7 +195,7 @@ export default function FeaturedProducts() {
 
         {/* CTA Section */}
         <motion.div 
-          className="text-center mt-16"
+          className="text-center mt-12"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}

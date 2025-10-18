@@ -14,9 +14,14 @@
 
 body {
   font-family: var(--font-body);
-  color: #1f2937;
   margin: 0;
   padding: 0;
+}
+
+/* Optional: base theme helpers (keep admin dark by class on layout) */
+.theme-dark {
+  background-color: #0b0b0d;
+  color: #F8F8FA;
 }
 
 h1, h2, h3, h4, h5, h6 {

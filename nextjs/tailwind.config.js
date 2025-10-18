@@ -9,6 +9,16 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // Gaming theme tokens used throughout the app (admin + storefront)
+        // These enable utility classes like bg-gaming-dark, text-gaming-muted,
+        // bg-gaming-primary/20, border-gaming-accent/20, etc.
+        gaming: {
+          primary: '#8B0000',      // text-gaming-primary / bg-gaming-primary
+          accent: '#DC143C',       // text-gaming-accent / border-gaming-accent
+          dark: '#0b0b0d',         // bg-gaming-dark
+          darker: '#18181b',       // bg-gaming-darker
+          muted: '#b6b6c2',        // text-gaming-muted
+        },
         // Dark Red Gaming Palette
         primary: {
           DEFAULT: '#8B0000', // Dark Red

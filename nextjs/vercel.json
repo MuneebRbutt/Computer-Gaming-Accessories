@@ -1,4 +1,13 @@
 {
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "outputDirectory": ".next",
+  "env": {
+    "NEXT_PUBLIC_IMAGEKIT_ENDPOINT": "https://ik.imagekit.io/rbo8xe5z6",
+    "NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY": "public_GSvFJmpaAJigfGPN3Xvewq7W9Ko="
+  },
   "headers": [
     {
       "source": "/(.*)",

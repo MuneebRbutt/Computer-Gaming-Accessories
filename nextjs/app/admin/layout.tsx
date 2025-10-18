@@ -1,22 +1,44 @@
+import { redirect } from 'next/navigation'
+import { getServerSession } from 'next-auth'
 import Link from 'next/link'
+import { authOptions } from '@/lib/auth'
+import { UserService } from '@/lib/database'
 
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  // Simplified layout - authentication will be handled by NextAuth middleware later
+  const session = await getServerSession(authOptions)
   
+  if (!session?.user?.email) {
+    redirect('/login?callbackUrl=/admin')
+  }
+
+  const user = await UserService.getUserByEmail(session.user.email)
+  
+  if (!user || (user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN')) {
+    redirect('/')
+  }
+
   return (
-    <div className="min-h-screen bg-gray-900">
+    <div className="min-h-screen bg-gaming-dark text-white">
       {/* Admin Header */}
-      <header className="bg-gray-800 border-b border-gray-700">
+      <header className="bg-gaming-darker border-b border-gaming-accent/20">
         <div className="px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <h1 className="text-2xl font-bold text-white">
                 🎮 Gaming Store Admin
               </h1>
+              <span className="px-3 py-1 bg-gaming-primary/20 text-gaming-primary text-sm font-medium rounded-full">
+                {user.role}
+              </span>
+            </div>
+            <div className="flex items-center space-x-4">
+              <span className="text-gaming-muted">
+                Welcome, {user.firstName || user.email}
+              </span>
             </div>
           </div>
         </div>
@@ -24,7 +46,7 @@ export default function AdminLayout({
 
       <div className="flex">
         {/* Sidebar Navigation */}
-        <nav className="w-64 bg-gray-800 border-r border-gray-700 min-h-screen">
+        <nav className="w-64 bg-gaming-darker border-r border-gaming-accent/20 min-h-screen">
           <div className="p-6">
             <div className="space-y-2">
               <AdminNavLink href="/admin" icon="📊">
@@ -53,7 +75,7 @@ export default function AdminLayout({
               </AdminNavLink>
             </div>
             
-            <div className="mt-8 pt-8 border-t border-gray-700">
+            <div className="mt-8 pt-8 border-t border-gaming-accent/20">
               <AdminNavLink href="/" icon="🏠" external>
                 Back to Store
               </AdminNavLink>
@@ -62,7 +84,7 @@ export default function AdminLayout({
         </nav>
 
         {/* Main Content */}
-        <main className="flex-1 p-6">
+        <main className="flex-1 p-6 text-white">
           {children}
         </main>
       </div>
@@ -86,9 +108,9 @@ function AdminNavLink({
       href={href}
       className={`
         flex items-center space-x-3 px-4 py-2 rounded-lg
-        text-gray-400 hover:text-white hover:bg-gray-700
+        text-gaming-muted hover:text-white hover:bg-gaming-accent/10
         transition-all duration-200
-        ${external ? 'border border-gray-700' : ''}
+        ${external ? 'border border-gaming-accent/20' : ''}
       `}
     >
       <span className="text-lg">{icon}</span>

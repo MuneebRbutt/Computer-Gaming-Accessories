@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ImageKit Test</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #1a1a1a; color: white; }
+        .image-test { margin: 20px 0; padding: 15px; background: #2a2a2a; border-radius: 8px; }
+        .image-test h3 { margin: 0 0 10px 0; color: #22C55E; }
+        .image-test img { max-width: 300px; border: 2px solid #444; }
+        .status { padding: 5px 10px; border-radius: 4px; display: inline-block; margin-top: 10px; }
+        .success { background: #22C55E; color: white; }
+        .error { background: #EF4444; color: white; }
+    </style>
+</head>
+<body>
+    <h1>ImageKit Image Test</h1>
+    <p>Testing if images are accessible from ImageKit CDN...</p>
+
+    <div class="image-test">
+        <h3>Test 1: MSI Gaming Laptop (Front)</h3>
+        <img src="https://ik.imagekit.io/rbo8xe5z6/images/msi-gaming-laptop-rtx4060-front.png" 
+             alt="MSI Laptop Front"
+             onload="showStatus(this, true)"
+             onerror="showStatus(this, false)" />
+        <div class="status-container"></div>
+    </div>
+
+    <div class="image-test">
+        <h3>Test 2: Custom PC Ryzen 7 (Front)</h3>
+        <img src="https://ik.imagekit.io/rbo8xe5z6/images/custom-pc-ryzen7-5800x-front.png" 
+             alt="PC Front"
+             onload="showStatus(this, true)"
+             onerror="showStatus(this, false)" />
+        <div class="status-container"></div>
+    </div>
+
+    <div class="image-test">
+        <h3>Test 3: Dell Monitor 27</h3>
+        <img src="https://ik.imagekit.io/rbo8xe5z6/images/dell-x2721q-27-curved.png" 
+             alt="Dell Monitor"
+             onload="showStatus(this, true)"
+             onerror="showStatus(this, false)" />
+        <div class="status-container"></div>
+    </div>
+
+    <div class="image-test">
+        <h3>Test 4: HP OMEN Monitor</h3>
+        <img src="https://ik.imagekit.io/rbo8xe5z6/images/hp-omen-x24f-24-flat.png" 
+             alt="HP OMEN"
+             onload="showStatus(this, true)"
+             onerror="showStatus(this, false)" />
+        <div class="status-container"></div>
+    </div>
+
+    <div class="image-test">
+        <h3>Test 5: Without /images/ path</h3>
+        <img src="https://ik.imagekit.io/rbo8xe5z6/msi-gaming-laptop-rtx4060-front.png" 
+             alt="Without images folder"
+             onload="showStatus(this, true)"
+             onerror="showStatus(this, false)" />
+        <div class="status-container"></div>
+    </div>
+
+    <script>
+        function showStatus(img, success) {
+            const container = img.parentElement.querySelector('.status-container');
+            const statusDiv = document.createElement('div');
+            statusDiv.className = 'status ' + (success ? 'success' : 'error');
+            statusDiv.textContent = success ? '✓ Image loaded successfully' : '✗ Failed to load image';
+            container.appendChild(statusDiv);
+            
+            if (success) {
+                console.log('✓ Loaded:', img.src);
+            } else {
+                console.error('✗ Failed:', img.src);
+            }
+        }
+    </script>
+</body>
+</html>
