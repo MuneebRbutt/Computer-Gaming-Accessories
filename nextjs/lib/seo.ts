@@ -536,8 +536,7 @@ export function getSEOConfig(options: {
     canonicalUrl: options.canonical ? `${SEO_CONFIG.siteUrl}${options.canonical}` : null,
     preconnectUrls: [
       'https://fonts.googleapis.com',
-      'https://fonts.gstatic.com',
-      'https://ik.imagekit.io'
+      'https://fonts.gstatic.com'
     ],
     dnsPrefetchUrls: [
       '//www.google-analytics.com',

@@ -5,7 +5,7 @@ const nextConfig = {
   swcMinify: true,
   poweredByHeader: false,
   
-  // Image Optimization with ImageKit and WebP
+  // Image optimization using the local custom loader
   images: {
     loader: 'custom',
     loaderFile: './lib/imageLoader.js',
@@ -97,7 +97,6 @@ const nextConfig = {
   // Environment Variables
   env: {
     NEXTAUTH_URL: process.env.NEXTAUTH_URL || 'https://your-app-name.vercel.app',
-    NEXT_PUBLIC_IMAGEKIT_ENDPOINT: process.env.NEXT_PUBLIC_IMAGEKIT_ENDPOINT || 'https://ik.imagekit.io/rbo8xe5z6',
     REDIS_URL: process.env.REDIS_URL || 'redis://localhost:6379',
   },
   

@@ -9,8 +9,8 @@ import { useCartStore } from '@/hooks/useCartStore'
 import { Button } from './ui/Button'
 import { Select } from './ui/Select'
 import { Badge } from './ui/Badge'
+import { Input } from './ui/Input'
 import toast from 'react-hot-toast'
-import BuilderStepper from './BuilderStepper'
 import { 
   AlertTriangle, 
   CheckCircle, 
@@ -22,9 +22,6 @@ import {
   TrendingUp,
   DollarSign,
   Save,
-  Share2,
-  Download,
-  Upload,
   RotateCcw,
   Info,
   Sparkles
@@ -44,9 +41,7 @@ export default function PCBuilder() {
   const [selectedComponents, setSelectedComponents] = useState<Record<string, string>>({})
   const [buildName, setBuildName] = useState('')
   const [savedBuilds, setSavedBuilds] = useState<BuildConfiguration[]>([])
-  const [showSaveDialog, setShowSaveDialog] = useState(false)
   const [activeCategory, setActiveCategory] = useState('cpu')
-  const [buildPreset, setBuildPreset] = useState<string>('')
   
   const { addItem } = useCartStore()
 
@@ -60,52 +55,6 @@ export default function PCBuilder() {
     { key: 'psu', label: 'Power Supply', icon: Zap, color: 'from-yellow-500 to-orange-500', required: true },
     { key: 'case', label: 'PC Case', icon: Monitor, color: 'from-slate-500 to-gray-500', required: false },
     { key: 'cooler', label: 'CPU Cooler', icon: Zap, color: 'from-cyan-500 to-blue-500', required: false },
-  ]
-
-  // Preset builds for quick start
-  const presetBuilds = [
-    {
-      id: 'budget-gaming',
-      name: 'Budget Gaming',
-      description: 'Perfect for 1080p gaming on a budget',
-      price: 80000,
-      components: {
-        cpu: 'cpu-ryzen5-4600g',
-        motherboard: 'motherboard-b450m',
-        gpu: 'gpu-gtx1660-super',
-        ram: 'ram-16gb-ddr4-3200',
-        storage: 'storage-ssd-500gb',
-        psu: 'psu-600w-bronze'
-      }
-    },
-    {
-      id: 'mid-range',
-      name: 'Mid-Range Beast',
-      description: 'Excellent 1440p gaming performance',
-      price: 150000,
-      components: {
-        cpu: 'cpu-ryzen5-5600x',
-        motherboard: 'motherboard-b550',
-        gpu: 'gpu-rtx3060ti',
-        ram: 'ram-16gb-ddr4-3600',
-        storage: 'storage-nvme-1tb',
-        psu: 'psu-750w-gold'
-      }
-    },
-    {
-      id: 'high-end',
-      name: 'High-End Elite',
-      description: '4K gaming and content creation',
-      price: 300000,
-      components: {
-        cpu: 'cpu-ryzen7-5800x3d',
-        motherboard: 'motherboard-x570',
-        gpu: 'gpu-rtx4070',
-        ram: 'ram-32gb-ddr4-3600',
-        storage: 'storage-nvme-2tb',
-        psu: 'psu-850w-gold'
-      }
-    }
   ]
 
   // Get all components by category
@@ -226,14 +175,6 @@ export default function PCBuilder() {
     }))
   }, [])
 
-  const handlePresetLoad = useCallback((presetId: string) => {
-    const preset = presetBuilds.find(p => p.id === presetId)
-    if (preset) {
-      setSelectedComponents(preset.components)
-      setBuildPreset(presetId)
-      toast.success(`${preset.name} preset loaded!`)
-    }
-  }, [])
 
   const handleSaveBuild = useCallback(() => {
     if (!buildName.trim()) {
@@ -251,8 +192,6 @@ export default function PCBuilder() {
     }
 
     setSavedBuilds(prev => [...prev, newBuild])
-    setBuildName('')
-    setShowSaveDialog(false)
     toast.success('Build saved successfully!')
   }, [buildName, selectedComponents, buildStats])
 
@@ -290,74 +229,60 @@ export default function PCBuilder() {
     toast.success('Custom build added to cart!')
   }, [selectedComponents, compatibilityCheck.issues, buildName, buildStats, performanceCategory.name])
 
+  const builderHighlights = [
+    {
+      title: 'Plan Your Build',
+      description: 'Start with the essentials like CPU, motherboard, graphics, and memory to anchor your setup.'
+    },
+    {
+      title: 'Check Compatibility',
+      description: 'We flag socket, power, and clearance conflicts automatically so you can adjust with confidence.'
+    },
+    {
+      title: 'Finalize & Save',
+      description: 'Name your build, review totals, then add it to cart or save the configuration for later tweaks.'
+    }
+  ]
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-bg-dark via-bg-darker to-bg-dark">
-      <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-[#fff3f3] via-[#fff7f7] to-white">
+      <div className="max-w-6xl mx-auto px-4 py-10 space-y-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
+          className="text-center"
         >
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent mb-4">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent mb-3">
             PC Builder Studio
           </h1>
-          <p className="text-text-muted text-lg max-w-2xl mx-auto">
-            Build your dream gaming PC with our intelligent compatibility checker and performance estimator
+          <p className="text-text-muted text-base md:text-lg max-w-2xl mx-auto">
+            Build your dream rig with live compatibility checks, performance projections, and a streamlined parts workflow.
           </p>
         </motion.div>
 
-        {/* Preset Builds */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="mb-8"
+          transition={{ delay: 0.15 }}
         >
-          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-accent" />
-            Quick Start Presets
-          </h2>
-          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {presetBuilds.map((preset, index) => (
-              <motion.div
-                key={preset.id}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.1 + index * 0.1 }}
-                className={cn(
-                  'p-4 rounded-xl border cursor-pointer transition-all duration-300',
-                  'bg-gradient-to-br from-card/50 to-card/30 backdrop-blur-sm',
-                  'hover:from-card/70 hover:to-card/50 hover:scale-105',
-                  buildPreset === preset.id 
-                    ? 'border-primary/50 shadow-[0_0_20px_rgba(15,240,252,0.3)]' 
-                    : 'border-primary/20 hover:border-primary/40'
-                )}
-                onClick={() => handlePresetLoad(preset.id)}
+            {builderHighlights.map((item) => (
+              <div
+                key={item.title}
+                className="rounded-2xl border border-primary/10 bg-white/70 backdrop-blur-sm p-5 text-left shadow-sm"
               >
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="font-semibold text-text-primary">{preset.name}</h3>
-                  <Badge variant="default" size="sm">
-                    {formatPrice(preset.price)}
-                  </Badge>
-                </div>
-                <p className="text-sm text-text-muted mb-3">{preset.description}</p>
-                <div className="flex justify-between items-center">
-                  <span className="text-xs text-primary font-mono">
-                    {Object.keys(preset.components).length} Components
-                  </span>
-                  <Button variant="ghost" size="sm" className="text-xs">
-                    Load Preset
-                  </Button>
-                </div>
-              </motion.div>
+                <h3 className="text-sm font-semibold uppercase tracking-widest text-primary mb-2">
+                  {item.title}
+                </h3>
+                <p className="text-sm text-text-muted leading-relaxed">{item.description}</p>
+              </div>
             ))}
           </div>
         </motion.div>
 
         {/* Main Builder Interface */}
-        <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr_350px] gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[260px_minmax(0,1fr)_320px] gap-8 xl:gap-10">
           {/* Component Categories Sidebar */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -382,11 +307,11 @@ export default function PCBuilder() {
                   whileTap={{ scale: 0.98 }}
                   onClick={() => setActiveCategory(category.key)}
                   className={cn(
-                    'w-full p-3 rounded-lg border text-left transition-all duration-300',
+                    'w-full p-4 rounded-xl border text-left transition-all duration-300',
                     'flex items-center gap-3 group',
                     isActive 
                       ? 'border-primary/50 bg-gradient-to-r from-primary/10 to-accent/10 shadow-[0_0_15px_rgba(15,240,252,0.2)]'
-                      : 'border-primary/20 bg-card/50 hover:border-primary/40 hover:bg-card/70'
+                      : 'border-primary/10 bg-white/70 hover:border-primary/30 hover:bg-white/90'
                   )}
                 >
                   <div className={cn(
@@ -426,7 +351,7 @@ export default function PCBuilder() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-card/50 backdrop-blur-sm border border-primary/20 rounded-xl p-6"
+            className="bg-white/80 backdrop-blur-lg border border-primary/10 rounded-2xl p-7 shadow-sm"
           >
             <AnimatePresence mode="wait">
               {componentCategories.map((category) => {
@@ -536,13 +461,25 @@ export default function PCBuilder() {
             className="space-y-4"
           >
             {/* Build Overview */}
-            <div className="bg-gradient-to-br from-card/70 to-card/50 backdrop-blur-sm border border-primary/20 rounded-xl p-4">
+            <div className="bg-white/80 backdrop-blur-lg border border-primary/10 rounded-2xl p-6 shadow-sm">
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                 <TrendingUp className="w-5 h-5 text-accent" />
                 Build Overview
               </h3>
               
-              <div className="space-y-3">
+              <div className="space-y-4">
+                <div>
+                  <label className="text-xs font-semibold uppercase tracking-widest text-text-muted block mb-2">
+                    Build Name
+                  </label>
+                  <Input
+                    value={buildName}
+                    onChange={(event) => setBuildName(event.target.value)}
+                    placeholder="My neon battlestation"
+                    className="bg-white/90"
+                  />
+                </div>
+
                 <div className="flex justify-between items-center">
                   <span className="text-text-muted">Total Price:</span>
                   <span className="text-xl font-bold text-primary">
@@ -585,7 +522,7 @@ export default function PCBuilder() {
             </div>
 
             {/* Compatibility Check */}
-            <div className="bg-gradient-to-br from-card/70 to-card/50 backdrop-blur-sm border border-primary/20 rounded-xl p-4">
+            <div className="bg-white/80 backdrop-blur-lg border border-primary/10 rounded-2xl p-6 shadow-sm">
               <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                 {compatibilityCheck.score === 100 ? (
                   <CheckCircle className="w-5 h-5 text-green-400" />
@@ -621,7 +558,7 @@ export default function PCBuilder() {
             </div>
 
             {/* Performance Meter */}
-            <div className="bg-gradient-to-br from-card/70 to-card/50 backdrop-blur-sm border border-primary/20 rounded-xl p-4">
+            <div className="bg-white/80 backdrop-blur-lg border border-primary/10 rounded-2xl p-6 shadow-sm">
               <h3 className="text-lg font-semibold mb-4">Performance Rating</h3>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
@@ -655,7 +592,7 @@ export default function PCBuilder() {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => setShowSaveDialog(true)}
+                  onClick={handleSaveBuild}
                   disabled={Object.keys(selectedComponents).length === 0}
                 >
                   <Save className="w-4 h-4 mr-2" />
@@ -667,7 +604,7 @@ export default function PCBuilder() {
                   size="sm"
                   onClick={() => {
                     setSelectedComponents({})
-                    setBuildPreset('')
+                    setBuildName('')
                     setActiveCategory('cpu')
                     toast.success('Build cleared!')
                   }}
@@ -677,6 +614,12 @@ export default function PCBuilder() {
                 </Button>
               </div>
             </div>
+
+            {savedBuilds.length > 0 && (
+              <div className="text-xs text-text-muted text-center">
+                {savedBuilds.length} build{savedBuilds.length > 1 ? 's' : ''} saved this session.
+              </div>
+            )}
 
             {compatibilityCheck.issues.length > 0 && (
               <div className="text-xs text-red-400 text-center bg-red-500/10 border border-red-500/20 rounded-lg p-2">

@@ -182,6 +182,60 @@ export const PRODUCTS: Product[] = [
     sku: 'RZ03-BWID-RGB'
   },
   {
+    id: 'logitech-g213-prodigy',
+    title: 'Logitech G213 Prodigy RGB Gaming Keyboard',
+    price: 8500,
+    originalPrice: 9900,
+    category: 'Keyboards',
+    brand: 'Logitech',
+    image: '/images/categories/keyboards/logitech-g213-gaming-keyboard-logitech-paksitan-front-image_medium@2x.webp',
+    description: 'Spill-resistant membrane gaming keyboard with five-zone RGB lighting and dedicated media controls.',
+    availability: 'In Stock',
+    specs: {
+      'Switches': 'Logitech Mech-Dome',
+      'Layout': 'Full-size (104 keys)',
+      'Lighting': 'Lightsync RGB (5 zone)',
+      'Connection': 'USB-A Wired',
+      'Polling Rate': '1000Hz',
+      'Key Rollover': 'Anti-ghosting (multi-key)',
+      'Software': 'Logitech G HUB'
+    },
+    tags: ['keyboard', 'rgb', 'membrane', 'logitech', 'gaming'],
+    rating: 4.4,
+    reviewCount: 178,
+    discount: 14,
+    weight: 1000,
+    warranty: '2 Years Logitech Warranty',
+    sku: 'LOG-G213-PRO'
+  },
+  {
+    id: 'logitech-g413-tkl-se',
+    title: 'Logitech G413 TKL SE Mechanical Keyboard',
+    price: 11200,
+    originalPrice: 12500,
+    category: 'Keyboards',
+    brand: 'Logitech',
+    image: '/images/categories/keyboards/logitech-g413-tkl-se-black-logitech-pakistan-01_medium@2x.webp',
+    description: 'Tenkeyless mechanical keyboard featuring tactile switches, PBT keycaps, and white LED backlighting.',
+    availability: 'Limited Stock',
+    specs: {
+      'Switches': 'Tactile (Logitech GX equivalent)',
+      'Layout': 'Tenkeyless (87 keys)',
+      'Lighting': 'White LED',
+      'Connection': 'USB-A Wired',
+      'Polling Rate': '1000Hz',
+      'Key Rollover': '26-key rollover',
+      'Software': 'Logitech G HUB'
+    },
+    tags: ['keyboard', 'mechanical', 'tkl', 'logitech', 'gaming'],
+    rating: 4.5,
+    reviewCount: 94,
+    discount: 10,
+    weight: 780,
+    warranty: '2 Years Logitech Warranty',
+    sku: 'LOG-G413-TKL-SE'
+  },
+  {
     id: 'hyperx-headset-cloud3',
     title: 'HyperX Cloud III Wireless Gaming Headset',
     price: 9800,
@@ -240,7 +294,7 @@ export const PRODUCTS: Product[] = [
     originalPrice: 68000,
     category: 'Monitors',
     brand: 'Dell',
-    image: 'images/dell-x2721q-27-curved.png',
+  image: '/images/categories/desktop-pcs/dell-x2721q-27-curved.png',
     description: 'Premium 27" curved gaming monitor with 165Hz refresh rate, 1ms response time, and FreeSync Premium support.',
     availability: 'Preorder',
     specs: {
@@ -267,7 +321,7 @@ export const PRODUCTS: Product[] = [
     originalPrice: 52000,
     category: 'Monitors',
     brand: 'HP',
-    image: 'images/hp-omen-x24f-24-flat.png',
+  image: '/images/categories/desktop-pcs/hp-omen-x24f-24-flat.png',
     description: '24" Full HD gaming monitor with 240Hz refresh rate, perfect for competitive gaming.',
     availability: 'In Stock',
     specs: {
@@ -294,7 +348,7 @@ export const PRODUCTS: Product[] = [
     originalPrice: 110000,
     category: 'Monitors',
     brand: 'ASUS',
-    image: 'images/asus-rog-swift-pg27aqn-27-flat.png',
+  image: '/images/categories/desktop-pcs/asus-rog-swift-pg27aqn-27-flat.png',
     description: 'Premium 27" QHD gaming monitor with 360Hz refresh rate and G-SYNC Ultimate.',
     availability: 'In Stock',
     specs: {
@@ -322,7 +376,7 @@ export const PRODUCTS: Product[] = [
     originalPrice: 145000,
     category: 'Monitors',
     brand: 'Acer',
-    image: 'images/acer-predator-x34p-34-curved.png',
+  image: '/images/categories/desktop-pcs/acer-predator-x34p-34-curved.png',
     description: 'Immersive 34" curved ultrawide monitor with 120Hz refresh rate and G-SYNC.',
     availability: 'In Stock',
     specs: {
@@ -350,7 +404,7 @@ export const PRODUCTS: Product[] = [
     originalPrice: 62000,
     category: 'Monitors',
     brand: 'MSI',
-    image: 'images/msi-optix-g27cq4-27-curved.png',
+  image: '/images/categories/desktop-pcs/msi-optix-g27cq4-27-curved.png',
     description: '27" QHD curved gaming monitor with 165Hz refresh rate and 1ms response time.',
     availability: 'In Stock',
     specs: {
@@ -377,7 +431,7 @@ export const PRODUCTS: Product[] = [
     originalPrice: 78000,
     category: 'Monitors',
     brand: 'LG',
-    image: 'images/lg-ultragear-32gn63t-32-flat.png',
+  image: '/images/categories/desktop-pcs/lg-ultragear-32gn63t-32-flat.png',
     description: '32" QHD gaming monitor with 165Hz refresh rate and HDR10 support.',
     availability: 'In Stock',
     specs: {
@@ -404,7 +458,7 @@ export const PRODUCTS: Product[] = [
     originalPrice: 155000,
     category: 'Monitors',
     brand: 'Samsung',
-    image: 'images/samsung-odyssey-g8-34-curved.png',
+  image: '/images/categories/desktop-pcs/samsung-odyssey-g8-34-curved.png',
     description: 'Premium 34" OLED curved gaming monitor with 175Hz refresh rate.',
     availability: 'Limited Stock',
     specs: {

@@ -17,7 +17,13 @@ export default function Header() {
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const itemCount = useCartStore((state) => state.items.reduce((sum, item) => sum + item.quantity, 0))
+
+  // Only render cart count after mount to avoid hydration mismatch
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const navigationItems = [
     { name: 'Home', href: '/', icon: Home },
@@ -190,7 +196,7 @@ export default function Header() {
               aria-label="Shopping cart"
             >
               <ShoppingCart className="w-5 h-5" />
-              {itemCount > 0 && (
+              {mounted && itemCount > 0 && (
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center animate-bounce">
                   {itemCount}
                 </span>

@@ -2,6 +2,10 @@ import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { APP_CONFIG } from './config'
 
+const fallbackSvg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'><defs><linearGradient id='g' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' stop-color='#1f2937'/><stop offset='100%' stop-color='#111827'/></linearGradient></defs><rect width='400' height='400' fill='url(#g)'/><g fill='#8b5cf6' opacity='0.2'><circle cx='80' cy='80' r='50'/><circle cx='340' cy='120' r='70'/><circle cx='120' cy='300' r='60'/></g><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-family='Segoe UI, sans-serif' font-size='42' fill='#9ca3af' letter-spacing='4'>NO IMAGE</text></svg>`
+
+export const FALLBACK_IMAGE_DATA_URI = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(fallbackSvg)}`
+
 /**
  * Utility function to merge class names with Tailwind CSS
  */

@@ -2,7 +2,8 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
-import { getOptimizedImageUrl, generateSrcSet } from '@/lib/imageLoader'
+import { getOptimizedImageUrl } from '@/lib/imageLoader'
+import { FALLBACK_IMAGE_DATA_URI } from '@/lib/utils'
 import { motion } from 'framer-motion'
 
 interface OptimizedImageProps {
@@ -30,7 +31,7 @@ export default function OptimizedImage({
   priority = false,
   lazy = true,
   gaming = false,
-  fallback = '/images/placeholder-gaming.webp',
+  fallback = FALLBACK_IMAGE_DATA_URI,
   onLoad,
   onError,
   ...props
