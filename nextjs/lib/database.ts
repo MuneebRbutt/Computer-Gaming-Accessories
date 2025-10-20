@@ -546,7 +546,28 @@ export const ReviewService = {
 
 // Analytics Services
 export const AnalyticsService = {
-  getDashboardStats: cache(async () => {
+  getDashboardStats: cache(async (range: string = '7d') => {
+    // Calculate date range
+    const now = new Date()
+    let startDate = new Date()
+    
+    switch (range) {
+      case '24h':
+        startDate.setHours(now.getHours() - 24)
+        break
+      case '7d':
+        startDate.setDate(now.getDate() - 7)
+        break
+      case '30d':
+        startDate.setDate(now.getDate() - 30)
+        break
+      case '90d':
+        startDate.setDate(now.getDate() - 90)
+        break
+      default:
+        startDate.setDate(now.getDate() - 7)
+    }
+
     const [
       totalProducts,
       totalUsers,
@@ -554,14 +575,20 @@ export const AnalyticsService = {
       totalRevenue,
       recentOrders,
       topProducts,
-      lowStockProducts
+      lowStockProducts,
+      monthlyRevenue,
+      conversionRate,
+      averageOrderValue
     ] = await Promise.all([
       prisma.product.count({ where: { status: 'ACTIVE' } }),
       prisma.user.count({ where: { role: 'CUSTOMER' } }),
-      prisma.order.count(),
+      prisma.order.count({ where: { createdAt: { gte: startDate } } }),
       prisma.order.aggregate({
         _sum: { totalAmount: true },
-        where: { status: 'DELIVERED' }
+        where: { 
+          status: 'DELIVERED',
+          createdAt: { gte: startDate }
+        }
       }),
       prisma.order.findMany({
         take: 5,
@@ -589,11 +616,17 @@ export const AnalyticsService = {
         where: {
           trackQuantity: true,
           quantity: {
-            lte: prisma.product.fields.lowStockThreshold
+            lte: 10 // Low stock threshold
           }
         },
         take: 10
-      })
+      }),
+      // Mock monthly revenue data for now
+      Promise.resolve([12000, 15000, 18000, 22000, 19000, 25000, 28000]),
+      // Mock conversion rate
+      Promise.resolve(3.2),
+      // Mock average order value
+      Promise.resolve(125.50)
     ])
 
     return {
@@ -603,7 +636,10 @@ export const AnalyticsService = {
       totalRevenue: totalRevenue._sum.totalAmount || 0,
       recentOrders,
       topProducts,
-      lowStockProducts
+      lowStockProducts,
+      monthlyRevenue,
+      conversionRate,
+      averageOrderValue
     }
   })
 }

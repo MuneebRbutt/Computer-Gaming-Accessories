@@ -18,7 +18,7 @@ const RATE_LIMITS = {
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
 
 // List of paths that require authentication
-const protectedPaths = ['/account', '/checkout', '/orders'];
+const protectedPaths = ['/account', '/checkout', '/orders', '/admin'];
 const authPaths = ['/login', '/signup'];
 
 function getClientId(request: NextRequest): string {

@@ -69,7 +69,7 @@ async function main() {
   try {
     console.log('Connecting to database...');
     // Test a simple query to surface connection issues early
-    await prisma.$queryRaw`db.runCommand({ ping: 1 })`;
+    await prisma.user.findFirst();
 
     console.log(`Looking up user by email: ${email}`);
     const user = await prisma.user.findUnique({ where: { email } });

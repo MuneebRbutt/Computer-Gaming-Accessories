@@ -13,11 +13,11 @@ module.exports = {
         // These enable utility classes like bg-gaming-dark, text-gaming-muted,
         // bg-gaming-primary/20, border-gaming-accent/20, etc.
         gaming: {
-          primary: '#8B0000',      // text-gaming-primary / bg-gaming-primary
-          accent: '#DC143C',       // text-gaming-accent / border-gaming-accent
-          dark: '#0b0b0d',         // bg-gaming-dark
-          darker: '#18181b',       // bg-gaming-darker
-          muted: '#b6b6c2',        // text-gaming-muted
+          primary: '#8B5CF6',      // Purple primary for admin
+          accent: '#EC4899',       // Pink accent for admin
+          dark: '#0F172A',         // Slate dark background
+          darker: '#1E293B',       // Slate darker background
+          muted: '#94A3B8',        // Slate muted text
         },
         // Dark Red Gaming Palette
         primary: {
@@ -94,7 +94,11 @@ module.exports = {
         'md': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
         'lg': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
         'xl': '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-        'card': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)'
+        '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+        '3xl': '0 35px 60px -12px rgba(0, 0, 0, 0.3)',
+        'card': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+        'glow': '0 0 20px rgba(139, 92, 246, 0.3)',
+        'glow-lg': '0 0 40px rgba(139, 92, 246, 0.4)'
       },
       backdropBlur: {
         'xs': '2px',
