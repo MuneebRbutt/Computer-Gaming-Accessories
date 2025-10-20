@@ -116,13 +116,41 @@ module.exports = {
         'scale-in': {
           '0%': { transform: 'scale(0.95)', opacity: '0' },
           '100%': { transform: 'scale(1)', opacity: '1' }
+        },
+        // New animations for UI components
+        'wave': {
+          '0%, 100%': { transform: 'translateX(0)' },
+          '50%': { transform: 'translateX(100%)' }
+        },
+        'glow': {
+          '0%, 100%': { boxShadow: '0 0 5px rgba(139, 0, 0, 0.5)' },
+          '50%': { boxShadow: '0 0 20px rgba(139, 0, 0, 0.8)' }
+        },
+        'shimmer': {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' }
+        },
+        'bounce-in': {
+          '0%': { transform: 'scale(0.3)', opacity: '0' },
+          '50%': { transform: 'scale(1.05)' },
+          '70%': { transform: 'scale(0.9)' },
+          '100%': { transform: 'scale(1)', opacity: '1' }
+        },
+        'wiggle': {
+          '0%, 100%': { transform: 'rotate(-3deg)' },
+          '50%': { transform: 'rotate(3deg)' }
         }
       },
       animation: {
         'fade-in': 'fade-in 0.3s ease-out',
         'slide-up': 'slide-up 0.4s ease-out',
         'slide-down': 'slide-down 0.4s ease-out',
-        'scale-in': 'scale-in 0.3s ease-out'
+        'scale-in': 'scale-in 0.3s ease-out',
+        'wave': 'wave 1.5s ease-in-out infinite',
+        'glow': 'glow 2s ease-in-out infinite',
+        'shimmer': 'shimmer 2s linear infinite',
+        'bounce-in': 'bounce-in 0.6s ease-out',
+        'wiggle': 'wiggle 1s ease-in-out infinite'
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
