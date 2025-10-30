@@ -28,7 +28,7 @@ export default function ContactPage() {
         <div className="overflow-hidden rounded-3xl shadow-xl border border-rose-100">
           <iframe
             title="Google Maps"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d19802.30023008769!2d-0.13012233486475534!3d51.50735580150778!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x487604b900e67c05%3A0x9f129c8f6a74797!2sLondon%20Eye!5e0!3m2!1sen!2suk!4v1684335678007!5m2!1sen!2suk"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3401.8534448732986!2d74.34304607549654!3d31.508874974246906!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391904f90c9fbc47%3A0x2c0e1e1e1e1e1e1e!2sHafeez%20Centre%2C%20Main%20Blvd%20Gulberg%2C%20Block%20E1%20Gulberg%20III%2C%20Lahore!5e0!3m2!1sen!2s!4v1729684800000!5m2!1sen!2s"
             width="100%"
             height="420"
             style={{ border: 0 }}
@@ -91,9 +91,9 @@ export default function ContactPage() {
               <div className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-rose-500 mt-1" />
                 <div>
-                  <p className="font-medium text-gray-900">Head Office</p>
-                  <p className="text-gray-600">Office #UG25, Glamour Mobile & Computer Mall, Karachi</p>
-                  <p className="text-gray-600 mt-2">Office #LG 7-8 & M-27, Midway Shopping Mall, Rawalpindi</p>
+                  <p className="font-medium text-gray-900">Store Location</p>
+                  <p className="text-gray-600">Shop #65, 2nd Floor, Hafeez Centre</p>
+                  <p className="text-gray-600">Main Boulevard, Block E1 Gulberg 2, Lahore</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
