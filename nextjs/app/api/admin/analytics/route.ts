@@ -3,10 +3,58 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { UserService } from '@/lib/database'
 import prisma from '@/lib/prisma'
+import { PRODUCTS } from '@/lib/data'
 
 // GET /api/admin/analytics
 export async function GET(request: NextRequest) {
   try {
+    // Mock mode: return static analytics without DB/auth
+    if (process.env.NEXT_PUBLIC_DISABLE_AUTH === 'true') {
+      const now = new Date()
+      const recentSales = Array.from({ length: 7 }).map((_, i) => {
+        const d = new Date(now)
+        d.setDate(now.getDate() - i)
+        const base = 20000 + (i * 1500)
+        return { date: d.toISOString(), amount: base }
+      }).reverse()
+
+      const topProducts = PRODUCTS.slice(0, 5).map((p, i) => {
+        const sales = Math.max(10, 45 - i * 7)
+        return {
+          id: p.id,
+          title: p.title,
+          sales,
+          revenue: sales * (p.price || 0)
+        }
+      })
+
+      return NextResponse.json({
+        revenue: {
+          total: 350000,
+          today: 15000,
+          thisWeek: 90000,
+          thisMonth: 250000
+        },
+        orders: {
+          total: 123,
+          pending: 7,
+          processing: 12,
+          completed: 104
+        },
+        products: {
+          total: PRODUCTS.length,
+          lowStock: 5,
+          outOfStock: 2
+        },
+        customers: {
+          total: 2500,
+          newThisMonth: 120
+        },
+        topProducts,
+        recentSales
+      })
+    }
+
     const session = await getServerSession(authOptions)
     
     if (!session?.user?.email) {

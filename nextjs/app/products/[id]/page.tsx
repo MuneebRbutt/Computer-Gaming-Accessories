@@ -1,22 +1,25 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Heart, GitCompare, MessageCircle, Share2, CheckCircle, Truck, Package, Star, ShoppingCart, Minus, Plus } from 'lucide-react'
 import Header from '@/components/Header'
-import { PRODUCTS } from '@/lib/data'
+import { PRODUCTS, type Product } from '@/lib/data'
 import { FALLBACK_IMAGE_DATA_URI } from '@/lib/utils'
+import { useCartStore } from '@/hooks/useCartStore'
 
 export default function ProductDetailPage() {
   const params = useParams()
+  const router = useRouter()
   const productId = params?.id as string
   const [product, setProduct] = useState<any>(null)
   const [loading, setLoading] = useState(true)
   const [selectedImage, setSelectedImage] = useState(0)
   const [quantity, setQuantity] = useState(1)
   const [activeTab, setActiveTab] = useState<'description' | 'reviews'>('description')
+  const { addItem, hydrated } = useCartStore()
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -39,6 +42,28 @@ export default function ProductDetailPage() {
     }
     fetchProduct()
   }, [productId])
+
+  const toCartProduct = (p: any): Product => ({
+    id: p.id,
+    title: p.title,
+    price: typeof p.price === 'number' ? p.price : Number(p.price || 0),
+    category: p.category?.name ?? p.category ?? 'Misc',
+    brand: p.brand?.name ?? p.brand ?? 'Unknown',
+    image: (p.images?.[0]) || p.image || FALLBACK_IMAGE_DATA_URI
+  }) as Product
+
+  const handleAddToCart = () => {
+    if (!product || !hydrated) return
+    const cp = toCartProduct(product)
+    addItem(cp, { quantity })
+  }
+
+  const handleBuyNow = () => {
+    if (!product || !hydrated) return
+    const cp = toCartProduct(product)
+    addItem(cp, { quantity })
+    router.push('/checkout')
+  }
 
   if (loading) {
     return (
@@ -173,7 +198,7 @@ export default function ProductDetailPage() {
             </div>
 
             <div className="flex items-center gap-4 mb-6">
-              <button className="flex-1 bg-gray-800 text-white py-4 px-6 rounded-lg hover:bg-gray-900 transition-colors flex items-center justify-center gap-2 font-semibold">
+              <button onClick={handleAddToCart} disabled={!hydrated} className="flex-1 bg-gray-800 text-white py-4 px-6 rounded-lg hover:bg-gray-900 transition-colors flex items-center justify-center gap-2 font-semibold disabled:opacity-50">
                 <ShoppingCart className="w-5 h-5" />
                 Add to Cart
               </button>
@@ -182,7 +207,7 @@ export default function ProductDetailPage() {
               </button>
             </div>
 
-            <button className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-4 px-6 rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all font-semibold text-lg mb-6">
+            <button onClick={handleBuyNow} disabled={!hydrated} className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-4 px-6 rounded-lg hover:from-pink-600 hover:to-purple-700 transition-all font-semibold text-lg mb-6 disabled:opacity-50">
               Buy It Now
             </button>
 
@@ -336,7 +361,7 @@ export default function ProductDetailPage() {
                       <span className="text-gray-600">{compProduct.category}</span>
                     </td>
                     <td className="border border-gray-200 p-4 text-center">
-                      <button className="bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600 transition-colors text-sm font-semibold">Add to Cart</button>
+                      <button onClick={() => addItem(toCartProduct(compProduct), { quantity: 1 })} disabled={!hydrated} className="bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600 transition-colors text-sm font-semibold disabled:opacity-50">Add to Cart</button>
                     </td>
                   </tr>
                 ))}

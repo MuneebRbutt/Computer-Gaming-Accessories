@@ -10,12 +10,20 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode
 }) {
+  const disableAuth = process.env.NEXT_PUBLIC_DISABLE_AUTH === 'true'
   const { data: session, status } = useSession()
   const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [isAdmin, setIsAdmin] = useState(false)
 
   useEffect(() => {
+    // Bypass login/role checks entirely when auth is disabled
+    if (disableAuth) {
+      setIsAdmin(true)
+      setLoading(false)
+      return
+    }
+
     if (status === 'loading') return
     
     if (!session) {
@@ -43,9 +51,9 @@ export default function AdminLayout({
     }
 
     checkAdminRole()
-  }, [session, status, router])
+  }, [session, status, router, disableAuth])
 
-  if (status === 'loading' || loading) {
+  if ((status === 'loading' && !disableAuth) || loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
         <div className="flex flex-col items-center space-y-4">
@@ -97,14 +105,14 @@ export default function AdminLayout({
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
                   <span className="text-sm font-bold">
-                    {session?.user?.email?.[0]?.toUpperCase() || 'A'}
+                    {(session?.user?.email?.[0]?.toUpperCase() || 'A')}
                   </span>
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-medium text-white">
                     {session?.user?.name || session?.user?.email?.split('@')[0] || 'Admin'}
                   </p>
-                  <p className="text-xs text-purple-300">{session?.user?.email}</p>
+                  <p className="text-xs text-purple-300">{session?.user?.email || 'admin@demo.local'}</p>
                 </div>
               </div>
             </div>

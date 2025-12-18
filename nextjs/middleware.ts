@@ -69,6 +69,13 @@ function checkRateLimit(
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const response = NextResponse.next();
+
+  // Bypass all auth & rate limit protections if public auth disabled
+  if (process.env.NEXT_PUBLIC_DISABLE_AUTH === 'true') {
+    // Minimal headers only
+    response.headers.set('X-Admin-Bypass', 'enabled');
+    return response; // Short-circuit
+  }
   
   // Enhanced Security Headers
   response.headers.set('X-Content-Type-Options', 'nosniff');

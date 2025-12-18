@@ -17,6 +17,13 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
+    // Mock mode: accept update and return merged object
+    if (process.env.NEXT_PUBLIC_DISABLE_AUTH === 'true') {
+      const body = await request.json()
+      const validated = updateCategorySchema.parse(body)
+      return NextResponse.json({ id: params.id, ...validated, updatedAt: new Date().toISOString() })
+    }
+
     const session = await getServerSession(authOptions)
     
     if (!session?.user?.email) {
@@ -58,6 +65,11 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
+    // Mock mode: pretend deletion succeeded
+    if (process.env.NEXT_PUBLIC_DISABLE_AUTH === 'true') {
+      return NextResponse.json({ message: 'Category deleted successfully (mock)' })
+    }
+
     const session = await getServerSession(authOptions)
     
     if (!session?.user?.email) {

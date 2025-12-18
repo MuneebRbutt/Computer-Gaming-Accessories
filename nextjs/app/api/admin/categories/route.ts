@@ -3,10 +3,25 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { UserService, CategoryService } from '@/lib/database'
 import { z } from 'zod'
+import { CATEGORIES } from '@/lib/data'
 
 // GET /api/admin/categories
 export async function GET(request: NextRequest) {
   try {
+    // Bypass auth/DB and return mock categories when auth is disabled
+    if (process.env.NEXT_PUBLIC_DISABLE_AUTH === 'true') {
+      const mock = CATEGORIES.map((c) => ({
+        id: c.id,
+        name: c.name,
+        slug: c.slug,
+        description: c.description,
+        image: c.image,
+        createdAt: new Date().toISOString(),
+        _count: { products: c.productCount ?? 0 }
+      }))
+      return NextResponse.json(mock)
+    }
+
     const session = await getServerSession(authOptions)
     
     if (!session?.user?.email) {
@@ -41,6 +56,19 @@ const createCategorySchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    // Bypass and echo a mock created category when auth is disabled
+    if (process.env.NEXT_PUBLIC_DISABLE_AUTH === 'true') {
+      const body = await request.json()
+      const validated = createCategorySchema.parse(body)
+      const created = {
+        id: `mock-${Date.now()}`,
+        ...validated,
+        createdAt: new Date().toISOString(),
+        _count: { products: 0 }
+      }
+      return NextResponse.json(created, { status: 201 })
+    }
+
     const session = await getServerSession(authOptions)
     
     if (!session?.user?.email) {

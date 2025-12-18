@@ -64,9 +64,10 @@ export default function CategoriesManagement() {
       setLoading(true)
       const response = await fetch('/api/admin/categories')
       const data = await response.json()
-      setCategories(data)
+      setCategories(Array.isArray(data) ? data : [])
     } catch (error) {
       console.error('Failed to fetch categories:', error)
+      setCategories([])
     } finally {
       setLoading(false)
     }
