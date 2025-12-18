@@ -1,6 +1,7 @@
 "use client"
 
 import Header from '@/components/Header'
+import { useCartSync } from '@/lib/hooks/useCartSync'
 import { useCartStore } from '@/hooks/useCartStore'
 import Image from 'next/image'
 import { Button } from '@/components/ui/Button'
@@ -9,7 +10,9 @@ import CheckoutProgress from '@/components/CheckoutProgress'
 import { useMemo, useState } from 'react'
 
 export default function CartPage() {
-  const { items, updateQuantity, removeItem, getTotalPrice, hydrated } = useCartStore()
+  const { items, updateQuantity, removeItem } = useCartSync()
+  const { getTotalPrice } = useCartStore()
+  const hydrated = true // Always hydrated when using API sync
   const [coupon, setCoupon] = useState('')
   const [applied, setApplied] = useState('')
 

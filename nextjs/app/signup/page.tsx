@@ -89,7 +89,19 @@ export default function SignupPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        toast.error(data.error || 'Something went wrong');
+        // Show detailed error message if available
+        const errorMessage = data.message || data.error || 'Something went wrong';
+        toast.error(errorMessage);
+        // Show field-specific errors if available
+        if (data.details && Array.isArray(data.details)) {
+          const fieldErrors: any = {};
+          data.details.forEach((err: any) => {
+            if (err.field === 'name') fieldErrors.name = err.message;
+            if (err.field === 'email') fieldErrors.email = err.message;
+            if (err.field === 'password') fieldErrors.password = err.message;
+          });
+          setErrors(prev => ({ ...prev, ...fieldErrors }));
+        }
         return;
       }
 
