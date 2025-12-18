@@ -77,18 +77,36 @@ export async function POST(request: NextRequest) {
     }
 
     // Create user in MongoDB database
-    const newUser = await UserService.createUser({
-      email: email.toLowerCase(),
-      password: hashedPassword,
-      firstName,
-      lastName,
-      username, // Use the unique username we generated above
-      role: 'CUSTOMER', // Default role for new signups
-      emailVerified: null,
-      avatar: null,
-      phone: null,
-      newsletter: false
-    });
+    let newUser;
+    try {
+      newUser = await UserService.createUser({
+        email: email.toLowerCase(),
+        password: hashedPassword,
+        firstName,
+        lastName,
+        username, // Use the unique username we generated above
+        role: 'CUSTOMER', // Default role for new signups
+        emailVerified: null,
+        avatar: null,
+        phone: null,
+        newsletter: false
+      });
+    } catch (createError: any) {
+      console.error('User creation error:', createError);
+      
+      // Handle Prisma/MongoDB specific errors
+      if (createError.code === 'P2002' || createError.code === 11000) {
+        // Unique constraint violation
+        const field = createError.meta?.target?.[0] || 'email';
+        return NextResponse.json(
+          { error: `User already exists with this ${field}` },
+          { status: 400 }
+        );
+      }
+      
+      // Re-throw to be caught by outer catch block
+      throw createError;
+    }
 
     console.log('New user registered:', { id: newUser.id, email: newUser.email, role: newUser.role });
 
@@ -111,10 +129,40 @@ export async function POST(request: NextRequest) {
     
     // Handle specific database errors
     if (error instanceof Error) {
-      if (error.message.includes('Unique constraint')) {
+      // MongoDB duplicate key error
+      if (error.message.includes('Unique constraint') || error.message.includes('E11000')) {
         return NextResponse.json(
           { error: 'User already exists with this email' },
           { status: 400 }
+        );
+      }
+      
+      // Prisma unique constraint error
+      if (error.message.includes('Unique constraint') || error.message.includes('P2002')) {
+        return NextResponse.json(
+          { error: 'User already exists with this email or username' },
+          { status: 400 }
+        );
+      }
+      
+      // Database connection error
+      if (error.message.includes('connect') || error.message.includes('ECONNREFUSED')) {
+        console.error('Database connection error:', error);
+        return NextResponse.json(
+          { error: 'Database connection failed. Please check your DATABASE_URL environment variable.' },
+          { status: 500 }
+        );
+      }
+      
+      // Return the actual error message for debugging (in development)
+      if (process.env.NODE_ENV === 'development') {
+        return NextResponse.json(
+          { 
+            error: 'Internal server error',
+            message: error.message,
+            stack: error.stack
+          },
+          { status: 500 }
         );
       }
     }

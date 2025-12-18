@@ -1,5 +1,10 @@
 import { prisma } from './prisma'
-import { cache } from 'react'
+import { generateOrderNumber } from './utils/order'
+
+// Cache function for server-side caching
+function cache<T extends (...args: any[]) => Promise<any>>(fn: T): T {
+  return fn as T
+}
 
 // Product Services
 export const ProductService = {
@@ -382,12 +387,26 @@ export const OrderService = {
   }),
 
   createOrder: async (data: any) => {
+    // Generate order number if not provided
+    if (!data.orderNumber) {
+      data.orderNumber = await generateOrderNumber()
+    }
+
     return await prisma.order.create({
       data,
       include: {
         items: {
           include: {
             product: true
+          }
+        },
+        shippingAddress: true,
+        billingAddress: true,
+        user: {
+          select: {
+            email: true,
+            firstName: true,
+            lastName: true
           }
         }
       }
@@ -642,4 +661,383 @@ export const AnalyticsService = {
       averageOrderValue
     }
   })
+}
+
+// Wishlist Services
+export const WishlistService = {
+  getWishlist: cache(async (userId: string) => {
+    return await prisma.wishlistItem.findMany({
+      where: { userId },
+      include: {
+        product: {
+          include: {
+            category: true,
+            brand: true
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
+  }),
+
+  addToWishlist: async (userId: string, productId: string) => {
+    // Check if already in wishlist
+    const existing = await prisma.wishlistItem.findFirst({
+      where: {
+        userId,
+        productId
+      }
+    })
+
+    if (existing) {
+      return existing
+    }
+
+    return await prisma.wishlistItem.create({
+      data: {
+        userId,
+        productId
+      },
+      include: {
+        product: true
+      }
+    })
+  },
+
+  removeFromWishlist: async (userId: string, productId: string) => {
+    const item = await prisma.wishlistItem.findFirst({
+      where: {
+        userId,
+        productId
+      }
+    })
+
+    if (!item) {
+      throw new Error('Wishlist item not found')
+    }
+
+    return await prisma.wishlistItem.delete({
+      where: { id: item.id }
+    })
+  },
+
+  isInWishlist: async (userId: string, productId: string): Promise<boolean> => {
+    const item = await prisma.wishlistItem.findFirst({
+      where: {
+        userId,
+        productId
+      }
+    })
+    return !!item
+  }
+}
+
+// Address Services
+export const AddressService = {
+  getAddresses: cache(async (userId: string) => {
+    return await prisma.address.findMany({
+      where: { userId },
+      orderBy: [
+        { isDefault: 'desc' },
+        { createdAt: 'desc' }
+      ]
+    })
+  }),
+
+  getAddress: async (id: string, userId: string) => {
+    return await prisma.address.findFirst({
+      where: {
+        id,
+        userId
+      }
+    })
+  },
+
+  createAddress: async (data: any) => {
+    // If this is set as default, unset other defaults
+    if (data.isDefault) {
+      await prisma.address.updateMany({
+        where: {
+          userId: data.userId,
+          isDefault: true
+        },
+        data: {
+          isDefault: false
+        }
+      })
+    }
+
+    return await prisma.address.create({
+      data
+    })
+  },
+
+  updateAddress: async (id: string, userId: string, data: any) => {
+    // If setting as default, unset other defaults
+    if (data.isDefault) {
+      await prisma.address.updateMany({
+        where: {
+          userId,
+          isDefault: true,
+          id: { not: id }
+        },
+        data: {
+          isDefault: false
+        }
+      })
+    }
+
+    return await prisma.address.update({
+      where: { id },
+      data
+    })
+  },
+
+  deleteAddress: async (id: string, userId: string) => {
+    return await prisma.address.delete({
+      where: {
+        id,
+        userId
+      }
+    })
+  },
+
+  setDefaultAddress: async (id: string, userId: string) => {
+    // Unset all other defaults
+    await prisma.address.updateMany({
+      where: {
+        userId,
+        isDefault: true
+      },
+      data: {
+        isDefault: false
+      }
+    })
+
+    // Set this as default
+    return await prisma.address.update({
+      where: { id },
+      data: { isDefault: true }
+    })
+  }
+}
+
+// Support Ticket Services
+export const SupportTicketService = {
+  getTickets: cache(async (userId: string) => {
+    return await prisma.supportTicket.findMany({
+      where: { userId },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
+  }),
+
+  getTicket: async (id: string, userId: string) => {
+    return await prisma.supportTicket.findFirst({
+      where: {
+        id,
+        userId
+      }
+    })
+  },
+
+  createTicket: async (data: any) => {
+    return await prisma.supportTicket.create({
+      data
+    })
+  },
+
+  updateTicket: async (id: string, userId: string, data: any) => {
+    return await prisma.supportTicket.update({
+      where: { id },
+      data
+    })
+  },
+
+  deleteTicket: async (id: string, userId: string) => {
+    return await prisma.supportTicket.delete({
+      where: {
+        id,
+        userId
+      }
+    })
+  }
+}
+
+// PC Build Services
+export const PCBuildService = {
+  getBuilds: cache(async (userId: string) => {
+    return await prisma.pCBuild.findMany({
+      where: { userId },
+      include: {
+        items: {
+          include: {
+            product: {
+              include: {
+                category: true,
+                brand: true
+              }
+            }
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
+  }),
+
+  getBuild: async (id: string, userId: string) => {
+    return await prisma.pCBuild.findFirst({
+      where: {
+        id,
+        userId
+      },
+      include: {
+        items: {
+          include: {
+            product: {
+              include: {
+                category: true,
+                brand: true
+              }
+            }
+          }
+        }
+      }
+    })
+  },
+
+  createBuild: async (data: any) => {
+    return await prisma.pCBuild.create({
+      data,
+      include: {
+        items: {
+          include: {
+            product: true
+          }
+        }
+      }
+    })
+  },
+
+  updateBuild: async (id: string, userId: string, data: any) => {
+    return await prisma.pCBuild.update({
+      where: { id },
+      data
+    })
+  },
+
+  deleteBuild: async (id: string, userId: string) => {
+    return await prisma.pCBuild.delete({
+      where: {
+        id,
+        userId
+      }
+    })
+  },
+
+  addItemToBuild: async (buildId: string, productId: string, category: string, quantity: number = 1) => {
+    return await prisma.pCBuildItem.create({
+      data: {
+        buildId,
+        productId,
+        category,
+        quantity
+      },
+      include: {
+        product: true
+      }
+    })
+  },
+
+  removeItemFromBuild: async (itemId: string, buildId: string, userId: string) => {
+    // Verify build belongs to user
+    const build = await prisma.pCBuild.findFirst({
+      where: {
+        id: buildId,
+        userId
+      }
+    })
+
+    if (!build) {
+      throw new Error('Build not found or unauthorized')
+    }
+
+    return await prisma.pCBuildItem.delete({
+      where: { id: itemId }
+    })
+  }
+}
+
+// Newsletter Services
+export const NewsletterService = {
+  subscribe: async (email: string, firstName?: string, lastName?: string) => {
+    // Check if already subscribed
+    const existing = await prisma.newsletterSubscriber.findUnique({
+      where: { email }
+    })
+
+    if (existing) {
+      if (existing.status === 'ACTIVE') {
+        return existing
+      }
+      // Reactivate if unsubscribed
+      return await prisma.newsletterSubscriber.update({
+        where: { email },
+        data: {
+          status: 'ACTIVE',
+          firstName,
+          lastName,
+          unsubscribedAt: null
+        }
+      })
+    }
+
+    return await prisma.newsletterSubscriber.create({
+      data: {
+        email,
+        firstName,
+        lastName,
+        status: 'ACTIVE'
+      }
+    })
+  },
+
+  unsubscribe: async (email: string) => {
+    return await prisma.newsletterSubscriber.update({
+      where: { email },
+      data: {
+        status: 'UNSUBSCRIBED',
+        unsubscribedAt: new Date()
+      }
+    })
+  },
+
+  getSubscribers: async (page: number = 1, limit: number = 50) => {
+    const skip = (page - 1) * limit
+    const [subscribers, total] = await Promise.all([
+      prisma.newsletterSubscriber.findMany({
+        skip,
+        take: limit,
+        orderBy: {
+          subscribedAt: 'desc'
+        }
+      }),
+      prisma.newsletterSubscriber.count()
+    ])
+
+    return {
+      subscribers,
+      pagination: {
+        total,
+        page,
+        limit,
+        pages: Math.ceil(total / limit)
+      }
+    }
+  }
 }
