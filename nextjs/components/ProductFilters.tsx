@@ -1,13 +1,13 @@
-'use client'
+"use client"
 
 import { useMemo, useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { 
-  Search, 
-  Filter, 
-  X, 
-  Grid3X3, 
-  List, 
+import {
+  Search,
+  Filter,
+  X,
+  Grid3X3,
+  List,
   SlidersHorizontal,
   ChevronDown,
   RotateCcw,
@@ -53,8 +53,8 @@ export default function ProductFilters({ products, className }: ProductFiltersPr
   } = useFilterStore()
 
   // Debounced search handler
-  const debouncedSearch = useCallback(
-    debounce((value: string) => setSearch(value), 300),
+  const debouncedSearch = useMemo(
+    () => debounce((value: string) => setSearch(value), 300),
     [setSearch]
   )
 
@@ -98,34 +98,37 @@ export default function ProductFilters({ products, className }: ProductFiltersPr
 
   return (
     <div className={cn(
-      'bg-white border border-gray-200 rounded-xl overflow-hidden',
-      'shadow-sm hover:shadow-md',
+      'bg-gaming-card border border-white/5 rounded-2xl overflow-hidden',
+      'shadow-glass hover:shadow-neon hover:border-gaming-primary/30',
       'transition-all duration-300',
       className
     )}>
       {/* Quick Filters Header */}
-      <div className="p-4 border-b border-gray-200 bg-gray-50">
+      <div className="p-4 border-b border-white/5 bg-white/[0.02]">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <Filter className="w-5 h-5 text-primary" />
-            <h3 className="text-lg font-bold text-gray-900">
+            <Filter className="w-5 h-5 text-gaming-primary" />
+            <h3 className="text-lg font-display font-bold text-white">
               Filters
             </h3>
             {activeFiltersCount > 0 && (
-              <Badge variant="default" size="sm">
+              <Badge variant="default" size="sm" className="bg-gaming-primary text-white">
                 {activeFiltersCount}
               </Badge>
             )}
           </div>
-          
+
           <div className="flex items-center gap-2">
             {/* View Toggle */}
-            <div className="flex items-center gap-1 bg-gray-100 rounded-lg p-1">
+            <div className="flex items-center gap-1 bg-white/5 rounded-lg p-1 border border-white/5">
               <Button
                 variant={view === 'grid' ? 'primary' : 'ghost'}
                 size="sm"
                 onClick={() => setView('grid')}
-                className="!p-2"
+                className={cn(
+                  "!p-2 text-white hover:text-white transition-all",
+                  view === 'grid' ? "bg-gaming-primary shadow-neon" : "hover:bg-white/10"
+                )}
                 aria-label="Grid view"
               >
                 <Grid3X3 className="w-4 h-4" />
@@ -134,7 +137,10 @@ export default function ProductFilters({ products, className }: ProductFiltersPr
                 variant={view === 'list' ? 'primary' : 'ghost'}
                 size="sm"
                 onClick={() => setView('list')}
-                className="!p-2"
+                className={cn(
+                  "!p-2 text-white hover:text-white transition-all",
+                  view === 'list' ? "bg-gaming-primary shadow-neon" : "hover:bg-white/10"
+                )}
                 aria-label="List view"
               >
                 <List className="w-4 h-4" />
@@ -146,7 +152,7 @@ export default function ProductFilters({ products, className }: ProductFiltersPr
               variant="ghost"
               size="sm"
               onClick={() => setIsExpanded(!isExpanded)}
-              className="!p-2"
+              className="!p-2 text-gray-400 hover:text-white hover:bg-white/10"
               aria-label={isExpanded ? 'Collapse filters' : 'Expand filters'}
             >
               <SlidersHorizontal className={cn(
@@ -168,9 +174,9 @@ export default function ProductFilters({ products, className }: ProductFiltersPr
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: index * 0.1 }}
                 onClick={filter.action}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/10 border border-primary/20 text-primary text-sm font-medium hover:bg-primary/20 hover:border-primary/40 transition-all duration-300 group"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gaming-surface border border-white/10 text-xs text-gray-300 font-medium hover:bg-gaming-primary hover:text-white hover:border-gaming-primary hover:shadow-neon transition-all duration-300 group"
               >
-                <Icon className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
+                <Icon className="w-3.5 h-3.5 group-hover:scale-110 transition-transform duration-300" />
                 {filter.label}
               </motion.button>
             )
@@ -179,15 +185,15 @@ export default function ProductFilters({ products, className }: ProductFiltersPr
       </div>
 
       {/* Main Search */}
-      <div className="p-4 border-b border-gray-200">
+      <div className="p-4 border-b border-white/5">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
           <Input
             type="text"
-            placeholder="Search gaming gear, brands, specs..."
+            placeholder="Search gear..."
             defaultValue={search}
             onChange={(e) => debouncedSearch(e.target.value)}
-            className="pl-11 bg-gray-50 border-gray-200 focus:border-primary focus:ring-2 focus:ring-primary/20"
+            className="pl-11 bg-gaming-surface border-white/10 text-white placeholder:text-gray-600 focus:border-gaming-primary focus:ring-gaming-primary"
             aria-label="Search products"
           />
           {search && (
@@ -195,7 +201,7 @@ export default function ProductFilters({ products, className }: ProductFiltersPr
               variant="ghost"
               size="sm"
               onClick={() => setSearch('')}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 !p-1 hover:bg-red-500/20"
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 !p-1 text-gray-500 hover:text-red-400 hover:bg-red-500/10"
               aria-label="Clear search"
             >
               <X className="w-4 h-4" />
@@ -214,14 +220,14 @@ export default function ProductFilters({ products, className }: ProductFiltersPr
             transition={{ duration: 0.3 }}
             className="overflow-hidden"
           >
-            <div className="p-4 space-y-6">
+            <div className="p-4 space-y-6 bg-white/[0.01]">
               {/* Category & Brand Row */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-900 flex items-center gap-2">
+                  <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
                     Category
                     {category && (
-                      <Badge variant="outline" size="sm">
+                      <Badge variant="outline" size="sm" className="border-gaming-primary text-gaming-primary">
                         {category}
                       </Badge>
                     )}
@@ -232,20 +238,20 @@ export default function ProductFilters({ products, className }: ProductFiltersPr
                       setCategory(e.target.value)
                       setSubcategory('') // Reset subcategory when category changes
                     }}
-                    className="bg-gray-50 border-gray-200 focus:border-primary"
+                    className="bg-gaming-surface border-white/10 text-white focus:border-gaming-primary"
                   >
-                    <option value="">All Categories</option>
+                    <option value="" className="text-gray-900">All Categories</option>
                     {CATEGORIES.map((cat) => (
-                      <option key={cat.id} value={cat.name}>{cat.name}</option>
+                      <option key={cat.id} value={cat.name} className="text-gray-900">{cat.name}</option>
                     ))}
                   </Select>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-text-primary flex items-center gap-2">
+                  <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
                     Subcategory
                     {subcategory && (
-                      <Badge variant="outline" size="sm">
+                      <Badge variant="outline" size="sm" className="border-gaming-primary text-gaming-primary">
                         {subcategory}
                       </Badge>
                     )}
@@ -254,20 +260,20 @@ export default function ProductFilters({ products, className }: ProductFiltersPr
                     value={subcategory}
                     onChange={(e) => setSubcategory(e.target.value)}
                     disabled={!category}
-                    className="bg-bg-dark/50 border-primary/20 focus:border-primary/50 disabled:opacity-50"
+                    className="bg-gaming-surface border-white/10 text-white focus:border-gaming-primary disabled:opacity-50"
                   >
-                    <option value="">All Subcategories</option>
+                    <option value="" className="text-gray-900">All Subcategories</option>
                     {subcategories.map(sub => (
-                      <option key={sub} value={sub}>{sub}</option>
+                      <option key={sub} value={sub} className="text-gray-900">{sub}</option>
                     ))}
                   </Select>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-text-primary flex items-center gap-2">
+                  <label className="text-sm font-medium text-gray-300 flex items-center gap-2">
                     Brand
                     {brand && (
-                      <Badge variant="outline" size="sm">
+                      <Badge variant="outline" size="sm" className="border-gaming-primary text-gaming-primary">
                         {brand}
                       </Badge>
                     )}
@@ -275,11 +281,11 @@ export default function ProductFilters({ products, className }: ProductFiltersPr
                   <Select
                     value={brand}
                     onChange={(e) => setBrand(e.target.value)}
-                    className="bg-bg-dark/50 border-primary/20 focus:border-primary/50"
+                    className="bg-gaming-surface border-white/10 text-white focus:border-gaming-primary"
                   >
-                    <option value="">All Brands</option>
+                    <option value="" className="text-gray-900">All Brands</option>
                     {BRANDS.map((b) => (
-                      <option key={b.id} value={b.name}>{b.name}</option>
+                      <option key={b.id} value={b.name} className="text-gray-900">{b.name}</option>
                     ))}
                   </Select>
                 </div>
@@ -288,19 +294,19 @@ export default function ProductFilters({ products, className }: ProductFiltersPr
               {/* Price Range */}
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <label className="text-sm font-medium text-text-primary">
+                  <label className="text-sm font-medium text-gray-300">
                     Price Range (Rs)
                   </label>
-                  <div className="text-xs text-text-muted">
-                    Min: Rs {priceStats.min.toLocaleString()} • 
-                    Max: Rs {priceStats.max.toLocaleString()} • 
-                    Avg: Rs {priceStats.avg.toLocaleString()}
+                  <div className="text-xs text-gaming-text-muted font-mono">
+                    Min: {priceStats.min.toLocaleString()} •
+                    Max: {priceStats.max.toLocaleString()} •
+                    Avg: {priceStats.avg.toLocaleString()}
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-xs text-text-muted">Minimum Price</label>
+                    <label className="text-xs text-gaming-text-muted">Minimum Price</label>
                     <Input
                       type="number"
                       min="0"
@@ -308,11 +314,11 @@ export default function ProductFilters({ products, className }: ProductFiltersPr
                       placeholder={`Min (${priceStats.min.toLocaleString()})`}
                       value={minPrice || ''}
                       onChange={(e) => setMinPrice(Number(e.target.value) || 0)}
-                      className="bg-bg-dark/50 border-primary/20 focus:border-primary/50"
+                      className="bg-gaming-surface border-white/10 text-white focus:border-gaming-primary placeholder:text-gray-600"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-xs text-text-muted">Maximum Price</label>
+                    <label className="text-xs text-gaming-text-muted">Maximum Price</label>
                     <Input
                       type="number"
                       min="0"
@@ -320,7 +326,7 @@ export default function ProductFilters({ products, className }: ProductFiltersPr
                       placeholder={`Max (${priceStats.max.toLocaleString()})`}
                       value={maxPrice || ''}
                       onChange={(e) => setMaxPrice(Number(e.target.value) || 0)}
-                      className="bg-bg-dark/50 border-primary/20 focus:border-primary/50"
+                      className="bg-gaming-surface border-white/10 text-white focus:border-gaming-primary placeholder:text-gray-600"
                     />
                   </div>
                 </div>
@@ -328,20 +334,20 @@ export default function ProductFilters({ products, className }: ProductFiltersPr
 
               {/* Sort Options */}
               <div className="space-y-2">
-                <label className="text-sm font-medium text-text-primary">Sort By</label>
+                <label className="text-sm font-medium text-gray-300">Sort By</label>
                 <Select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="bg-bg-dark/50 border-primary/20 focus:border-primary/50"
+                  className="bg-gaming-surface border-white/10 text-white focus:border-gaming-primary"
                 >
-                  <option value="default">Default Order</option>
-                  <option value="price-asc">Price: Low to High</option>
-                  <option value="price-desc">Price: High to Low</option>
-                  <option value="name-asc">Name: A → Z</option>
-                  <option value="name-desc">Name: Z → A</option>
-                  <option value="rating-desc">Highest Rated</option>
-                  <option value="popularity-desc">Most Popular</option>
-                  <option value="newest">Newest First</option>
+                  <option value="default" className="text-gray-900">Default Order</option>
+                  <option value="price-asc" className="text-gray-900">Price: Low to High</option>
+                  <option value="price-desc" className="text-gray-900">Price: High to Low</option>
+                  <option value="name-asc" className="text-gray-900">Name: A → Z</option>
+                  <option value="name-desc" className="text-gray-900">Name: Z → A</option>
+                  <option value="rating-desc" className="text-gray-900">Highest Rated</option>
+                  <option value="popularity-desc" className="text-gray-900">Most Popular</option>
+                  <option value="newest" className="text-gray-900">Newest First</option>
                 </Select>
               </div>
 
@@ -350,12 +356,12 @@ export default function ProductFilters({ products, className }: ProductFiltersPr
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="pt-4 border-t border-primary/10"
+                  className="pt-4 border-t border-white/10"
                 >
                   <Button
                     variant="outline"
                     onClick={resetFilters}
-                    className="w-full group hover:border-red-500/50 hover:text-red-400"
+                    className="w-full border-red-500/30 text-red-400 hover:bg-red-500/10 hover:border-red-500 hover:text-red-300 group"
                   >
                     <RotateCcw className="w-4 h-4 mr-2 group-hover:rotate-180 transition-transform duration-300" />
                     Reset All Filters ({activeFiltersCount})

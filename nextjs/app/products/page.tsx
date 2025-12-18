@@ -44,7 +44,7 @@ export default function ProductsPage({ searchParams }: ProductsPageProps) {
           cache: 'no-store',
           headers: { 'Cache-Control': 'no-cache' }
         })
-        
+
         if (response.ok) {
           const dbProducts = await response.json()
           setAllProducts([...dbProducts, ...PRODUCTS])
@@ -55,7 +55,7 @@ export default function ProductsPage({ searchParams }: ProductsPageProps) {
         setLoading(false)
       }
     }
-    
+
     fetchProducts()
   }, [])
 
@@ -113,21 +113,21 @@ export default function ProductsPage({ searchParams }: ProductsPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-gaming-background text-white">
       <Header />
-      
+
       {/* Hero Banner */}
-      <div className="relative h-[300px] bg-gradient-to-r from-gray-900 via-red-900 to-gray-900 overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-red-600 transform -rotate-45 -translate-x-32 -translate-y-32"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-red-600 transform rotate-45 translate-x-32 translate-y-32"></div>
+      <div className="relative h-[300px] bg-gaming-background overflow-hidden border-b border-white/5">
+        <div className="absolute inset-0">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-gaming-primary/20 blur-[100px] transform -translate-x-1/2 -translate-y-1/2"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-gaming-secondary/20 blur-[100px] transform translate-x-1/2 translate-y-1/2"></div>
         </div>
-        <div className="relative container mx-auto px-4 h-full flex flex-col items-center justify-center text-white">
-          <h1 className="text-5xl font-bold mb-4">SHOP</h1>
-          <div className="flex items-center gap-2 text-sm">
-            <Link href="/" className="hover:text-red-400 transition-colors">Home</Link>
+        <div className="relative container mx-auto px-4 h-full flex flex-col items-center justify-center text-white z-10">
+          <h1 className="text-5xl font-display font-bold mb-4 glow-text">SHOP</h1>
+          <div className="flex items-center gap-2 text-sm text-gray-400">
+            <Link href="/" className="hover:text-gaming-primary transition-colors">Home</Link>
             <span>›</span>
-            <span>Shop</span>
+            <span className="text-gaming-primary">Shop</span>
           </div>
         </div>
       </div>
@@ -138,15 +138,16 @@ export default function ProductsPage({ searchParams }: ProductsPageProps) {
           <button className="p-2 rounded-full hover:bg-gray-100">
             <ChevronLeft className="w-6 h-6" />
           </button>
-          
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 flex-1 mx-8">
             {categories.map((cat) => (
               <div key={cat.name} className="flex flex-col items-center group cursor-pointer">
-                <div className="w-32 h-32 rounded-full bg-gray-100 flex items-center justify-center mb-4 group-hover:shadow-lg transition-shadow overflow-hidden">
-                  <div className="text-5xl">{cat.icon}</div>
+                <div className="w-32 h-32 rounded-full bg-gaming-surface border border-white/5 flex items-center justify-center mb-4 group-hover:shadow-neon group-hover:border-gaming-primary/50 transition-all duration-300 overflow-hidden relative">
+                  <div className="absolute inset-0 bg-gradient-to-br from-gaming-primary/10 to-gaming-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="text-5xl relative z-10 transform group-hover:scale-110 transition-transform">{cat.icon}</div>
                 </div>
-                <h3 className="font-semibold text-gray-900">{cat.name}</h3>
-                <p className="text-sm text-gray-500">{cat.count} Products</p>
+                <h3 className="font-display font-semibold text-white group-hover:text-gaming-primary transition-colors">{cat.name}</h3>
+                <p className="text-sm text-gray-400">{cat.count} Products</p>
               </div>
             ))}
           </div>
@@ -161,28 +162,28 @@ export default function ProductsPage({ searchParams }: ProductsPageProps) {
           {/* Sidebar Filters */}
           <aside className="w-full lg:w-72 flex-shrink-0">
             <div className="sticky top-24 space-y-6">
-              <div className="bg-white rounded-3xl border border-gray-200 shadow-sm p-6 flex items-center justify-between">
+              <div className="bg-gaming-card rounded-3xl border border-white/5 shadow-glass p-6 flex items-center justify-between">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.35em] text-gray-400">Filter</p>
-                  <h2 className="text-xl font-semibold text-gray-900">Filter By</h2>
+                  <p className="text-xs uppercase tracking-[0.35em] text-gaming-primary font-bold">Filter</p>
+                  <h2 className="text-xl font-display font-semibold text-white">Filter By</h2>
                 </div>
-                <div className="h-12 w-12 rounded-full bg-gradient-to-br from-pink-500 to-purple-500 text-white flex items-center justify-center shadow-lg shadow-pink-200">
+                <div className="h-12 w-12 rounded-full bg-gradient-to-br from-gaming-primary to-gaming-secondary text-white flex items-center justify-center shadow-neon">
                   <SlidersHorizontal className="w-6 h-6" />
                 </div>
               </div>
 
               {/* Categories Filter */}
-              <div className="bg-white rounded-3xl border border-gray-200 p-6 shadow-sm">
+              <div className="bg-gaming-card rounded-3xl border border-white/5 p-6 shadow-glass">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-gray-900 text-lg">Categories</h3>
+                  <h3 className="font-display font-semibold text-white text-lg">Categories</h3>
                   <ChevronDown className="w-4 h-4 text-gray-400" />
                 </div>
                 <div className="space-y-3">
                   {Array.from(new Set(allProducts.map(p => p.category))).map((cat) => (
-                    <label key={cat} className="flex items-center gap-3 text-sm cursor-pointer rounded-xl px-3 py-2 transition-colors hover:bg-pink-50">
-                      <input 
-                        type="checkbox" 
-                        className="rounded border-gray-300 text-pink-500 focus:ring-pink-400"
+                    <label key={cat} className="flex items-center gap-3 text-sm cursor-pointer rounded-xl px-3 py-2 transition-colors hover:bg-white/5 group">
+                      <input
+                        type="checkbox"
+                        className="rounded border-white/20 bg-gaming-surface text-gaming-primary focus:ring-gaming-primary"
                         checked={selectedCategories.includes(cat)}
                         onChange={(e) => {
                           if (e.target.checked) {
@@ -192,72 +193,72 @@ export default function ProductsPage({ searchParams }: ProductsPageProps) {
                           }
                         }}
                       />
-                      <span className="text-gray-700">{cat}</span>
-                      <span className="text-gray-400 ml-auto">({allProducts.filter(p => p.category === cat).length})</span>
+                      <span className="text-gray-300 group-hover:text-white transition-colors">{cat}</span>
+                      <span className="text-gray-500 ml-auto">({allProducts.filter(p => p.category === cat).length})</span>
                     </label>
                   ))}
                 </div>
               </div>
 
               {/* Price Filter */}
-              <div className="bg-white rounded-3xl border border-gray-200 p-6 shadow-sm">
+              <div className="bg-gaming-card rounded-3xl border border-white/5 p-6 shadow-glass">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-gray-900 text-lg">Price</h3>
+                  <h3 className="font-display font-semibold text-white text-lg">Price</h3>
                   <ChevronDown className="w-4 h-4 text-gray-400" />
                 </div>
                 <div className="space-y-4">
-                  <input 
-                    type="range" 
-                    min="0" 
-                    max="90" 
+                  <input
+                    type="range"
+                    min="0"
+                    max="90"
                     value={priceRange[1]}
                     onChange={(e) => setPriceRange([0, parseInt(e.target.value)])}
-                    className="w-full accent-pink-500"
+                    className="w-full accent-gaming-primary bg-gaming-surface h-2 rounded-lg appearance-none cursor-pointer"
                   />
                   <div className="flex items-center gap-3 text-sm">
-                    <div className="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-xl border border-gray-200">
+                    <div className="flex items-center gap-2 bg-gaming-surface px-3 py-2 rounded-xl border border-white/10">
                       <span className="text-gray-500">$</span>
-                      <input 
-                        type="number" 
+                      <input
+                        type="number"
                         value={priceRange[0]}
                         onChange={(e) => setPriceRange([parseInt(e.target.value), priceRange[1]])}
-                        className="w-16 bg-transparent focus:outline-none"
+                        className="w-16 bg-transparent text-white focus:outline-none"
                         placeholder="0"
                       />
                     </div>
                     <span className="text-gray-400">—</span>
-                    <div className="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-xl border border-gray-200">
+                    <div className="flex items-center gap-2 bg-gaming-surface px-3 py-2 rounded-xl border border-white/10">
                       <span className="text-gray-500">$</span>
-                      <input 
-                        type="number" 
+                      <input
+                        type="number"
                         value={priceRange[1]}
                         onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
-                        className="w-16 bg-transparent focus:outline-none"
+                        className="w-16 bg-transparent text-white focus:outline-none"
                         placeholder="90"
                       />
                     </div>
                   </div>
-                  <div className="text-xs uppercase tracking-widest text-gray-400">
+                  <div className="text-xs uppercase tracking-widest text-gray-500">
                     Range: ${priceRange[0].toFixed(0)} - ${priceRange[1].toFixed(0)}
                   </div>
-                  <button className="w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:opacity-90 text-white py-2 rounded-full text-sm font-semibold transition">
+                  <button className="w-full bg-gradient-to-r from-gaming-primary to-gaming-secondary hover:opacity-90 text-white py-2 rounded-full text-sm font-semibold transition shadow-neon border-0">
                     Apply Filter
                   </button>
                 </div>
               </div>
 
               {/* Brands Filter */}
-              <div className="bg-white rounded-3xl border border-gray-200 p-6 shadow-sm">
+              <div className="bg-gaming-card rounded-3xl border border-white/5 p-6 shadow-glass">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-gray-900 text-lg">Brands</h3>
+                  <h3 className="font-display font-semibold text-white text-lg">Brands</h3>
                   <ChevronDown className="w-4 h-4 text-gray-400" />
                 </div>
                 <div className="space-y-3">
                   {brands.map((brand) => (
-                    <label key={brand.name} className="flex items-center gap-3 text-sm cursor-pointer rounded-xl px-3 py-2 transition-colors hover:bg-pink-50">
-                      <input 
-                        type="checkbox" 
-                        className="rounded border-gray-300 text-pink-500 focus:ring-pink-400"
+                    <label key={brand.name} className="flex items-center gap-3 text-sm cursor-pointer rounded-xl px-3 py-2 transition-colors hover:bg-white/5 group">
+                      <input
+                        type="checkbox"
+                        className="rounded border-white/20 bg-gaming-surface text-gaming-primary focus:ring-gaming-primary"
                         checked={selectedBrands.includes(brand.name)}
                         onChange={(e) => {
                           if (e.target.checked) {
@@ -267,29 +268,29 @@ export default function ProductsPage({ searchParams }: ProductsPageProps) {
                           }
                         }}
                       />
-                      <span className="text-gray-700">{brand.name}</span>
-                      <span className="text-gray-400 ml-auto">({brand.count})</span>
+                      <span className="text-gray-300 group-hover:text-white transition-colors">{brand.name}</span>
+                      <span className="text-gray-500 ml-auto">({brand.count})</span>
                     </label>
                   ))}
                 </div>
               </div>
 
               {/* Ratings Filter */}
-              <div className="bg-white rounded-3xl border border-gray-200 p-6 shadow-sm">
+              <div className="bg-gaming-card rounded-3xl border border-white/5 p-6 shadow-glass">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-gray-900 text-lg">Ratings</h3>
+                  <h3 className="font-display font-semibold text-white text-lg">Ratings</h3>
                   <ChevronDown className="w-4 h-4 text-gray-400" />
                 </div>
                 <div className="space-y-3">
                   {[5, 4, 3, 2, 1].map((rating) => (
-                    <label key={rating} className="flex items-center gap-3 text-sm cursor-pointer rounded-xl px-3 py-2 transition-colors hover:bg-pink-50">
-                      <input type="checkbox" className="rounded border-gray-300 text-pink-500 focus:ring-pink-400" />
-                      <div className="flex items-center gap-1 text-pink-500">
+                    <label key={rating} className="flex items-center gap-3 text-sm cursor-pointer rounded-xl px-3 py-2 transition-colors hover:bg-white/5">
+                      <input type="checkbox" className="rounded border-white/20 bg-gaming-surface text-gaming-primary focus:ring-gaming-primary" />
+                      <div className="flex items-center gap-1 text-yellow-400">
                         {[...Array(rating)].map((_, i) => (
-                          <Star key={i} className="w-4 h-4 fill-pink-500 text-pink-500" />
+                          <Star key={i} className="w-4 h-4 fill-yellow-400" />
                         ))}
                       </div>
-                      <span className="text-gray-400 ml-auto">(0)</span>
+                      <span className="text-gray-500 ml-auto">(0)</span>
                     </label>
                   ))}
                 </div>
@@ -300,39 +301,39 @@ export default function ProductsPage({ searchParams }: ProductsPageProps) {
           {/* Main Content */}
           <div className="flex-1">
             {/* Toolbar */}
-            <div className="flex flex-wrap items-center justify-between gap-4 mb-8 pb-6 border-b border-gray-200">
-              <div className="flex items-center gap-3 bg-white rounded-full px-2 py-1 shadow-sm">
-                <button 
+            <div className="flex flex-wrap items-center justify-between gap-4 mb-8 pb-6 border-b border-white/5">
+              <div className="flex items-center gap-3 bg-gaming-surface rounded-full px-2 py-1 shadow-inner border border-white/5">
+                <button
                   onClick={() => setViewMode('large-grid')}
-                  className={`h-10 w-10 flex items-center justify-center rounded-full transition-all duration-200 ${viewMode === 'large-grid' ? 'bg-gradient-to-br from-pink-500 to-purple-500 text-white shadow-lg shadow-pink-200' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                  className={`h-10 w-10 flex items-center justify-center rounded-full transition-all duration-200 ${viewMode === 'large-grid' ? 'bg-gradient-to-br from-gaming-primary to-gaming-secondary text-white shadow-neon' : 'text-gray-500 hover:text-white hover:bg-white/5'}`}
                   aria-pressed={viewMode === 'large-grid'}
                 >
                   <Grid3x3 className="w-5 h-5" />
                 </button>
-                <button 
+                <button
                   onClick={() => setViewMode('grid')}
-                  className={`h-10 w-10 flex items-center justify-center rounded-full transition-all duration-200 ${viewMode === 'grid' ? 'bg-gradient-to-br from-pink-500 to-purple-500 text-white shadow-lg shadow-pink-200' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                  className={`h-10 w-10 flex items-center justify-center rounded-full transition-all duration-200 ${viewMode === 'grid' ? 'bg-gradient-to-br from-gaming-primary to-gaming-secondary text-white shadow-neon' : 'text-gray-500 hover:text-white hover:bg-white/5'}`}
                   aria-pressed={viewMode === 'grid'}
                 >
                   <LayoutGrid className="w-5 h-5" />
                 </button>
-                <button className="h-10 w-10 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 cursor-not-allowed">
+                <button className="h-10 w-10 flex items-center justify-center rounded-full text-gray-600 cursor-not-allowed">
                   <List className="w-5 h-5" />
                 </button>
               </div>
 
-              <div className="text-sm md:text-base text-gray-700 font-medium">
-                Showing <span className="text-pink-500">{showingCount}</span> of <span className="text-gray-900">{sortedProducts.length}</span> results
+              <div className="text-sm md:text-base text-gray-300 font-medium font-sans">
+                Showing <span className="text-gaming-primary">{showingCount}</span> of <span className="text-white">{sortedProducts.length}</span> results
               </div>
 
-              <select 
+              <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-full bg-white shadow-sm text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-pink-200"
+                className="px-4 py-2 border border-white/10 rounded-full bg-gaming-surface text-white shadow-sm text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-gaming-primary/50"
               >
-                <option value="default">Default sorting</option>
-                <option value="price-asc">Price: Low to High</option>
-                <option value="price-desc">Price: High to Low</option>
+                <option value="default" className="bg-gaming-card">Default sorting</option>
+                <option value="price-asc" className="bg-gaming-card">Price: Low to High</option>
+                <option value="price-desc" className="bg-gaming-card">Price: High to Low</option>
               </select>
             </div>
 
@@ -346,19 +347,19 @@ export default function ProductsPage({ searchParams }: ProductsPageProps) {
             {/* Pagination */}
             <div className="pb-10">
               <div className="max-w-xl mx-auto text-center space-y-4">
-                <p className="text-sm text-gray-600">
-                  Showing <span className="font-semibold text-pink-500">{showingCount}</span> of <span className="font-semibold text-gray-900">{sortedProducts.length}</span> products
+                <p className="text-sm text-gray-400">
+                  Showing <span className="font-semibold text-gaming-primary">{showingCount}</span> of <span className="font-semibold text-white">{sortedProducts.length}</span> products
                 </p>
-                <div className="h-2 rounded-full bg-gray-200 overflow-hidden">
+                <div className="h-2 rounded-full bg-gaming-surface overflow-hidden">
                   <div
-                    className="h-full bg-gradient-to-r from-pink-500 to-purple-500 transition-all duration-500"
+                    className="h-full bg-gradient-to-r from-gaming-primary to-gaming-secondary transition-all duration-500 shadow-neon"
                     style={{ width: `${progressPercent}%` }}
                   />
                 </div>
-                <button 
+                <button
                   onClick={() => setCurrentPage(Math.min(currentPage + 1, totalPages))}
                   disabled={!showLoadMore}
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-gray-100 hover:bg-pink-500 hover:text-white text-gray-800 px-8 py-3 text-sm font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-gaming-surface hover:bg-gaming-primary hover:text-white text-gray-300 border border-white/10 px-8 py-3 text-sm font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-neon"
                 >
                   Load More Items
                 </button>
@@ -366,11 +367,11 @@ export default function ProductsPage({ searchParams }: ProductsPageProps) {
             </div>
 
             {/* Tags Section */}
-            <div className="py-12 border-t border-gray-200">
-              <h3 className="text-2xl font-bold mb-6">ALL TAGS :</h3>
+            <div className="py-12 border-t border-white/10">
+              <h3 className="text-2xl font-bold mb-6 font-display text-white">ALL TAGS :</h3>
               <div className="flex flex-wrap gap-3">
                 {tags.map((tag) => (
-                  <button key={tag} className="px-6 py-2 bg-gray-100 hover:bg-pink-500 hover:text-white rounded-full text-sm transition-colors">
+                  <button key={tag} className="px-6 py-2 bg-gaming-surface border border-white/5 hover:border-gaming-primary/50 hover:text-white rounded-full text-sm text-gray-400 transition-all hover:shadow-neon">
                     {tag}
                   </button>
                 ))}

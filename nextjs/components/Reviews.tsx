@@ -2,11 +2,11 @@
 
 import { useMemo, useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { 
-  Star, 
-  StarHalf, 
-  Shield, 
-  ThumbsUp, 
+import {
+  Star,
+  StarHalf,
+  Shield,
+  ThumbsUp,
   ThumbsDown,
   Flag,
   Gamepad2,
@@ -50,14 +50,14 @@ interface ReviewsProps {
   category?: string
 }
 
-function StarRating({ rating, size = 'sm', showHalf = true }: { 
-  rating: number; 
+function StarRating({ rating, size = 'sm', showHalf = true }: {
+  rating: number;
   size?: 'sm' | 'md' | 'lg';
   showHalf?: boolean;
 }) {
   const sizeClasses = {
     sm: 'w-4 h-4',
-    md: 'w-5 h-5', 
+    md: 'w-5 h-5',
     lg: 'w-6 h-6'
   }
 
@@ -66,7 +66,7 @@ function StarRating({ rating, size = 'sm', showHalf = true }: {
       {[1, 2, 3, 4, 5].map((star) => {
         const filled = rating >= star
         const half = showHalf && rating >= star - 0.5 && rating < star
-        
+
         return (
           <div key={star} className="relative">
             {half ? (
@@ -91,12 +91,12 @@ function UserLevelBadge({ level }: { level: Review['userLevel'] }) {
     'Expert': { color: 'text-purple-400', bg: 'bg-purple-500/20', icon: Zap },
     'Pro Gamer': { color: 'text-accent', bg: 'bg-accent/20', icon: Award }
   }
-  
+
   if (!level) return null
-  
+
   const config = levelConfig[level]
   const Icon = config.icon
-  
+
   return (
     <div className={cn('flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium', config.bg, config.color)}>
       <Icon className="w-3 h-3" />
@@ -107,17 +107,19 @@ function UserLevelBadge({ level }: { level: Review['userLevel'] }) {
 
 export default function Reviews({ sku, productName, category }: ReviewsProps) {
   const KEY = `ait-reviews-${sku}`
-  
+
   const load = (): Review[] => {
-    try { 
+    try {
       const data = localStorage.getItem(KEY)
       return data ? JSON.parse(data) : []
-    } catch { 
-      return [] 
+    } catch {
+      return []
     }
   }
-  
-  const save = (list: Review[]) => localStorage.setItem(KEY, JSON.stringify(list))
+
+  const save = useCallback((list: Review[]) => {
+    localStorage.setItem(KEY, JSON.stringify(list))
+  }, [KEY])
 
   const [reviews, setReviews] = useState<Review[]>(load())
   const [text, setText] = useState('')
@@ -132,36 +134,36 @@ export default function Reviews({ sku, productName, category }: ReviewsProps) {
 
   const sortedAndFiltered = useMemo(() => {
     let filtered = [...reviews]
-    
+
     // Apply filters
     if (filter === 'verified') {
       filtered = filtered.filter(r => r.verified)
     } else if (filter === 'recommended') {
       filtered = filtered.filter(r => r.wouldRecommend)
     }
-    
+
     // Apply sorting
     if (sort === 'new') filtered.sort((a, b) => b.time - a.time)
     if (sort === 'high') filtered.sort((a, b) => b.rating - a.rating)
     if (sort === 'low') filtered.sort((a, b) => a.rating - b.rating)
     if (sort === 'helpful') filtered.sort((a, b) => (b.helpful || 0) - (a.helpful || 0))
-    
+
     return filtered
   }, [reviews, sort, filter])
 
   const stats = useMemo(() => {
     if (reviews.length === 0) return null
-    
+
     const avg = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
     const distribution = [5, 4, 3, 2, 1].map(star => ({
       star,
       count: reviews.filter(r => r.rating === star).length,
       percentage: (reviews.filter(r => r.rating === star).length / reviews.length) * 100
     }))
-    
+
     const verifiedCount = reviews.filter(r => r.verified).length
     const recommendedCount = reviews.filter(r => r.wouldRecommend).length
-    
+
     return {
       average: avg,
       total: reviews.length,
@@ -182,13 +184,13 @@ export default function Reviews({ sku, productName, category }: ReviewsProps) {
       }
       return r
     }))
-    
+
     setHelpfulVotes(prev => ({ ...prev, [reviewId]: helpful }))
   }, [])
 
   const submitReview = useCallback(() => {
     if (!text.trim()) return
-    
+
     const newReview: Review = {
       id: `review-${Date.now()}`,
       rating,
@@ -205,7 +207,7 @@ export default function Reviews({ sku, productName, category }: ReviewsProps) {
       helpful: 0,
       notHelpful: 0
     }
-    
+
     // Add gaming performance data for GPUs
     if (category === 'Graphics Cards' && Math.random() > 0.5) {
       newReview.gamesFps = {
@@ -215,11 +217,11 @@ export default function Reviews({ sku, productName, category }: ReviewsProps) {
         'Valorant': Math.floor(Math.random() * 200) + 150
       }
     }
-    
+
     const updatedReviews = [newReview, ...reviews]
     setReviews(updatedReviews)
     save(updatedReviews)
-    
+
     // Reset form
     setText('')
     setRating(5)
@@ -227,7 +229,7 @@ export default function Reviews({ sku, productName, category }: ReviewsProps) {
     setCons([''])
     setWouldRecommend(true)
     setShowWriteReview(false)
-  }, [text, rating, pros, cons, wouldRecommend, reviews, category])
+  }, [text, rating, pros, cons, wouldRecommend, reviews, category, save])
 
   return (
     <div className="bg-gradient-to-br from-card/70 to-card/50 backdrop-blur-sm border border-primary/20 rounded-xl overflow-hidden">
@@ -241,7 +243,7 @@ export default function Reviews({ sku, productName, category }: ReviewsProps) {
               <Badge variant="outline" size="sm">{productName}</Badge>
             )}
           </div>
-          
+
           <Button
             variant="primary"
             size="sm"
@@ -263,7 +265,7 @@ export default function Reviews({ sku, productName, category }: ReviewsProps) {
                 {stats.total} reviews
               </div>
             </div>
-            
+
             <div className="space-y-2">
               {stats.distribution.map(({ star, count, percentage }) => (
                 <div key={star} className="flex items-center gap-2 text-sm">
@@ -281,7 +283,7 @@ export default function Reviews({ sku, productName, category }: ReviewsProps) {
                 </div>
               ))}
             </div>
-            
+
             <div className="text-center">
               <div className="text-2xl font-bold text-green-400 mb-1">
                 {stats.verifiedPercentage.toFixed(0)}%
@@ -291,7 +293,7 @@ export default function Reviews({ sku, productName, category }: ReviewsProps) {
                 Verified Purchases
               </div>
             </div>
-            
+
             <div className="text-center">
               <div className="text-2xl font-bold text-accent mb-1">
                 {stats.recommendedPercentage.toFixed(0)}%
@@ -365,7 +367,7 @@ export default function Reviews({ sku, productName, category }: ReviewsProps) {
                     />
                   ))}
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-medium mb-2 text-red-400">Cons</label>
                   {cons.map((con, index) => (
@@ -397,7 +399,7 @@ export default function Reviews({ sku, productName, category }: ReviewsProps) {
                   />
                   <span className="text-sm">I would recommend this product</span>
                 </label>
-                
+
                 <div className="flex gap-2">
                   <Button
                     variant="outline"
@@ -436,7 +438,7 @@ export default function Reviews({ sku, productName, category }: ReviewsProps) {
               <option value="recommended">Recommended</option>
             </Select>
           </div>
-          
+
           <div className="flex items-center gap-2">
             <TrendingUp className="w-4 h-4 text-text-muted" />
             <Select
@@ -450,7 +452,7 @@ export default function Reviews({ sku, productName, category }: ReviewsProps) {
               <option value="low">Lowest Rating</option>
             </Select>
           </div>
-          
+
           <div className="text-sm text-text-muted">
             Showing {sortedAndFiltered.length} of {reviews.length} reviews
           </div>
@@ -507,7 +509,7 @@ export default function Reviews({ sku, productName, category }: ReviewsProps) {
                       </div>
                     </div>
                   </div>
-                  
+
                   {review.wouldRecommend && (
                     <Badge variant="success" size="sm">
                       <ThumbsUp className="w-3 h-3 mr-1" />
@@ -537,7 +539,7 @@ export default function Reviews({ sku, productName, category }: ReviewsProps) {
                         </ul>
                       </div>
                     )}
-                    
+
                     {review.cons && review.cons.length > 0 && (
                       <div>
                         <h4 className="text-sm font-medium text-red-400 mb-2 flex items-center gap-1">
@@ -592,7 +594,7 @@ export default function Reviews({ sku, productName, category }: ReviewsProps) {
                       <ThumbsUp className="w-4 h-4" />
                       Helpful ({review.helpful || 0})
                     </button>
-                    
+
                     <button
                       onClick={() => handleVoteHelpful(review.id, false)}
                       disabled={helpfulVotes[review.id] !== undefined}
@@ -607,7 +609,7 @@ export default function Reviews({ sku, productName, category }: ReviewsProps) {
                       Not Helpful ({review.notHelpful || 0})
                     </button>
                   </div>
-                  
+
                   <div className="flex items-center gap-2">
                     {review.buildType && (
                       <Badge variant="outline" size="sm">

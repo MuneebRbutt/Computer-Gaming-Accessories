@@ -2,10 +2,11 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { ShoppingCart, Eye, Star, Heart, GitCompare } from 'lucide-react'
+import { ShoppingCart, Eye, Star, Heart, GitCompare, Zap } from 'lucide-react'
 import { Product } from '@/lib/data'
 import { FALLBACK_IMAGE_DATA_URI } from '@/lib/utils'
 import { useCartStore } from '@/hooks/useCartStore'
+import { CartStore } from '@/lib/store'
 import toast from 'react-hot-toast'
 
 interface ProductCardProps {
@@ -13,7 +14,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const { addItem } = useCartStore()
+  const addItem = useCartStore((state: CartStore) => state.addItem)
 
   const formatCurrency = (value: number) => `Rs ${value.toLocaleString('en-IN')}`
 
@@ -23,12 +24,12 @@ export default function ProductCard({ product }: ProductCardProps) {
     addItem(product)
     toast.success('Added to cart!', {
       style: {
-        background: '#22C55E',
+        background: '#10B981',
         color: '#FFFFFF',
       },
       iconTheme: {
         primary: '#FFFFFF',
-        secondary: '#22C55E',
+        secondary: '#10B981',
       },
     })
   }
@@ -38,6 +39,10 @@ export default function ProductCard({ product }: ProductCardProps) {
     e.stopPropagation()
     toast.success('Added to wishlist!', {
       icon: '❤️',
+      style: {
+        background: '#182132',
+        color: '#fff',
+      }
     })
   }
 
@@ -46,13 +51,22 @@ export default function ProductCard({ product }: ProductCardProps) {
     e.stopPropagation()
     toast.success('Added to compare!', {
       icon: '🔄',
+      style: {
+        background: '#182132',
+        color: '#fff',
+      }
     })
   }
 
   const handleQuickView = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    toast('Quick view coming soon!')
+    toast('Quick view coming soon!', {
+      style: {
+        background: '#182132',
+        color: '#fff',
+      }
+    })
   }
 
   const resolvedImage = product.image || FALLBACK_IMAGE_DATA_URI
@@ -60,84 +74,95 @@ export default function ProductCard({ product }: ProductCardProps) {
   return (
     <Link
       href={`/products/${product.id}`}
-      className="group relative block h-full overflow-hidden rounded-[32px] border border-rose-100 bg-white p-6 shadow-[0_30px_80px_rgba(244,114,182,0.12)] transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_35px_120px_rgba(244,63,94,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-200"
+      className="group relative block h-full overflow-hidden rounded-2xl bg-gaming-card border border-white/5 transition-all duration-300 hover:border-gaming-primary/50 hover:shadow-neon hover:-translate-y-1"
     >
-      <div className="relative flex flex-col">
-        <div className="relative flex items-center justify-center rounded-[28px] bg-gradient-to-b from-rose-50 via-white to-white px-10 pt-12 pb-10">
-          <Image
-            src={resolvedImage}
-            alt={product.title}
-            width={280}
-            height={280}
-            className="h-60 w-full max-w-[260px] object-contain transition-transform duration-500 group-hover:scale-105"
-            unoptimized
-            onError={(event) => {
-              const target = event.target as HTMLImageElement
-              target.src = FALLBACK_IMAGE_DATA_URI
-            }}
-          />
+      {/* Image Container */}
+      <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-white/5 to-white/0 p-8">
+        <div className="absolute inset-0 bg-gaming-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
+        <Image
+          src={resolvedImage}
+          alt={product.title}
+          fill
+          className="object-contain p-4 transition-transform duration-500 group-hover:scale-110"
+          unoptimized
+          onError={(event) => {
+            const target = event.target as HTMLImageElement
+            target.src = FALLBACK_IMAGE_DATA_URI
+          }}
+        />
+
+        {/* Badges */}
+        <div className="absolute left-3 top-3 flex flex-col gap-2">
           {product.discount && (
-            <div className="absolute left-6 top-6 rounded-full bg-rose-500 px-4 py-1 text-xs font-semibold uppercase tracking-wide text-white shadow-lg shadow-rose-200">
+            <div className="rounded-md bg-gaming-secondary px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-lg">
               -{product.discount}%
             </div>
           )}
-
-          <div className="absolute right-6 top-6 flex flex-col gap-3 text-gray-500">
-            <button
-              onClick={handleWishlist}
-              className="grid h-11 w-11 place-items-center rounded-full bg-white/95 text-gray-700 shadow-lg shadow-rose-200 transition-all duration-200 hover:-translate-y-0.5 hover:bg-rose-500 hover:text-white"
-              title="Add to Wishlist"
-            >
-              <Heart className="h-5 w-5" />
-            </button>
-            <button
-              onClick={handleCompare}
-              className="grid h-11 w-11 place-items-center rounded-full bg-white/95 text-gray-700 shadow-lg shadow-rose-200 transition-all duration-200 hover:-translate-y-0.5 hover:bg-rose-500 hover:text-white"
-              title="Compare"
-            >
-              <GitCompare className="h-5 w-5" />
-            </button>
-            <button
-              onClick={handleQuickView}
-              className="grid h-11 w-11 place-items-center rounded-full bg-white/95 text-gray-700 shadow-lg shadow-rose-200 transition-all duration-200 hover:-translate-y-0.5 hover:bg-rose-500 hover:text-white"
-              title="Quick View"
-            >
-              <Eye className="h-5 w-5" />
-            </button>
-            <button
-              onClick={handleAddToCart}
-              className="grid h-11 w-11 place-items-center rounded-full bg-rose-500 text-white shadow-lg shadow-rose-200 transition-all duration-200 hover:-translate-y-0.5 hover:bg-rose-600"
-              title="Add to Cart"
-            >
-              <ShoppingCart className="h-5 w-5" />
-            </button>
-          </div>
+          {product.availability === 'In Stock' && (
+            <div className="rounded-md bg-gaming-success/20 border border-gaming-success/30 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-gaming-success backdrop-blur-md">
+              In Stock
+            </div>
+          )}
         </div>
 
-  <div className="mt-8 flex flex-col items-center gap-3 text-center">
-          <h3 className="text-lg font-semibold text-gray-900 transition-colors duration-200 group-hover:text-rose-500">
+        {/* Quick Actions Overlay */}
+        <div className="absolute right-3 top-3 flex flex-col gap-2 translate-x-12 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300">
+          <button
+            onClick={handleWishlist}
+            className="flex h-8 w-8 items-center justify-center rounded-lg bg-black/50 text-white backdrop-blur-md hover:bg-gaming-secondary hover:text-white transition-colors"
+            title="Add to Wishlist"
+          >
+            <Heart className="h-4 w-4" />
+          </button>
+          <button
+            onClick={handleCompare}
+            className="flex h-8 w-8 items-center justify-center rounded-lg bg-black/50 text-white backdrop-blur-md hover:bg-gaming-primary hover:text-white transition-colors"
+            title="Compare"
+          >
+            <GitCompare className="h-4 w-4" />
+          </button>
+          <button
+            onClick={handleQuickView}
+            className="flex h-8 w-8 items-center justify-center rounded-lg bg-black/50 text-white backdrop-blur-md hover:bg-gaming-accent hover:text-white transition-colors"
+            title="Quick View"
+          >
+            <Eye className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="p-4 space-y-3">
+        <div className="space-y-1">
+          <div className="flex items-center gap-1">
+            <Star className="w-3 h-3 text-gaming-warning fill-gaming-warning" />
+            <span className="text-xs text-gaming-text-muted font-medium">{product.rating || 4.5}</span>
+          </div>
+          <h3 className="text-base font-bold text-white line-clamp-2 group-hover:text-gaming-primary transition-colors">
             {product.title}
           </h3>
+        </div>
 
-          <div className="flex items-center justify-center gap-1 text-rose-500">
-            {[...Array(5)].map((_, index) => (
-              <Star
-                key={index}
-                className={`h-4 w-4 ${index < Math.floor(product.rating || 4) ? 'fill-rose-500 text-rose-500' : 'text-gray-300'}`}
-              />
-            ))}
-            <span className="ml-2 text-sm text-gray-400">({product.reviewCount || 0})</span>
-          </div>
-
-          <div className="flex items-baseline justify-center gap-3 text-gray-900">
-            <span className="text-2xl font-bold">{formatCurrency(product.price)}</span>
+        <div className="flex items-end justify-between gap-2">
+          <div className="flex flex-col">
             {product.originalPrice && (
-              <span className="text-sm font-semibold text-gray-400 line-through">
+              <span className="text-xs text-gaming-text-muted line-through">
                 {formatCurrency(product.originalPrice)}
               </span>
             )}
+            <span className="text-lg font-bold text-gaming-accent font-display">
+              {formatCurrency(product.price)}
+            </span>
           </div>
+
+          <button
+            onClick={handleAddToCart}
+            className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 text-gaming-primary hover:bg-gaming-primary hover:text-white hover:scale-105 active:scale-95 transition-all duration-300"
+            title="Add to Cart"
+          >
+            <ShoppingCart className="h-5 w-5" />
+          </button>
         </div>
       </div>
     </Link>

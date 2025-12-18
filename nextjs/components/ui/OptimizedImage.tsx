@@ -87,13 +87,13 @@ export default function OptimizedImage({
   }, [lazy, priority, src])
 
   // Get optimized image URL
-  const optimizedSrc = getOptimizedImageUrl(imageSrc, preset)
+  const optimizedSrc = getOptimizedImageUrl(imageSrc)
 
   return (
     <div className={`relative overflow-hidden ${className}`}>
       {/* Loading state with gaming theme */}
       {isLoading && gaming && <GamingLoader />}
-      
+
       {/* Optimized Image */}
       <Image
         ref={imgRef}

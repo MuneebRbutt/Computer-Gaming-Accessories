@@ -34,7 +34,7 @@ export interface ShippingOption {
   icon?: string
 }
 
-interface CartStore {
+export interface CartStore {
   items: CartItem[]
   savedForLater: CartItem[]
   appliedDiscounts: CartDiscount[]
@@ -44,33 +44,33 @@ interface CartStore {
   // Compatibility aliases expected by some components
   discounts?: CartDiscount[]
   shippingOption?: ShippingOption
-  
+
   // Cart Actions
   addItem: (product: Product, options?: Partial<CartItem>) => void
   removeItem: (productId: string) => void
   updateQuantity: (productId: string, quantity: number) => void
   updateItemOptions: (productId: string, options: Partial<CartItem>) => void
   clearCart: () => void
-  
+
   // Save for Later
   saveForLater: (productId: string) => void
   moveToCart: (productId: string) => void
   removeSavedItem: (productId: string) => void
-  
+
   // Discounts
   applyDiscount: (discount: CartDiscount | string) => void
   removeDiscount: (discountId: string) => void
-  
+
   // Shipping
   setShipping: (shipping: ShippingOption) => void
   setShippingOption?: (shipping: ShippingOption | string) => void
 
   // Compatibility helpers
   toggleSaveForLater?: (productId: string) => void
-  
+
   // Checkout
   setCheckoutStep: (step: CartStore['checkoutStep']) => void
-  
+
   // Calculations
   getTotalItems: () => number
   getSubtotal: () => number
@@ -78,7 +78,7 @@ interface CartStore {
   getShippingCost: () => number
   getTaxAmount: () => number
   getTotalPrice: () => number
-  
+
   // Validation
   validateCart: () => { isValid: boolean; errors: string[] }
   getEstimatedDelivery: () => string
@@ -96,11 +96,11 @@ export const useCartStore = create<CartStore>()(
       savedForLater: [],
       appliedDiscounts: [],
       checkoutStep: 'cart',
-      
+
       addItem: (product, options = {}) => {
         const items = get().items
         const existingItem = items.find(item => item.product.id === product.id)
-        
+
         if (existingItem) {
           set({
             items: items.map(item =>
@@ -119,17 +119,17 @@ export const useCartStore = create<CartStore>()(
           set({ items: [...items, newItem] })
         }
       },
-      
+
       removeItem: (productId) => {
         set({ items: get().items.filter(item => item.product.id !== productId) })
       },
-      
+
       updateQuantity: (productId, quantity) => {
         if (quantity <= 0) {
           get().removeItem(productId)
           return
         }
-        
+
         set({
           items: get().items.map(item =>
             item.product.id === productId
@@ -138,7 +138,7 @@ export const useCartStore = create<CartStore>()(
           )
         })
       },
-      
+
       updateItemOptions: (productId, options) => {
         set({
           items: get().items.map(item =>
@@ -148,9 +148,9 @@ export const useCartStore = create<CartStore>()(
           )
         })
       },
-      
+
       clearCart: () => set({ items: [], appliedDiscounts: [], selectedShipping: undefined }),
-      
+
       saveForLater: (productId: string) => {
         const item = get().items.find(item => item.product.id === productId)
         if (item) {
@@ -160,7 +160,7 @@ export const useCartStore = create<CartStore>()(
           })
         }
       },
-      
+
       moveToCart: (productId) => {
         const item = get().savedForLater.find(item => item.product.id === productId)
         if (item) {
@@ -170,13 +170,13 @@ export const useCartStore = create<CartStore>()(
           })
         }
       },
-      
+
       removeSavedItem: (productId) => {
         set({
           savedForLater: get().savedForLater.filter(item => item.product.id !== productId)
         })
       },
-      
+
       applyDiscount: (discount) => {
         // Accept either a CartDiscount object or a discount code string
         if (typeof discount === 'string') {
@@ -199,13 +199,13 @@ export const useCartStore = create<CartStore>()(
           set({ appliedDiscounts: [...get().appliedDiscounts, discount] })
         }
       },
-      
+
       removeDiscount: (discountId) => {
         set({
           appliedDiscounts: get().appliedDiscounts.filter(d => d.id !== discountId)
         })
       },
-      
+
       setShipping: (shipping) => set({ selectedShipping: shipping }),
       // Accept either a ShippingOption or an id string
       setShippingOption: (shipping) => {
@@ -217,29 +217,29 @@ export const useCartStore = create<CartStore>()(
           set({ selectedShipping: shipping })
         }
       },
-      
+
       setCheckoutStep: (step) => set({ checkoutStep: step }),
-      
+
       getTotalItems: () => get().items.reduce((total, item) => total + item.quantity, 0),
-      
+
       getSubtotal: () => {
         return get().items.reduce((total, item) => {
           let itemPrice = item.product.price * item.quantity
-          
+
           // Add warranty cost
           if (item.warranty) {
             itemPrice += item.warranty.price
           }
-          
+
           // Add accessories cost
           if (item.accessories) {
             itemPrice += item.accessories.reduce((acc, accessory) => acc + accessory.price, 0)
           }
-          
+
           return total + itemPrice
         }, 0)
       },
-      
+
       getDiscountAmount: () => {
         const subtotal = get().getSubtotal()
         return get().appliedDiscounts.reduce((total, discount) => {
@@ -251,31 +251,31 @@ export const useCartStore = create<CartStore>()(
           return total
         }, 0)
       },
-      
+
       getShippingCost: () => {
         const shippingDiscounts = get().appliedDiscounts.filter(d => d.type === 'shipping')
         const baseShipping = get().selectedShipping?.price || 0
-        
+
         const shippingDiscount = shippingDiscounts.reduce((total, discount) => {
           return total + (discount.type === 'shipping' ? discount.value : 0)
         }, 0)
-        
+
         return Math.max(0, baseShipping - shippingDiscount)
       },
-      
+
       getTaxAmount: () => {
         const subtotal = get().getSubtotal()
         const discountAmount = get().getDiscountAmount()
         const taxableAmount = subtotal - discountAmount
         return taxableAmount * 0.08 // 8% tax rate
       },
-      
+
       getTotalPrice: () => {
         const subtotal = get().getSubtotal()
         const discountAmount = get().getDiscountAmount()
         const shippingCost = get().getShippingCost()
         const taxAmount = get().getTaxAmount()
-        
+
         return subtotal - discountAmount + shippingCost + taxAmount
       },
 
@@ -290,11 +290,11 @@ export const useCartStore = create<CartStore>()(
         }, 0)
       },
       getTotalSavings: () => get().getDiscountAmount(),
-      
+
       validateCart: () => {
         const errors: string[] = []
         const items = get().items
-        
+
         // Check stock availability
         items.forEach(item => {
           if (item.product.availability === 'Out of Stock') {
@@ -304,7 +304,7 @@ export const useCartStore = create<CartStore>()(
             errors.push(`Maximum quantity for ${item.product.title} is 10`)
           }
         })
-        
+
         // Check minimum order
         const appliedDiscounts = get().appliedDiscounts
         appliedDiscounts.forEach(discount => {
@@ -312,26 +312,26 @@ export const useCartStore = create<CartStore>()(
             errors.push(`Minimum order of Rs ${discount.minimumOrder} required for ${discount.description}`)
           }
         })
-        
+
         return {
           isValid: errors.length === 0,
           errors
         }
       },
-      
+
       getEstimatedDelivery: () => {
         const shipping = get().selectedShipping
         if (!shipping) return 'Select shipping method'
-        
+
         const today = new Date()
         const deliveryDate = new Date(today)
-        
+
         // Parse estimated days (e.g., "3-5 days" -> take max value)
         const daysMatch = shipping.estimatedDays.match(/(\d+)-?(\d+)?/)
         const maxDays = daysMatch ? parseInt(daysMatch[2] || daysMatch[1]) : 7
-        
+
         deliveryDate.setDate(today.getDate() + maxDays)
-        
+
         return deliveryDate.toLocaleDateString('en-US', {
           weekday: 'long',
           year: 'numeric',
@@ -361,20 +361,20 @@ export interface WishlistItem {
 interface WishlistStore {
   items: WishlistItem[]
   collections: { id: string; name: string; items: string[] }[]
-  
+
   // Wishlist Actions
   addItem: (product: Product, options?: Partial<WishlistItem>) => void
   addToWishlist: (productId: string, collectionId?: string) => void
   removeItem: (productId: string) => void
   updateItem: (productId: string, updates: Partial<WishlistItem>) => void
   clearWishlist: () => void
-  
+
   // Collections
   createCollection: (name: string) => string
   addToCollection: (collectionId: string, productId: string) => void
   removeFromCollection: (collectionId: string, productId: string) => void
   deleteCollection: (collectionId: string) => void
-  
+
   // Utilities
   isInWishlist: (productId: string) => boolean
   getTotalItems: () => number
@@ -388,7 +388,7 @@ export const useWishlistStore = create<WishlistStore>()(
     (set, get) => ({
       items: [],
       collections: [],
-      
+
       addItem: (product, options = {}) => {
         const existing = get().items.find(item => item.product.id === product.id)
         if (!existing) {
@@ -404,18 +404,18 @@ export const useWishlistStore = create<WishlistStore>()(
           set({ items: [...get().items, newItem] })
         }
       },
-      
+
       addToWishlist: (productId, collectionId = 'main') => {
         // This is a simplified version - in real app you'd fetch product by ID
-  const mockProduct = { id: productId, title: 'Product', price: 99.99, category: 'Misc', brand: 'Brand', image: '/placeholder.png' } as Product
+        const mockProduct = { id: productId, title: 'Product', price: 99.99, category: 'Misc', brand: 'Brand', image: '/placeholder.png' } as Product
         get().addItem(mockProduct)
         if (collectionId !== 'main') {
           get().addToCollection(collectionId, productId)
         }
       },
-      
+
       removeItem: (productId) => {
-        set({ 
+        set({
           items: get().items.filter(item => item.product.id !== productId),
           collections: get().collections.map(collection => ({
             ...collection,
@@ -423,7 +423,7 @@ export const useWishlistStore = create<WishlistStore>()(
           }))
         })
       },
-      
+
       updateItem: (productId, updates) => {
         set({
           items: get().items.map(item =>
@@ -433,9 +433,9 @@ export const useWishlistStore = create<WishlistStore>()(
           )
         })
       },
-      
+
       clearWishlist: () => set({ items: [], collections: [] }),
-      
+
       createCollection: (name) => {
         const id = `collection-${Date.now()}`
         set({
@@ -443,7 +443,7 @@ export const useWishlistStore = create<WishlistStore>()(
         })
         return id
       },
-      
+
       addToCollection: (collectionId, productId) => {
         set({
           collections: get().collections.map(collection =>
@@ -453,7 +453,7 @@ export const useWishlistStore = create<WishlistStore>()(
           )
         })
       },
-      
+
       removeFromCollection: (collectionId, productId) => {
         set({
           collections: get().collections.map(collection =>
@@ -463,31 +463,31 @@ export const useWishlistStore = create<WishlistStore>()(
           )
         })
       },
-      
+
       deleteCollection: (collectionId) => {
         set({
           collections: get().collections.filter(collection => collection.id !== collectionId)
         })
       },
-      
+
       isInWishlist: (productId) => {
         return get().items.some(item => item.product.id === productId)
       },
-      
+
       getTotalItems: () => get().items.length,
-      
+
       getPriceDropItems: () => {
-        return get().items.filter(item => 
+        return get().items.filter(item =>
           item.product.price < item.priceAtAdd && item.notifyOnSale
         )
       },
-      
+
       getBackInStockItems: () => {
-        return get().items.filter(item => 
+        return get().items.filter(item =>
           item.product.availability === 'In Stock' && item.notifyOnStock
         )
       },
-      
+
       moveToCart: (productId) => {
         const item = get().items.find(item => item.product.id === productId)
         if (item) {
@@ -551,19 +551,19 @@ interface AuthStore {
   user: User | null
   isAuthenticated: boolean
   isLoading: boolean
-  
+
   // Auth Actions
   login: (email: string, password: string) => Promise<boolean>
   logout: () => void
   signup: (userData: Partial<User> & { password: string }) => Promise<boolean>
   updateProfile: (updates: Partial<User>) => Promise<boolean>
-  
+
   // Address Management
   addAddress: (address: Omit<User['addresses'][0], 'id'>) => void
   updateAddress: (addressId: string, updates: Partial<User['addresses'][0]>) => void
   deleteAddress: (addressId: string) => void
   setDefaultAddress: (addressId: string, type: 'billing' | 'shipping') => void
-  
+
   // Payment Methods
   addPaymentMethod: (method: Omit<User['paymentMethods'][0], 'id'>) => void
   updatePaymentMethod: (methodId: string, updates: Partial<User['paymentMethods'][0]>) => void
@@ -577,13 +577,13 @@ export const useAuthStore = create<AuthStore>()(
       user: null,
       isAuthenticated: false,
       isLoading: false,
-      
+
       login: async (email, password) => {
         set({ isLoading: true })
-        
+
         // Simulate API call
         await new Promise(resolve => setTimeout(resolve, 1000))
-        
+
         // Mock successful login
         const mockUser: User = {
           id: 'user-123',
@@ -607,26 +607,26 @@ export const useAuthStore = create<AuthStore>()(
           addresses: [],
           paymentMethods: []
         }
-        
-        set({ 
-          user: mockUser, 
-          isAuthenticated: true, 
-          isLoading: false 
+
+        set({
+          user: mockUser,
+          isAuthenticated: true,
+          isLoading: false
         })
-        
+
         return true
       },
-      
+
       logout: () => {
         set({ user: null, isAuthenticated: false })
       },
-      
+
       signup: async (userData) => {
         set({ isLoading: true })
-        
+
         // Simulate API call
         await new Promise(resolve => setTimeout(resolve, 1000))
-        
+
         // Mock successful signup
         const newUser: User = {
           id: `user-${Date.now()}`,
@@ -650,22 +650,22 @@ export const useAuthStore = create<AuthStore>()(
           addresses: [],
           paymentMethods: []
         }
-        
-        set({ 
-          user: newUser, 
-          isAuthenticated: true, 
-          isLoading: false 
+
+        set({
+          user: newUser,
+          isAuthenticated: true,
+          isLoading: false
         })
-        
+
         return true
       },
-      
+
       updateProfile: async (updates) => {
         set({ isLoading: true })
-        
+
         // Simulate API call
         await new Promise(resolve => setTimeout(resolve, 500))
-        
+
         const currentUser = get().user
         if (currentUser) {
           set({
@@ -673,10 +673,10 @@ export const useAuthStore = create<AuthStore>()(
             isLoading: false
           })
         }
-        
+
         return true
       },
-      
+
       addAddress: (address) => {
         const currentUser = get().user
         if (currentUser) {
@@ -692,7 +692,7 @@ export const useAuthStore = create<AuthStore>()(
           })
         }
       },
-      
+
       updateAddress: (addressId, updates) => {
         const currentUser = get().user
         if (currentUser) {
@@ -706,7 +706,7 @@ export const useAuthStore = create<AuthStore>()(
           })
         }
       },
-      
+
       deleteAddress: (addressId) => {
         const currentUser = get().user
         if (currentUser) {
@@ -718,7 +718,7 @@ export const useAuthStore = create<AuthStore>()(
           })
         }
       },
-      
+
       setDefaultAddress: (addressId, type) => {
         const currentUser = get().user
         if (currentUser) {
@@ -733,7 +733,7 @@ export const useAuthStore = create<AuthStore>()(
           })
         }
       },
-      
+
       addPaymentMethod: (method) => {
         const currentUser = get().user
         if (currentUser) {
@@ -749,7 +749,7 @@ export const useAuthStore = create<AuthStore>()(
           })
         }
       },
-      
+
       updatePaymentMethod: (methodId, updates) => {
         const currentUser = get().user
         if (currentUser) {
@@ -763,7 +763,7 @@ export const useAuthStore = create<AuthStore>()(
           })
         }
       },
-      
+
       deletePaymentMethod: (methodId) => {
         const currentUser = get().user
         if (currentUser) {
@@ -775,7 +775,7 @@ export const useAuthStore = create<AuthStore>()(
           })
         }
       },
-      
+
       setDefaultPaymentMethod: (methodId) => {
         const currentUser = get().user
         if (currentUser) {

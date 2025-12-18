@@ -11,8 +11,8 @@ interface ProductGridProps {
   itemsPerPage?: number
 }
 
-export default function ProductGrid({ 
-  products, 
+export default function ProductGrid({
+  products,
   className = '',
   itemsPerPage = 20
 }: ProductGridProps) {
@@ -21,11 +21,11 @@ export default function ProductGrid({
 
   const filteredAndSortedProducts = useMemo(() => {
     let filtered = products.filter(product => {
-      const matchesSearch = !search || 
+      const matchesSearch = !search ||
         product.title.toLowerCase().includes(search.toLowerCase()) ||
         product.category.toLowerCase().includes(search.toLowerCase()) ||
         product.brand.toLowerCase().includes(search.toLowerCase())
-      
+
       const matchesCategory = !category || product.category === category
       const matchesSubcategory = !subcategory || product.subcategory === subcategory
       const matchesBrand = !brand || product.brand === brand
@@ -67,9 +67,9 @@ export default function ProductGrid({
 
   if (filteredAndSortedProducts.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 px-4 bg-white rounded-lg border border-gray-200">
-        <p className="text-lg text-gray-600 mb-4">No products found</p>
-        <p className="text-sm text-gray-500">Try adjusting your filters</p>
+      <div className="flex flex-col items-center justify-center py-16 px-4 bg-gaming-card rounded-2xl border border-white/5 shadow-glass">
+        <p className="text-xl font-display font-medium text-white mb-4">No products found</p>
+        <p className="text-sm text-gray-400">Try adjusting your filters or search criteria</p>
       </div>
     )
   }
@@ -95,7 +95,7 @@ export default function ProductGrid({
           >
             Previous
           </button>
-          
+
           <div className="flex gap-1">
             {[...Array(Math.min(5, totalPages))].map((_, i) => {
               let pageNum
@@ -108,7 +108,7 @@ export default function ProductGrid({
               } else {
                 pageNum = currentPage - 2 + i
               }
-              
+
               return (
                 <button
                   key={i}

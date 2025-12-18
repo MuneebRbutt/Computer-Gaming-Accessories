@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { 
-  CheckCircle, 
-  XCircle, 
-  AlertTriangle, 
-  Info, 
+import {
+  CheckCircle,
+  XCircle,
+  AlertTriangle,
+  Info,
   X,
   Zap,
   Gamepad2,
@@ -73,14 +73,14 @@ const toastColors = {
   }
 }
 
-export function Toast({ 
-  id, 
-  title, 
-  description, 
-  type = 'info', 
+export function Toast({
+  id,
+  title,
+  description,
+  type = 'info',
   duration = 5000,
   action,
-  onRemove 
+  onRemove
 }: ToastComponentProps) {
   const [isVisible, setIsVisible] = useState(true)
   const Icon = toastIcons[type]
@@ -120,10 +120,10 @@ export function Toast({
           {type === 'gaming' && (
             <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-gaming-primary/5 to-gaming-accent/5 animate-pulse" />
           )}
-          
+
           <div className="relative flex items-start gap-3">
             <Icon className={cn('h-5 w-5 flex-shrink-0 mt-0.5', colors.icon)} />
-            
+
             <div className="flex-1 min-w-0">
               {title && (
                 <p className={cn('text-sm font-semibold', colors.text)}>
@@ -135,7 +135,7 @@ export function Toast({
                   {description}
                 </p>
               )}
-              
+
               {action && (
                 <button
                   onClick={action.onClick}
@@ -148,7 +148,7 @@ export function Toast({
                 </button>
               )}
             </div>
-            
+
             <button
               onClick={handleClose}
               className={cn(
@@ -159,7 +159,7 @@ export function Toast({
               <X className="h-4 w-4" />
             </button>
           </div>
-          
+
           {/* Progress bar */}
           {duration > 0 && (
             <div className="absolute bottom-0 left-0 right-0 h-1 bg-black/10 dark:bg-white/10 rounded-b-lg overflow-hidden">
@@ -169,7 +169,7 @@ export function Toast({
                 transition={{ duration: duration / 1000, ease: 'linear' }}
                 className={cn(
                   'h-full',
-                  type === 'gaming' 
+                  type === 'gaming'
                     ? 'bg-gradient-to-r from-gaming-primary to-gaming-accent'
                     : 'bg-current'
                 )}
@@ -189,10 +189,10 @@ interface ToastContainerProps {
   position?: 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'top-center' | 'bottom-center'
 }
 
-export function ToastContainer({ 
-  toasts, 
-  onRemove, 
-  position = 'top-right' 
+export function ToastContainer({
+  toasts,
+  onRemove,
+  position = 'top-right'
 }: ToastContainerProps) {
   const positionClasses = {
     'top-right': 'top-4 right-4',
@@ -222,12 +222,12 @@ export function ToastContainer({
 }
 
 // Specialized Gaming Toasts
-export function GamingToast({ 
-  id, 
-  title = "Achievement Unlocked!", 
-  description, 
-  onRemove 
-}: Omit<ToastProps, 'type'>) {
+export function GamingToast({
+  id,
+  title = "Achievement Unlocked!",
+  description,
+  onRemove
+}: Omit<ToastComponentProps, 'type'>) {
   return (
     <Toast
       id={id}
@@ -240,12 +240,12 @@ export function GamingToast({
   )
 }
 
-export function SuccessToast({ 
-  id, 
-  title = "Success!", 
-  description, 
-  onRemove 
-}: Omit<ToastProps, 'type'>) {
+export function SuccessToast({
+  id,
+  title = "Success!",
+  description,
+  onRemove
+}: Omit<ToastComponentProps, 'type'>) {
   return (
     <Toast
       id={id}
@@ -257,12 +257,12 @@ export function SuccessToast({
   )
 }
 
-export function ErrorToast({ 
-  id, 
-  title = "Error", 
-  description, 
-  onRemove 
-}: Omit<ToastProps, 'type'>) {
+export function ErrorToast({
+  id,
+  title = "Error",
+  description,
+  onRemove
+}: Omit<ToastComponentProps, 'type'>) {
   return (
     <Toast
       id={id}
@@ -274,12 +274,12 @@ export function ErrorToast({
   )
 }
 
-export function WarningToast({ 
-  id, 
-  title = "Warning", 
-  description, 
-  onRemove 
-}: Omit<ToastProps, 'type'>) {
+export function WarningToast({
+  id,
+  title = "Warning",
+  description,
+  onRemove
+}: Omit<ToastComponentProps, 'type'>) {
   return (
     <Toast
       id={id}
@@ -291,12 +291,12 @@ export function WarningToast({
   )
 }
 
-export function InfoToast({ 
-  id, 
-  title = "Info", 
-  description, 
-  onRemove 
-}: Omit<ToastProps, 'type'>) {
+export function InfoToast({
+  id,
+  title = "Info",
+  description,
+  onRemove
+}: Omit<ToastComponentProps, 'type'>) {
   return (
     <Toast
       id={id}

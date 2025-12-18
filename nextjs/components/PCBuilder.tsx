@@ -11,12 +11,12 @@ import { Select } from './ui/Select'
 import { Badge } from './ui/Badge'
 import { Input } from './ui/Input'
 import toast from 'react-hot-toast'
-import { 
-  AlertTriangle, 
-  CheckCircle, 
-  Cpu, 
-  HardDrive, 
-  Zap, 
+import {
+  AlertTriangle,
+  CheckCircle,
+  Cpu,
+  HardDrive,
+  Zap,
   Monitor,
   Gamepad2,
   TrendingUp,
@@ -42,7 +42,7 @@ export default function PCBuilder() {
   const [buildName, setBuildName] = useState('')
   const [savedBuilds, setSavedBuilds] = useState<BuildConfiguration[]>([])
   const [activeCategory, setActiveCategory] = useState('cpu')
-  
+
   const { addItem } = useCartStore()
 
   // Component categories with enhanced metadata
@@ -70,13 +70,13 @@ export default function PCBuilder() {
 
   // Calculate build statistics
   const buildStats = useMemo(() => {
-    const components = Object.values(selectedComponents).map(id => 
+    const components = Object.values(selectedComponents).map(id =>
       PC_COMPONENTS.find(c => c.id === id)
     ).filter(Boolean)
 
     const totalPrice = components.reduce((sum, comp) => sum + (comp?.price || 0), 0)
     const totalWatts = components.reduce((sum, comp) => sum + (comp?.watts || 0), 0)
-    
+
     // Enhanced performance calculation based on component names and prices
     const performanceFactors = {
       cpu: components.find(c => c?.category === 'cpu')?.price || 0,
@@ -84,13 +84,13 @@ export default function PCBuilder() {
       ram: components.find(c => c?.category === 'ram')?.price || 0,
       storage: components.find(c => c?.category === 'storage')?.price || 0
     }
-    
+
     // Convert price to performance score (higher price = better performance)
     const performance = Math.round(
-      (Math.sqrt(performanceFactors.cpu / 1000) * 0.3 + 
-       Math.sqrt(performanceFactors.gpu / 1000) * 0.4 + 
-       Math.sqrt(performanceFactors.ram / 1000) * 0.2 + 
-       Math.sqrt(performanceFactors.storage / 1000) * 0.1) * 20
+      (Math.sqrt(performanceFactors.cpu / 1000) * 0.3 +
+        Math.sqrt(performanceFactors.gpu / 1000) * 0.4 +
+        Math.sqrt(performanceFactors.ram / 1000) * 0.2 +
+        Math.sqrt(performanceFactors.storage / 1000) * 0.1) * 20
     )
 
     return {
@@ -106,7 +106,7 @@ export default function PCBuilder() {
   const compatibilityCheck = useMemo(() => {
     const issues: string[] = []
     const warnings: string[] = []
-    
+
     const selectedComps = Object.entries(selectedComponents).reduce((acc, [category, id]) => {
       acc[category] = PC_COMPONENTS.find(c => c.id === id)
       return acc
@@ -123,7 +123,7 @@ export default function PCBuilder() {
     if (selectedComps.psu && buildStats.totalWatts > 0) {
       const psuWattage = selectedComps.psu.watts || 0
       const requiredWattage = buildStats.totalWatts * 1.2 // 20% headroom
-      
+
       if (psuWattage < requiredWattage) {
         issues.push(`PSU insufficient: ${psuWattage}W PSU for ${Math.round(requiredWattage)}W system`)
       } else if (psuWattage < buildStats.totalWatts * 1.5) {
@@ -135,7 +135,7 @@ export default function PCBuilder() {
     if (selectedComps.case && selectedComps.motherboard) {
       const caseSize = selectedComps.case.formFactor
       const mbSize = selectedComps.motherboard.formFactor
-      
+
       if (mbSize === 'ATX' && caseSize === 'ITX') {
         issues.push(`ATX motherboard won't fit in ITX case`)
       }
@@ -145,7 +145,7 @@ export default function PCBuilder() {
     if (selectedComps.gpu && selectedComps.case) {
       const gpuLength = selectedComps.gpu.length || 0
       const caseGpuClearance = selectedComps.case.gpuClearance || 999
-      
+
       if (gpuLength > caseGpuClearance) {
         issues.push(`GPU too long: ${gpuLength}mm GPU in case with ${caseGpuClearance}mm clearance`)
       }
@@ -245,18 +245,18 @@ export default function PCBuilder() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#fff3f3] via-[#fff7f7] to-white">
-      <div className="max-w-6xl mx-auto px-4 py-10 space-y-10">
+    <div className="min-h-screen bg-gaming-background p-4 md:p-8">
+      <div className="max-w-7xl mx-auto space-y-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center"
+          className="text-center space-y-4"
         >
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent mb-3">
+          <h1 className="text-4xl md:text-6xl font-display font-bold text-white mb-3 glow-text">
             PC Builder Studio
           </h1>
-          <p className="text-text-muted text-base md:text-lg max-w-2xl mx-auto">
+          <p className="text-gray-400 text-base md:text-lg max-w-2xl mx-auto">
             Build your dream rig with live compatibility checks, performance projections, and a streamlined parts workflow.
           </p>
         </motion.div>
@@ -270,12 +270,12 @@ export default function PCBuilder() {
             {builderHighlights.map((item) => (
               <div
                 key={item.title}
-                className="rounded-2xl border border-primary/10 bg-white/70 backdrop-blur-sm p-5 text-left shadow-sm"
+                className="rounded-2xl border border-white/10 bg-gaming-card p-6 text-left shadow-glass hover:border-gaming-primary/30 transition-colors"
               >
-                <h3 className="text-sm font-semibold uppercase tracking-widest text-primary mb-2">
+                <h3 className="text-sm font-bold uppercase tracking-widest text-gaming-primary mb-3">
                   {item.title}
                 </h3>
-                <p className="text-sm text-text-muted leading-relaxed">{item.description}</p>
+                <p className="text-sm text-gray-400 leading-relaxed">{item.description}</p>
               </div>
             ))}
           </div>
@@ -288,18 +288,18 @@ export default function PCBuilder() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
-            className="space-y-2"
+            className="space-y-3"
           >
-            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-              <Monitor className="w-5 h-5 text-primary" />
+            <h3 className="text-lg font-display font-bold text-white mb-4 flex items-center gap-2">
+              <Monitor className="w-5 h-5 text-gaming-primary" />
               Components
             </h3>
-            
+
             {componentCategories.map((category) => {
               const Icon = category.icon
               const isSelected = selectedComponents[category.key]
               const isActive = activeCategory === category.key
-              
+
               return (
                 <motion.button
                   key={category.key}
@@ -309,33 +309,33 @@ export default function PCBuilder() {
                   className={cn(
                     'w-full p-4 rounded-xl border text-left transition-all duration-300',
                     'flex items-center gap-3 group',
-                    isActive 
-                      ? 'border-primary/50 bg-gradient-to-r from-primary/10 to-accent/10 shadow-[0_0_15px_rgba(15,240,252,0.2)]'
-                      : 'border-primary/10 bg-white/70 hover:border-primary/30 hover:bg-white/90'
+                    isActive
+                      ? 'border-gaming-primary bg-gaming-primary/10 shadow-neon'
+                      : 'border-white/5 bg-gaming-card hover:border-white/20 hover:bg-gaming-card/80'
                   )}
                 >
                   <div className={cn(
-                    'p-2 rounded-lg bg-gradient-to-r transition-all duration-300',
+                    'p-2 rounded-lg bg-gradient-to-r transition-all duration-300 shadow-inner',
                     category.color,
                     'group-hover:scale-110'
                   )}>
                     <Icon className="w-4 h-4 text-white" />
                   </div>
-                  
+
                   <div className="flex-1">
-                    <div className="font-medium text-sm text-text-primary">
+                    <div className="font-medium text-sm text-white">
                       {category.label}
                     </div>
                     {isSelected && (
-                      <div className="text-xs text-text-muted truncate">
+                      <div className="text-xs text-gaming-primary truncate mt-1">
                         {PC_COMPONENTS.find(c => c.id === isSelected)?.name}
                       </div>
                     )}
                   </div>
-                  
+
                   <div className="flex items-center gap-1">
-                    {category.required && (
-                      <Badge variant="warning" size="sm">Required</Badge>
+                    {category.required && !isSelected && (
+                      <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
                     )}
                     {isSelected && (
                       <CheckCircle className="w-4 h-4 text-green-400" />
@@ -351,16 +351,16 @@ export default function PCBuilder() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="bg-white/80 backdrop-blur-lg border border-primary/10 rounded-2xl p-7 shadow-sm"
+            className="bg-gaming-card border border-white/5 rounded-2xl p-8 shadow-glass h-fit"
           >
             <AnimatePresence mode="wait">
               {componentCategories.map((category) => {
                 if (activeCategory !== category.key) return null
-                
+
                 const Icon = category.icon
                 const compatibleComponents = componentsByCategory[category.key] || []
                 const selectedComp = selectedComponents[category.key]
-                
+
                 return (
                   <motion.div
                     key={category.key}
@@ -369,32 +369,32 @@ export default function PCBuilder() {
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <div className="flex items-center gap-3 mb-6">
+                    <div className="flex items-center gap-4 mb-8">
                       <div className={cn(
-                        'p-3 rounded-xl bg-gradient-to-r',
+                        'p-4 rounded-xl bg-gradient-to-r shadow-lg',
                         category.color
                       )}>
-                        <Icon className="w-6 h-6 text-white" />
+                        <Icon className="w-8 h-8 text-white" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-semibold text-text-primary">
+                        <h3 className="text-2xl font-display font-bold text-white">
                           {category.label}
                         </h3>
-                        <p className="text-sm text-text-muted">
+                        <p className="text-sm text-gray-400 mt-1">
                           {category.required ? 'Required component' : 'Optional component'}
                         </p>
                       </div>
                     </div>
 
-                    <div className="space-y-4">
+                    <div className="space-y-6">
                       <Select
                         value={selectedComp || ''}
                         onChange={(e) => handleComponentChange(category.key, e.target.value)}
-                        className="w-full"
+                        className="w-full bg-gaming-surface border-white/10 text-white focus:border-gaming-primary p-4 text-lg"
                       >
-                        <option value="">Select {category.label}...</option>
+                        <option value="" className="bg-gaming-card">Select {category.label}...</option>
                         {compatibleComponents.map(component => (
-                          <option key={component.id} value={component.id}>
+                          <option key={component.id} value={component.id} className="bg-gaming-card">
                             {component.name} — {formatPrice(component.price)}
                           </option>
                         ))}
@@ -404,40 +404,41 @@ export default function PCBuilder() {
                         <motion.div
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: 'auto' }}
-                          className="p-4 bg-bg-dark/50 rounded-lg border border-primary/10"
+                          className="p-6 bg-gaming-surface rounded-xl border border-white/5"
                         >
                           {(() => {
                             const component = PC_COMPONENTS.find(c => c.id === selectedComp)
                             if (!component) return null
-                            
+
                             return (
                               <div>
-                                <h4 className="font-semibold text-text-primary mb-2">
+                                <h4 className="font-bold text-white mb-4 text-lg flex items-center gap-2">
                                   {component.name}
+                                  <Badge className="bg-gaming-primary/20 text-gaming-primary border-gaming-primary/20">Selected</Badge>
                                 </h4>
-                                <div className="grid grid-cols-2 gap-4 text-sm">
+                                <div className="grid grid-cols-2 gap-6 text-sm">
                                   <div>
-                                    <span className="text-text-muted">Price:</span>
-                                    <span className="ml-2 text-accent font-semibold">
+                                    <span className="text-gray-500 block mb-1 uppercase text-xs font-bold tracking-wider">Price</span>
+                                    <span className="text-gaming-secondary font-bold text-lg">
                                       {formatPrice(component.price)}
                                     </span>
                                   </div>
                                   {component.watts && (
                                     <div>
-                                      <span className="text-text-muted">Power:</span>
-                                      <span className="ml-2">{component.watts}W</span>
+                                      <span className="text-gray-500 block mb-1 uppercase text-xs font-bold tracking-wider">Power</span>
+                                      <span className="text-white font-medium">{component.watts}W</span>
                                     </div>
                                   )}
                                   {component.socket && (
                                     <div>
-                                      <span className="text-text-muted">Socket:</span>
-                                      <span className="ml-2">{component.socket}</span>
+                                      <span className="text-gray-500 block mb-1 uppercase text-xs font-bold tracking-wider">Socket</span>
+                                      <span className="text-white font-medium">{component.socket}</span>
                                     </div>
                                   )}
                                   {component.formFactor && (
                                     <div>
-                                      <span className="text-text-muted">Form Factor:</span>
-                                      <span className="ml-2">{component.formFactor}</span>
+                                      <span className="text-gray-500 block mb-1 uppercase text-xs font-bold tracking-wider">Form Factor</span>
+                                      <span className="text-white font-medium">{component.formFactor}</span>
                                     </div>
                                   )}
                                 </div>
@@ -458,42 +459,42 @@ export default function PCBuilder() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4 }}
-            className="space-y-4"
+            className="space-y-6"
           >
             {/* Build Overview */}
-            <div className="bg-white/80 backdrop-blur-lg border border-primary/10 rounded-2xl p-6 shadow-sm">
-              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-accent" />
+            <div className="bg-gaming-card border border-white/5 rounded-2xl p-6 shadow-glass">
+              <h3 className="text-lg font-display font-bold mb-4 flex items-center gap-2 text-white">
+                <TrendingUp className="w-5 h-5 text-gaming-primary" />
                 Build Overview
               </h3>
-              
-              <div className="space-y-4">
+
+              <div className="space-y-6">
                 <div>
-                  <label className="text-xs font-semibold uppercase tracking-widest text-text-muted block mb-2">
+                  <label className="text-xs font-bold uppercase tracking-widest text-gray-500 block mb-2">
                     Build Name
                   </label>
                   <Input
                     value={buildName}
                     onChange={(event) => setBuildName(event.target.value)}
                     placeholder="My neon battlestation"
-                    className="bg-white/90"
+                    className="bg-gaming-surface border-white/10 text-white text-sm"
                   />
                 </div>
 
-                <div className="flex justify-between items-center">
-                  <span className="text-text-muted">Total Price:</span>
-                  <span className="text-xl font-bold text-primary">
+                <div className="flex justify-between items-center pb-4 border-b border-white/5">
+                  <span className="text-gray-400">Total Price:</span>
+                  <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
                     {formatPrice(buildStats.totalPrice)}
                   </span>
                 </div>
-                
-                <div className="flex justify-between items-center">
-                  <span className="text-text-muted">Power Draw:</span>
-                  <span className="font-semibold">{buildStats.totalWatts}W</span>
+
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-gray-400">Power Draw:</span>
+                  <span className="font-semibold text-white">{buildStats.totalWatts}W</span>
                 </div>
-                
-                <div className="flex justify-between items-center">
-                  <span className="text-text-muted">Performance:</span>
+
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-gray-400">Performance:</span>
                   <div className="flex items-center gap-2">
                     <performanceCategory.icon className={cn('w-4 h-4', performanceCategory.color)} />
                     <span className={cn('font-semibold', performanceCategory.color)}>
@@ -501,20 +502,18 @@ export default function PCBuilder() {
                     </span>
                   </div>
                 </div>
-                
-                <div className="pt-3 border-t border-primary/10">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-text-muted">Completion:</span>
-                    <span className="font-semibold">
-                      {Math.round(buildStats.completionPercentage)}%
-                    </span>
+
+                <div className="pt-2">
+                  <div className="flex justify-between items-center mb-2 text-xs uppercase font-bold tracking-wider text-gray-500">
+                    <span>Completion</span>
+                    <span>{Math.round(buildStats.completionPercentage)}%</span>
                   </div>
-                  <div className="w-full bg-bg-dark/50 rounded-full h-2">
+                  <div className="w-full bg-gaming-surface rounded-full h-2 overflow-hidden">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${buildStats.completionPercentage}%` }}
                       transition={{ duration: 0.5 }}
-                      className="h-2 bg-gradient-to-r from-primary to-accent rounded-full"
+                      className="h-full bg-gradient-to-r from-gaming-primary to-gaming-secondary shadow-neon"
                     />
                   </div>
                 </div>
@@ -522,8 +521,8 @@ export default function PCBuilder() {
             </div>
 
             {/* Compatibility Check */}
-            <div className="bg-white/80 backdrop-blur-lg border border-primary/10 rounded-2xl p-6 shadow-sm">
-              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            <div className="bg-gaming-card border border-white/5 rounded-2xl p-6 shadow-glass">
+              <h3 className="text-lg font-display font-bold mb-4 flex items-center gap-2 text-white">
                 {compatibilityCheck.score === 100 ? (
                   <CheckCircle className="w-5 h-5 text-green-400" />
                 ) : compatibilityCheck.issues.length > 0 ? (
@@ -533,22 +532,22 @@ export default function PCBuilder() {
                 )}
                 Compatibility
               </h3>
-              
+
               {compatibilityCheck.issues.length === 0 && compatibilityCheck.warnings.length === 0 ? (
-                <div className="text-green-400 text-sm flex items-center gap-2">
+                <div className="text-green-400 text-sm flex items-center gap-2 p-3 bg-green-500/10 rounded-lg border border-green-500/20">
                   <CheckCircle className="w-4 h-4" />
                   All components are compatible!
                 </div>
               ) : (
                 <div className="space-y-2">
                   {compatibilityCheck.issues.map((issue, index) => (
-                    <div key={index} className="text-red-400 text-xs flex items-start gap-2">
+                    <div key={index} className="text-red-400 text-xs flex items-start gap-2 p-2 bg-red-500/10 rounded border border-red-500/20">
                       <AlertTriangle className="w-3 h-3 mt-0.5 flex-shrink-0" />
                       <span>{issue}</span>
                     </div>
                   ))}
                   {compatibilityCheck.warnings.map((warning, index) => (
-                    <div key={index} className="text-yellow-400 text-xs flex items-start gap-2">
+                    <div key={index} className="text-yellow-400 text-xs flex items-start gap-2 p-2 bg-yellow-500/10 rounded border border-yellow-500/20">
                       <Info className="w-3 h-3 mt-0.5 flex-shrink-0" />
                       <span>{warning}</span>
                     </div>
@@ -558,21 +557,21 @@ export default function PCBuilder() {
             </div>
 
             {/* Performance Meter */}
-            <div className="bg-white/80 backdrop-blur-lg border border-primary/10 rounded-2xl p-6 shadow-sm">
-              <h3 className="text-lg font-semibold mb-4">Performance Rating</h3>
+            <div className="bg-gaming-card border border-white/5 rounded-2xl p-6 shadow-glass">
+              <h3 className="text-lg font-display font-bold mb-4 text-white">Performance Rating</h3>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span>Performance Score</span>
-                  <span className="font-bold text-primary">{buildStats.performance}/100</span>
+                  <span className="text-gray-400">Score</span>
+                  <span className="font-bold text-gaming-primary">{buildStats.performance}/100</span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-3">
-                  <div 
-                    className="bg-primary h-3 rounded-full transition-all duration-500"
+                <div className="w-full bg-gaming-surface rounded-full h-3 overflow-hidden">
+                  <div
+                    className="bg-gradient-to-r from-purple-500 to-pink-500 h-full transition-all duration-500 shadow-neon"
                     style={{ width: `${buildStats.performance}%` }}
                   />
                 </div>
               </div>
-              <div className="text-xs text-text-muted text-center mt-2">
+              <div className="text-xs text-gray-500 text-center mt-3 uppercase tracking-wider">
                 Estimated gaming performance
               </div>
             </div>
@@ -582,23 +581,24 @@ export default function PCBuilder() {
               <Button
                 onClick={handleAddToCart}
                 disabled={buildStats.totalPrice === 0 || compatibilityCheck.issues.length > 0}
-                className="w-full"
+                className="w-full bg-gradient-to-r from-gaming-primary to-gaming-secondary hover:opacity-90 text-white font-bold py-3 shadow-neon border-0 disabled:opacity-50 disabled:cursor-not-allowed"
                 variant="primary"
               >
                 Add to Cart — {formatPrice(buildStats.totalPrice)}
               </Button>
-              
-              <div className="grid grid-cols-2 gap-2">
+
+              <div className="grid grid-cols-2 gap-3">
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={handleSaveBuild}
                   disabled={Object.keys(selectedComponents).length === 0}
+                  className="border-white/10 text-gray-300 hover:text-white hover:bg-white/5"
                 >
                   <Save className="w-4 h-4 mr-2" />
                   Save
                 </Button>
-                
+
                 <Button
                   variant="outline"
                   size="sm"
@@ -608,6 +608,7 @@ export default function PCBuilder() {
                     setActiveCategory('cpu')
                     toast.success('Build cleared!')
                   }}
+                  className="border-white/10 text-gray-300 hover:text-white hover:bg-white/5"
                 >
                   <RotateCcw className="w-4 h-4 mr-2" />
                   Clear
@@ -616,14 +617,8 @@ export default function PCBuilder() {
             </div>
 
             {savedBuilds.length > 0 && (
-              <div className="text-xs text-text-muted text-center">
+              <div className="text-xs text-gray-500 text-center">
                 {savedBuilds.length} build{savedBuilds.length > 1 ? 's' : ''} saved this session.
-              </div>
-            )}
-
-            {compatibilityCheck.issues.length > 0 && (
-              <div className="text-xs text-red-400 text-center bg-red-500/10 border border-red-500/20 rounded-lg p-2">
-                Please resolve compatibility issues before adding to cart
               </div>
             )}
           </motion.div>

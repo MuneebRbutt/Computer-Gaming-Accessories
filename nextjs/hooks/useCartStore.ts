@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import { useCartStore as useCartStoreBase } from '@/lib/store'
+import { useCartStore as useCartStoreBase, CartStore } from '@/lib/store'
 
 // Overloaded wrapper: with selector -> returns selected slice; without -> returns full store + hydrated flag
-export function useCartStore<T>(selector: (state: ReturnType<typeof useCartStoreBase>) => T): T
-export function useCartStore(): ReturnType<typeof useCartStoreBase> & { hydrated: boolean }
-export function useCartStore(selector?: (state: ReturnType<typeof useCartStoreBase>) => any) {
+export function useCartStore<T>(selector: (state: CartStore) => T): T
+export function useCartStore(): CartStore & { hydrated: boolean }
+export function useCartStore(selector?: (state: CartStore) => any) {
   const [hydrated, setHydrated] = useState(false)
 
   useEffect(() => {
@@ -14,7 +14,7 @@ export function useCartStore(selector?: (state: ReturnType<typeof useCartStoreBa
         anyStore.persist.rehydrate().finally(() => setHydrated(true))
         return
       }
-    } catch {}
+    } catch { }
     // Fallback: mark hydrated
     setHydrated(true)
   }, [])

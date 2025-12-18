@@ -1,31 +1,64 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Poppins:wght@300;400;500;600;700&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --font-heading: 'Orbitron', sans-serif;
-  --font-body: 'Poppins', sans-serif;
-  --color-primary: #8B0000;
-  --color-primary-light: #A52A2A;
-  --color-primary-dark: #660000;
+  --background: 7 11 20;
+  --foreground: 248 248 250;
 }
 
-body {
-  font-family: var(--font-body);
-  margin: 0;
-  padding: 0;
+@layer base {
+  body {
+    @apply bg-gaming-background text-gaming-text-primary font-body antialiased selection:bg-gaming-primary selection:text-white;
+    background-image:
+      radial-gradient(circle at 15% 50%, rgba(139, 92, 246, 0.08), transparent 25%),
+      radial-gradient(circle at 85% 30%, rgba(217, 70, 239, 0.08), transparent 25%);
+    background-attachment: fixed;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading tracking-wide text-white;
+  }
 }
 
-/* Optional: base theme helpers (keep admin dark by class on layout) */
-.theme-dark {
-  background-color: #0b0b0d;
-  color: #F8F8FA;
+@layer utilities {
+  .text-glow {
+    text-shadow: 0 0 10px rgba(139, 92, 246, 0.5);
+  }
+
+  .glass-panel {
+    @apply bg-gaming-card/60 backdrop-blur-md border border-white/10 shadow-glass;
+  }
+
+  .glass-card {
+    @apply bg-gaming-surface/40 backdrop-blur-sm border border-white/5 hover:border-gaming-primary/50 transition-colors duration-300;
+  }
+
+  .neon-border {
+    @apply border border-gaming-primary/50 shadow-neon;
+  }
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-heading);
-  font-weight: 800;
-  letter-spacing: 0.05em;
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gaming-background;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gaming-surface rounded-full border border-gaming-background;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gaming-muted;
 }

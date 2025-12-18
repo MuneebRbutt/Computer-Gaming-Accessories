@@ -5,10 +5,10 @@ import Link from 'next/link'
 import { PRODUCTS, Product } from '@/lib/data'
 import ProductCard from './ProductCard'
 import { motion } from 'framer-motion'
-import { 
-  TrendingUp, 
-  Star, 
-  ArrowRight, 
+import {
+  TrendingUp,
+  Star,
+  ArrowRight,
   Flame,
   Zap,
   Award
@@ -51,7 +51,7 @@ export default function FeaturedProducts() {
         console.error('Failed to fetch products:', error)
       }
     }
-    
+
     fetchProducts()
   }, [])
 
@@ -65,54 +65,60 @@ export default function FeaturedProducts() {
     .slice(0, 4)
 
   return (
-    <section className="relative py-12 md:py-16 bg-white">
-      <div className="max-w-7xl mx-auto px-4">
+    <section className="relative py-12 md:py-20 bg-gaming-background overflow-hidden">
+      {/* Background Ambience */}
+      <div className="absolute top-1/2 left-1/4 w-[500px] h-[500px] bg-gaming-primary/5 rounded-full blur-[128px] pointer-events-none" />
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-gaming-secondary/5 rounded-full blur-[128px] pointer-events-none" />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4">
         {/* Section Header */}
-        <motion.div 
-          className="text-center mb-10"
+        <motion.div
+          className="text-center mb-12"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <Flame className="w-6 h-6 text-primary" />
-            <span className="text-primary text-sm font-semibold uppercase tracking-wider">Hot Deals</span>
-            <Flame className="w-6 h-6 text-primary" />
+          <div className="inline-flex items-center gap-2 mb-4 px-4 py-1.5 rounded-full bg-gaming-primary/10 border border-gaming-primary/20 backdrop-blur-sm">
+            <Flame className="w-4 h-4 text-gaming-primary animate-pulse" />
+            <span className="text-gaming-primary text-xs font-bold uppercase tracking-widest">Hot Deals Detected</span>
           </div>
-          
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            Top-Selling Products
+
+          <h2 className="text-4xl md:text-5xl font-display font-bold text-white mb-6">
+            TOP SELLING <span className="text-transparent bg-clip-text bg-gradient-to-r from-gaming-primary to-gaming-secondary">GEAR</span>
           </h2>
-          
-          <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-            Discover the most popular gaming gear trusted by thousands of gamers across Pakistan
+
+          <p className="text-gaming-text-secondary max-w-2xl mx-auto text-lg leading-relaxed">
+            Discover the most popular gaming gear trusted by thousands of gamers across Pakistan.
+            Performance met style.
           </p>
         </motion.div>
 
         {/* Stats Bar */}
-        <motion.div 
-          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
           {[
-            { icon: TrendingUp, label: 'Trending Now', value: '50+', color: 'text-primary' },
-            { icon: Star, label: 'Top Rated', value: '4.8★', color: 'text-amber-500' },
-            { icon: Award, label: 'Best Sellers', value: '1000+', color: 'text-green-600' }
+            { icon: TrendingUp, label: 'Trending Now', value: '50+', color: 'text-gaming-primary', bg: 'bg-gaming-primary/10' },
+            { icon: Star, label: 'Top Rated', value: '4.8★', color: 'text-gaming-warning', bg: 'bg-gaming-warning/10' },
+            { icon: Award, label: 'Best Sellers', value: '1000+', color: 'text-gaming-success', bg: 'bg-gaming-success/10' }
           ].map((stat, index) => (
-            <div 
+            <div
               key={stat.label}
-              className="flex items-center justify-center gap-3 p-4 rounded-xl bg-white border border-gray-200 shadow-sm"
+              className="group flex items-center justify-center gap-4 p-6 rounded-2xl bg-gaming-card border border-white/5 shadow-glass hover:border-white/10 transition-all duration-300"
             >
-              <stat.icon className={cn("w-5 h-5", stat.color)} />
-              <div>
-                <div className={cn("font-bold text-lg", stat.color)}>
+              <div className={cn("w-12 h-12 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110", stat.bg)}>
+                <stat.icon className={cn("w-6 h-6", stat.color)} />
+              </div>
+              <div className="text-left">
+                <div className={cn("font-display font-bold text-2xl mb-1", stat.color)}>
                   {stat.value}
                 </div>
-                <div className="text-gray-600 text-sm">
+                <div className="text-gray-400 text-sm font-medium tracking-wide">
                   {stat.label}
                 </div>
               </div>
@@ -121,8 +127,8 @@ export default function FeaturedProducts() {
         </motion.div>
 
         {/* Featured Products Grid */}
-        <motion.div 
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
+        <motion.div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-20"
           variants={container}
           initial="hidden"
           whileInView="show"
@@ -133,6 +139,7 @@ export default function FeaturedProducts() {
               key={product.id}
               variants={item}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
+              className="h-full"
             >
               <ProductCard product={product} />
             </motion.div>
@@ -140,39 +147,42 @@ export default function FeaturedProducts() {
         </motion.div>
 
         {/* Top Rated Section */}
-        <motion.div 
-          className="bg-gray-50 rounded-3xl border border-gray-200 p-8"
+        <motion.div
+          className="relative rounded-3xl border border-white/10 bg-gaming-surface/50 backdrop-blur-sm p-8 md:p-12 overflow-hidden"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <div className="flex items-center justify-between mb-8">
+          {/* Decorative Glow */}
+          <div className="absolute top-0 right-0 w-96 h-96 bg-gaming-warning/5 rounded-full blur-[100px] pointer-events-none" />
+
+          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-end justify-between gap-6 mb-12">
             <div>
-              <div className="flex items-center gap-2 mb-2">
-                <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
-                <span className="text-amber-600 text-sm font-semibold uppercase tracking-wider">
-                  Top Rated
+              <div className="flex items-center gap-2 mb-3">
+                <Star className="w-5 h-5 text-gaming-warning fill-gaming-warning animate-pulse" />
+                <span className="text-gaming-warning text-sm font-bold uppercase tracking-widest">
+                  Elite Tier
                 </span>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900">
+              <h3 className="text-3xl font-display font-bold text-white mb-2">
                 Customer Favorites
               </h3>
-              <p className="text-gray-600">
-                Products with the highest customer satisfaction ratings
+              <p className="text-gaming-text-secondary">
+                Highest rated peripherals chosen by the community
               </p>
             </div>
-            
-            <Link 
+
+            <Link
               href="/products?sort=rating"
               className={cn(
                 "hidden md:flex items-center gap-2 px-6 py-3 rounded-xl",
-                "border border-amber-200 text-amber-600 hover:bg-amber-50",
+                "bg-white/5 border border-white/10 text-white hover:bg-white/10",
                 "transition-all duration-300 font-medium",
-                "hover:border-amber-300 group"
+                "group backdrop-blur-sm"
               )}
             >
-              <Star className="w-4 h-4" />
+              <Star className="w-4 h-4 text-gaming-warning" />
               View All Rated
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
             </Link>
@@ -186,6 +196,7 @@ export default function FeaturedProducts() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: idx * 0.1 }}
+                className="h-full"
               >
                 <ProductCard product={product} />
               </motion.div>
@@ -194,39 +205,39 @@ export default function FeaturedProducts() {
         </motion.div>
 
         {/* CTA Section */}
-        <motion.div 
-          className="text-center mt-12"
+        <motion.div
+          className="text-center mt-20"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link 
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+            <Link
               href="/products"
               className={cn(
                 "inline-flex items-center gap-2 px-8 py-4 rounded-xl",
-                "bg-primary hover:bg-primary/90 text-white",
-                "transition-all duration-300 font-semibold",
-                "shadow-md hover:shadow-lg group"
+                "bg-gaming-primary hover:bg-gaming-primary/90 text-white",
+                "transition-all duration-300 font-bold tracking-wide",
+                "shadow-neon hover:shadow-neon-hover group"
               )}
             >
-              <Zap className="w-5 h-5" />
-              View All Products
+              <Zap className="w-5 h-5 group-hover:fill-current" />
+              VIEW ALL PRODUCTS
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
             </Link>
-            
-            <Link 
+
+            <Link
               href="/deals"
               className={cn(
                 "inline-flex items-center gap-2 px-8 py-4 rounded-xl",
-                "border border-gray-300 text-gray-700 hover:bg-gray-50",
-                "transition-all duration-300 font-semibold",
-                "hover:border-gray-400 group"
+                "border border-white/10 bg-white/5 text-white hover:bg-white/10",
+                "transition-all duration-300 font-bold tracking-wide",
+                "backdrop-blur-sm group"
               )}
             >
-              <Flame className="w-5 h-5" />
-              Special Deals
+              <Flame className="w-5 h-5 text-gaming-secondary" />
+              SPECIAL DEALS
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
             </Link>
           </div>
