@@ -2,10 +2,12 @@
 
 import { SessionProvider } from "next-auth/react";
 import { Toaster } from "react-hot-toast";
+import { CartSynchronizer } from "@/components/CartSynchronizer";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <SessionProvider>
+      <CartSynchronizer />
       {children}
       <Toaster
         position="top-right"

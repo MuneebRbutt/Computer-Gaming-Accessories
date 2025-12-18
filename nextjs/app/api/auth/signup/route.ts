@@ -6,25 +6,25 @@ import { z } from 'zod';
 // Validation schema for signup
 const signupSchema = z.object({
   name: z.string().min(1, "Name is required").max(100, "Name is too long"),
-  email: z.string().email("Invalid email format"),
+  email: z.string().regex(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid email format"),
   password: z.string().min(6, "Password must be at least 6 characters").max(100, "Password is too long"),
 });
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    
+
     // Validate input with Zod
     const validationResult = signupSchema.safeParse(body);
-    
+
     if (!validationResult.success) {
       const errors = validationResult.error.issues.map(err => ({
         field: err.path.join('.'),
         message: err.message
       }));
-      
+
       return NextResponse.json(
-        { 
+        {
           error: 'Validation failed',
           details: errors,
           message: errors[0].message
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
 
     // Check if user already exists in MongoDB
     const existingUser = await UserService.getUserByEmail(email);
-    
+
     if (existingUser) {
       return NextResponse.json(
         { error: 'User already exists with this email' },
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
     // Generate unique username from email
     const baseUsername = email.split('@')[0].toLowerCase().replace(/[^a-z0-9_]/g, '');
     let username = baseUsername;
-    
+
     // Check if username exists and make it unique if needed
     try {
       let usernameExists = await UserService.getUserByUsername(username);
@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
       });
     } catch (createError: any) {
       console.error('User creation error:', createError);
-      
+
       // Handle Prisma/MongoDB specific errors
       if (createError.code === 'P2002' || createError.code === 11000) {
         // Unique constraint violation
@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         );
       }
-      
+
       // Re-throw to be caught by outer catch block
       throw createError;
     }
@@ -112,11 +112,11 @@ export async function POST(request: NextRequest) {
 
     // Return success (don't include password in response)
     return NextResponse.json(
-      { 
+      {
         message: 'Account created successfully! You can now login.',
-        user: { 
-          id: newUser.id, 
-          name: `${newUser.firstName}${newUser.lastName ? ' ' + newUser.lastName : ''}`, 
+        user: {
+          id: newUser.id,
+          name: `${newUser.firstName}${newUser.lastName ? ' ' + newUser.lastName : ''}`,
           email: newUser.email,
           role: newUser.role
         }
@@ -126,7 +126,7 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Signup error:', error);
-    
+
     // Handle specific database errors
     if (error instanceof Error) {
       // MongoDB duplicate key error
@@ -136,7 +136,7 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         );
       }
-      
+
       // Prisma unique constraint error
       if (error.message.includes('Unique constraint') || error.message.includes('P2002')) {
         return NextResponse.json(
@@ -144,7 +144,7 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         );
       }
-      
+
       // Database connection error
       if (error.message.includes('connect') || error.message.includes('ECONNREFUSED')) {
         console.error('Database connection error:', error);
@@ -153,11 +153,11 @@ export async function POST(request: NextRequest) {
           { status: 500 }
         );
       }
-      
+
       // Return the actual error message for debugging (in development)
       if (process.env.NODE_ENV === 'development') {
         return NextResponse.json(
-          { 
+          {
             error: 'Internal server error',
             message: error.message,
             stack: error.stack
@@ -166,7 +166,7 @@ export async function POST(request: NextRequest) {
         );
       }
     }
-    
+
     return NextResponse.json(
       { error: 'Internal server error. Please try again later.' },
       { status: 500 }

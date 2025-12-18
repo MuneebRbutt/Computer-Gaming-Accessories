@@ -14,57 +14,23 @@ export function useCartSync() {
   const { data: session } = useSession()
   const { items, addItem: addItemLocal, removeItem: removeItemLocal, updateQuantity: updateQuantityLocal, clearCart: clearCartLocal } = useCartStore()
 
-  // Load cart from backend on mount
-  useEffect(() => {
-    if (!session?.user) return
-
-    const loadCart = async () => {
-      try {
-        const cartItems = await cartApi.get() as any[]
-        
-        // Transform backend cart items to frontend format
-        const transformedItems = cartItems.map((item: any) => ({
-          product: {
-            id: item.product.id,
-            title: item.product.title,
-            price: item.price,
-            image: item.product.images?.[0] || '/images/placeholder.png',
-            category: item.product.category?.name || '',
-            brand: item.product.brand?.name || '',
-          },
-          quantity: item.quantity,
-          addedAt: new Date(item.createdAt),
-        }))
-
-        // Update local store with backend data
-        clearCartLocal()
-        transformedItems.forEach((item: any) => {
-          addItemLocal(item.product, { quantity: item.quantity })
-        })
-      } catch (error) {
-        if (error instanceof ApiError && error.status !== 401) {
-          console.error('Failed to load cart:', error)
-        }
-      }
-    }
-
-    loadCart()
-  }, [session?.user])
+  // Cart loading moved to CartSynchronizer component
 
   // Sync add item to backend
   const addItem = async (product: any, options?: any) => {
-    if (!session?.user) {
-      toast.error('Please login to add items to cart')
-      return
-    }
+    // Always add to local store first (optimistic update)
+    addItemLocal(product, options)
+    toast.success('Added to cart')
 
-    try {
-      await cartApi.add(product.id, options?.quantity || 1)
-      addItemLocal(product, options)
-      toast.success('Added to cart')
-    } catch (error) {
-      console.error('Failed to add to cart:', error)
-      toast.error(error instanceof ApiError ? error.message : 'Failed to add to cart')
+    // If logged in, sync to backend
+    if (session?.user) {
+      try {
+        await cartApi.add(product.id, options?.quantity || 1)
+      } catch (error) {
+        console.error('Failed to sync to backend:', error)
+        // We don't revert local state here to avoid bad UX, 
+        // but it might be out of sync until next reload
+      }
     }
   }
 
@@ -79,7 +45,7 @@ export function useCartSync() {
       // Find cart item ID from backend
       const cartItems = await cartApi.get() as any[]
       const cartItem = cartItems.find((item: any) => item.productId === productId || item.product.id === productId)
-      
+
       if (cartItem) {
         await cartApi.remove(cartItem.id)
       }
@@ -109,7 +75,7 @@ export function useCartSync() {
       // Find cart item ID from backend
       const cartItems = await cartApi.get() as any[]
       const cartItem = cartItems.find((item: any) => item.productId === productId || item.product.id === productId)
-      
+
       if (cartItem) {
         await cartApi.update(cartItem.id, quantity)
       }
