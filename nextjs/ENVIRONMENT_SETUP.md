@@ -4,7 +4,7 @@ Copy this file to `.env.local` in the `nextjs` directory and fill in your actual
 
 ```env
 # Database
-DATABASE_URL="mongodb://localhost:27017/computer-gaming-accessories"
+DATABASE_URL="bmuneeb882_db_user"
 
 # NextAuth
 NEXTAUTH_SECRET="your-nextauth-secret-key-change-this-in-production"

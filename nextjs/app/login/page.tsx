@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, Suspense, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -12,7 +12,14 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/account";
-  
+  const isRegistered = searchParams.get("registered") === "true";
+
+  useEffect(() => {
+    if (isRegistered) {
+      toast.success("Account created! Please log in with your credentials.");
+    }
+  }, [isRegistered]);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -44,18 +51,18 @@ function LoginForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
-    
+
     setIsLoading(true);
-    
+
     try {
       const result = await signIn("credentials", {
         redirect: false,
         email,
         password,
       });
-      
+
       if (result?.error) {
         toast.error("Invalid email or password");
       } else {
@@ -80,8 +87,8 @@ function LoginForm() {
   return (
     <div className="container mx-auto px-4 py-12">
       <div className="max-w-md mx-auto bg-gray-900 rounded-lg shadow-lg p-8">
-      <h1 className="text-2xl font-bold text-center mb-6">Login to Your Account</h1>
-        
+        <h1 className="text-2xl font-bold text-center mb-6">Login to Your Account</h1>
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
@@ -97,7 +104,7 @@ function LoginForm() {
             />
             {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
           </div>
-          
+
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-1">
               Password
@@ -112,7 +119,7 @@ function LoginForm() {
             />
             {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>}
           </div>
-          
+
           <button
             type="submit"
             disabled={isLoading}
@@ -121,7 +128,7 @@ function LoginForm() {
             {isLoading ? "Logging in..." : "Login"}
           </button>
         </form>
-        
+
         {isGoogleConfigured && (
           <div className="mt-6">
             <div className="relative">
@@ -132,7 +139,7 @@ function LoginForm() {
                 <span className="px-2 bg-gray-900 text-gray-400">Or continue with</span>
               </div>
             </div>
-            
+
             <div className="mt-6">
               <button
                 onClick={handleGoogleSignIn}
@@ -150,7 +157,7 @@ function LoginForm() {
             </div>
           </div>
         )}
-        
+
         <p className="mt-8 text-center text-sm text-gray-400">
           Don't have an account?{" "}
           <Link href="/signup" className="text-brand hover:underline">

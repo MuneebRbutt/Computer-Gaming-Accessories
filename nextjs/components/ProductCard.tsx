@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { ShoppingCart, Eye, Star, Heart, GitCompare, Zap } from 'lucide-react'
 import { Product } from '@/lib/data'
 import { FALLBACK_IMAGE_DATA_URI } from '@/lib/utils'
-import { useCartStore } from '@/hooks/useCartStore'
+import { useCartSync } from '@/lib/hooks/useCartSync'
 import { CartStore } from '@/lib/store'
 import toast from 'react-hot-toast'
 
@@ -14,7 +14,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const addItem = useCartStore((state: CartStore) => state.addItem)
+  const { addItem } = useCartSync()
 
   const formatCurrency = (value: number) => `Rs ${value.toLocaleString('en-IN')}`
 

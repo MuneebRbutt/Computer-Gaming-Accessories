@@ -72,7 +72,7 @@ export const authOptions: NextAuthOptions = {
 
           // Find user in MongoDB database
           const user = await prisma.user.findUnique({
-            where: { email: credentials.email }
+            where: { email: credentials.email.toLowerCase() }
           });
           if (!user) {
             console.log("User not found");
@@ -94,10 +94,10 @@ export const authOptions: NextAuthOptions = {
           }
 
           // Return user object
-          const displayName = user.firstName && user.lastName 
+          const displayName = user.firstName && user.lastName
             ? `${user.firstName} ${user.lastName}`
             : user.username || user.email.split('@')[0];
-          
+
           return {
             id: user.id,
             name: displayName,
@@ -128,7 +128,7 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id;
         token.role = (user as any).role || "user";
       }
-      
+
       // Handle OAuth account linking
       if (account) {
         token.accessToken = account.access_token;
@@ -166,10 +166,10 @@ export const authOptions: NextAuthOptions = {
     async redirect({ url, baseUrl }) {
       // Allows relative callback URLs
       if (url.startsWith("/")) return `${baseUrl}${url}`;
-      
+
       // Allows callback URLs on the same origin
       if (new URL(url).origin === baseUrl) return url;
-      
+
       return baseUrl;
     },
   },
